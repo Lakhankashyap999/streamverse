@@ -64,32 +64,40 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
 
       <CompassStrip className="absolute inset-x-0 top-20 hidden md:block lg:top-24" />
 
-      <div className="container-x grid items-center gap-12 pt-6 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:pt-14">
-        {/* left */}
-        <div className="order-2 lg:order-1">
-          <motion.p {...item(0)} className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-display text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-mute">
-            <Crosshair className="size-3.5 text-gold" aria-hidden />
-            Gaming <span className="text-blush">•</span> Entertainment <span className="text-blush">•</span> Community
-          </motion.p>
+      <div className="container-x grid items-center gap-10 pt-4 sm:pt-6 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:pt-14">
+        {/* left - Creator Intro at Top on Mobile and Desktop */}
+        <div className="order-1 lg:order-1">
+          <motion.div {...item(0)} className="w-full">
+            <div className="glass inline-flex flex-wrap items-center gap-1.5 sm:gap-2 rounded-full px-3 py-1 sm:px-4 sm:py-1.5 font-display text-[0.62rem] sm:text-[0.7rem] font-semibold uppercase tracking-[0.08em] sm:tracking-[0.22em] text-mute max-w-full">
+              <Crosshair className="size-3 sm:size-3.5 text-gold shrink-0" aria-hidden />
+              <span className="whitespace-nowrap">Gaming</span>
+              <span className="text-blush select-none">•</span>
+              <span className="whitespace-nowrap">Entertainment</span>
+              <span className="text-blush select-none">•</span>
+              <span className="whitespace-nowrap">Community</span>
+            </div>
+          </motion.div>
 
-          <motion.h1 {...item(1)} id="hero-title" className="mt-4 sm:mt-6 text-4xl font-bold leading-[1.05] sm:text-6xl xl:text-7xl break-words">
+          <motion.h1 {...item(1)} id="hero-title" className="mt-3 sm:mt-6 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] break-words">
             Welcome to
-            <span className="mt-1 block font-script text-[1.12em] italic leading-[1.05] text-gradient">My World</span>
+            <span className="mt-1 block font-script text-[1.15em] italic leading-[1.1] text-gradient pb-1 pr-2 inline-block max-w-full">
+              My World
+            </span>
           </motion.h1>
 
-          <motion.p {...item(2)} className="mt-4 sm:mt-6 font-display text-lg sm:text-2xl font-semibold">
-            I'm <span className="text-gradient-gold">{profile.gaming_name}</span>
+          <motion.p {...item(2)} className="mt-3 sm:mt-5 font-display text-base sm:text-xl md:text-2xl font-semibold break-words">
+            I'm <span className="text-gradient-gold inline-block">{profile.gaming_name}</span>
             {profile.tagline && <span className="text-mute block sm:inline"> — {profile.tagline}</span>}
           </motion.p>
 
-          <motion.p {...item(3)} className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-lg leading-relaxed text-mute">
+          <motion.p {...item(3)} className="mt-2.5 sm:mt-4 w-full max-w-xl text-xs sm:text-base md:text-lg leading-relaxed text-mute break-words">
             Marathon <span className="font-semibold text-gold">TOP 100 rank pushes</span>,{' '}
             <span className="font-semibold text-blush">rush gameplay</span>, clutch{' '}
             <span className="font-semibold text-violet-300">squad fights</span> and non-stop fun with the{' '}
             {SITE.communityName} ❤️
           </motion.p>
 
-          <motion.div {...item(4)} className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row w-full sm:w-auto">
+          <motion.div {...item(4)} className="mt-5 sm:mt-8 flex flex-col gap-3 sm:flex-row w-full sm:w-auto">
             <ExternalButton href={youtubeLiveUrl(profile)} hosts={['youtube.com']} size="lg" icon={<Play className="size-5 fill-current" aria-hidden />} className="w-full sm:w-auto justify-center">
               Watch My Stream
             </ExternalButton>
@@ -98,7 +106,7 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             </ButtonLink>
           </motion.div>
 
-          <motion.div {...item(5)} className="mt-6 sm:mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
+          <motion.div {...item(5)} className="mt-5 sm:mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
             <SocialIconRow profile={profile} />
             {profile.game_id && (
               <button
@@ -117,9 +125,9 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           </motion.div>
         </div>
 
-        {/* right */}
+        {/* right - Hero Artwork */}
         <motion.div
-          className="relative order-1 mx-auto w-full max-w-xl lg:order-2 lg:max-w-none"
+          className="relative order-2 mx-auto w-full max-w-xl lg:order-2 lg:max-w-none mt-4 lg:mt-0"
           initial={reduce ? false : { opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}

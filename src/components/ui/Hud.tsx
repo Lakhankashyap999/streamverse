@@ -22,11 +22,11 @@ export function CompassStrip({ className }: { className?: string }) {
 export function Ticker({ items }: { items: string[] }) {
   const colours = ['text-gradient-gold', 'text-gradient', 'text-gradient-zone'];
   const row = (hidden: boolean) => (
-    <div className="flex shrink-0 items-center gap-10 pr-10" aria-hidden={hidden || undefined}>
+    <div className="flex shrink-0 items-center gap-6 sm:gap-10 pr-6 sm:pr-10 py-1" aria-hidden={hidden || undefined}>
       {items.map((t, i) => (
-        <span key={`${t}-${i}`} className="flex items-center gap-10 font-display text-lg font-bold uppercase tracking-wider sm:text-2xl">
+        <span key={`${t}-${i}`} className="flex items-center gap-6 sm:gap-10 font-display text-sm sm:text-2xl font-bold uppercase tracking-wider whitespace-nowrap">
           <span className={colours[i % colours.length]}>{t}</span>
-          <span className="text-gold/60" aria-hidden>
+          <span className="text-gold/60 select-none" aria-hidden>
             ✦
           </span>
         </span>
