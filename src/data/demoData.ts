@@ -89,21 +89,21 @@ export const demoVideos: Video[] = durations.map<Video>((dur, i) => ({
 }));
 
 export const demoHighlights: Highlight[] = [
-  { t: 'Red-Dot Rush Push', c: 'Best Clutches', img: 'gameplay-scope' },
-  { t: 'Squad Drop Chaos', c: 'Squad Gameplay', img: 'insta-gameplay' },
-  { t: 'Live Stream Reactions', c: 'Funny Moments', img: 'insta-streaming' },
-  { t: 'Headset On, Game Face On', c: 'Favourite Clips', img: 'insta-headset' },
-  { t: 'TOP 100 Rank Push Moments', c: 'Challenges', img: 'stream-thumb-3' },
-  { t: 'Final Circle Rush', c: 'Best Clutches', img: 'stream-thumb-5' },
+  { t: 'Sacred Trident Power Found! 🔱', c: 'Challenges', img: 'thumb-ocean-trident.jpg' },
+  { t: '1v4 Clutch Inside Water Sphere 🔴', c: 'Best Clutches', img: 'thumb-ocean-clutch.jpg' },
+  { t: 'Flying Stingray Flight Across Ocean Bay 🌊', c: 'Squad Gameplay', img: 'thumb-ocean-stingray.jpg' },
+  { t: 'Colossal Ocean Dragon Boss Fight 🐉', c: 'Favourite Clips', img: 'thumb-ocean-dragon.jpg' },
+  { t: 'AWM Glacier 8x Scope Water Leap Headshot 🎯', c: 'Best Clutches', img: 'thumb-ocean-sniper.jpg' },
+  { t: 'Winner Winner Chicken Dinner - Ocean Conqueror 🏆', c: 'Challenges', img: 'thumb-ocean-victory.jpg' },
 ].map<Highlight>((h, i) => ({
   ...base,
   id: `demo-highlight-${i + 1}`,
   title: h.t,
-  description: 'Placeholder highlight — replace it with a real clip from the dashboard.',
+  description: 'Ocean Odyssey water event highlight clip — watch marathon clutches and rank push gameplay.',
   youtube_video_id: '',
-  thumbnail_url: `/images/creator/${h.img}.webp`,
+  thumbnail_url: `/images/thumbnails/${h.img}`,
   category: h.c as Highlight['category'],
-  is_featured: i < 2,
+  is_featured: i < 3,
   is_published: true,
 }));
 
