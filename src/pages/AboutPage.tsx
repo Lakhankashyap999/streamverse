@@ -36,18 +36,22 @@ export function AboutPage() {
         {/* 1. Bio & Overview Grid */}
         <section aria-labelledby="bio-heading">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] items-center">
-            <div className="relative">
-              <div className="gradient-border hud-corners overflow-hidden rounded-3xl bg-card p-2">
+            <div className="relative max-w-md mx-auto lg:max-w-none w-full">
+              <div className="gradient-border hud-corners overflow-hidden rounded-3xl bg-card p-2 shadow-2xl">
                 <SafeImage
-                  src={profile.avatar_url}
-                  alt={`${profile.gaming_name} portrait`}
-                  className="w-full aspect-square object-cover rounded-2xl"
+                  src="/images/creator/khushi-about-hd.jpg"
+                  alt={`${profile.gaming_name} official portrait`}
+                  className="w-full aspect-[4/5] object-cover object-[center_12%] rounded-2xl filter brightness-105 contrast-105"
+                  width={852}
+                  height={1024}
+                  fetchPriority="high"
+                  loading="eager"
                 />
               </div>
               {/* Cute Mascot sticker */}
-              <div className="absolute -top-3 -left-3 glass px-2.5 py-1.5 rounded-2xl flex items-center gap-2 border border-pink-400/50 shadow-xl bg-card/90">
-                <img src="/images/art/pink-gamer-teddy.jpg" alt="Mascot" className="size-7 rounded-lg object-cover" />
-                <span className="font-display text-xs font-bold text-white flex items-center gap-1">Teddy 🧸</span>
+              <div className="absolute -top-3 -left-3 glass px-3 py-1.5 rounded-2xl flex items-center gap-2 border border-pink-400/50 shadow-xl bg-card/90 backdrop-blur-md">
+                <img src="/images/art/pink-gamer-teddy.jpg" alt="Mascot" className="size-8 rounded-lg object-cover" />
+                <span className="font-display text-xs font-bold text-white flex items-center gap-1">Teddy Buddy 🧸</span>
               </div>
               {profile.country && (
                 <div className="absolute -bottom-4 right-6 glass px-4 py-2 rounded-xl flex items-center gap-2 font-display text-sm font-semibold text-ink shadow-xl">
