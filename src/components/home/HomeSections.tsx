@@ -157,11 +157,11 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             <div className="pointer-events-none absolute inset-x-0 h-2 bg-gradient-to-r from-transparent via-blush/60 to-transparent laser-scanner z-10" />
 
             <div className="scanlines relative aspect-[4/4.2] sm:aspect-[4/3.8] overflow-hidden bg-gradient-to-b from-[#1b2140] via-[#101426] to-[#090b16]">
-              {/* Khushi's Cropped HD Gaming Photo */}
+              {/* Khushi's HD Creator Photo */}
               <img
-                src="/images/creator/khushi-hero-front.webp"
-                alt="Khushi in gaming chair wearing gaming headset"
-                className="absolute inset-0 size-full object-cover object-top filter brightness-105 contrast-105"
+                src="/images/creator/khushi-hero-front.jpg"
+                alt="Khushi official creator photo"
+                className="absolute inset-0 size-full object-cover object-[center_15%] filter brightness-105 contrast-105"
                 width={800}
                 height={800}
                 fetchPriority="high"
