@@ -132,26 +132,26 @@ export function PubgCareerStats() {
 
       {/* Primary Rank Banner */}
       <Reveal>
-        <div className="gradient-border hud-corners relative mb-10 overflow-hidden rounded-2xl bg-card p-6 sm:p-8 shadow-2xl">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-5">
-              <div className="relative grid size-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-amber-400 via-pink-500 to-purple-600 shadow-lg shadow-purple-500/30">
-                <Trophy className="size-8 text-white" aria-hidden />
-                <span className="absolute -top-1 -right-1 size-3 rounded-full bg-emerald-400 animate-ping" />
+        <div className="gradient-border hud-corners relative mb-8 sm:mb-10 overflow-hidden rounded-2xl bg-card p-4 sm:p-8 shadow-2xl">
+          <div className="flex flex-col gap-5 sm:gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3.5 sm:gap-5 min-w-0">
+              <div className="relative grid size-13 sm:size-16 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-amber-400 via-pink-500 to-purple-600 shadow-lg shadow-purple-500/30">
+                <Trophy className="size-6 sm:size-8 text-white" aria-hidden />
+                <span className="absolute -top-1 -right-1 size-2.5 rounded-full bg-emerald-400 animate-ping" />
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs uppercase tracking-widest text-gold font-bold">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-gold font-bold">
                     CURRENT BGMI TIER
                   </span>
-                  <span className="rounded bg-red-600/20 px-2 py-0.5 text-[10px] font-mono font-bold text-red-400 border border-red-500/30">
+                  <span className="rounded bg-red-600/20 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold text-red-400 border border-red-500/30">
                     TOP 100 ASIA
                   </span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black font-display text-ink mt-0.5 tracking-tight flex items-center gap-2">
-                  ACE DOMINATOR <span className="text-gradient-gold">18★</span>
+                <h3 className="text-xl sm:text-3xl font-black font-display text-ink mt-0.5 tracking-tight flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <span>ACE DOMINATOR</span> <span className="text-gradient-gold">18★</span>
                 </h3>
-                <p className="text-sm text-mute font-mono">
+                <p className="text-xs sm:text-sm text-mute font-mono truncate">
                   BGMI ID: 5112658248 · Squad TPP · Asia Server (20ms)
                 </p>
               </div>

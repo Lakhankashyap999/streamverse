@@ -9,7 +9,6 @@ interface Particle {
   color: string;
   alpha: number;
   decay: number;
-  glow: number;
 }
 
 const SPARK_COLORS = [
@@ -18,13 +17,13 @@ const SPARK_COLORS = [
   '#f472b6', // neon pink spark
   '#fb923c', // fiery orange
   '#c026d3', // neon magenta
-  '#fde68a', // bright core
+  '#ffffff', // bright spark
 ];
 
 /**
  * Interactive PUBG "Tiliya" / Ember Sparks cursor & touch trail.
- * Renders glowing ember sparks following mouse movement and touch gestures,
- * plus a firecracker ricochet burst on clicks/taps.
+ * Reliably tracks mouse movement on desktop and touch gestures / taps on mobile,
+ * rendering crisp glowing embers scaled to Device Pixel Ratio.
  */
 export function CursorSparks() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -40,8 +39,20 @@ export function CursorSparks() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const setupCanvas = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.scale(dpr, dpr);
+    };
+    setupCanvas();
 
     let animationFrameId: number;
     const particles: Particle[] = [];
@@ -50,34 +61,29 @@ export function CursorSparks() {
     let isRunning = false;
 
     const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      setupCanvas();
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
-    const isMobile = window.innerWidth < 640;
-    const maxParticles = isMobile ? 25 : 45;
+    const maxParticles = 55;
 
     const createSpark = (x: number, y: number, count = 2, isBurst = false) => {
       if (particles.length >= maxParticles) return;
 
-      const actualCount = isMobile ? Math.min(count, 2) : count;
-      for (let i = 0; i < actualCount; i++) {
+      for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = isBurst ? Math.random() * 3.5 + 1.5 : Math.random() * 1.6 + 0.4;
+        const speed = isBurst ? Math.random() * 3.5 + 1.5 : Math.random() * 1.8 + 0.4;
         const color = SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)];
 
         particles.push({
           x,
           y,
           vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed - (isBurst ? 1.2 : 0.6),
-          size: isBurst ? Math.random() * 3.5 + 2 : Math.random() * 2.5 + 1.2,
+          vy: Math.sin(angle) * speed - (isBurst ? 1.2 : 0.6), // upward drift
+          size: isBurst ? Math.random() * 3.5 + 2 : Math.random() * 2.8 + 1.2,
           color,
           alpha: 1,
-          decay: isBurst ? Math.random() * 0.035 + 0.025 : Math.random() * 0.05 + 0.035,
-          glow: Math.random() * 4 + 2,
+          decay: isBurst ? Math.random() * 0.035 + 0.025 : Math.random() * 0.05 + 0.03,
         });
       }
 
@@ -87,27 +93,54 @@ export function CursorSparks() {
       }
     };
 
+    // Desktop: Pointer move
     const handlePointerMove = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return; // Handled by touch events for better accuracy
       const x = e.clientX;
       const y = e.clientY;
-
       const dx = x - lastX;
       const dy = y - lastY;
-      const dist = dx * dx + dy * dy;
-
-      if (dist > 36) { // moved > 6px
-        createSpark(x, y, isMobile ? 1 : 2, false);
+      if (dx * dx + dy * dy > 25) {
+        createSpark(x, y, 2, false);
         lastX = x;
         lastY = y;
       }
     };
 
+    // Desktop: Click burst
     const handlePointerDown = (e: PointerEvent) => {
-      createSpark(e.clientX, e.clientY, isMobile ? 8 : 12, true);
+      if (e.pointerType === 'touch') return;
+      createSpark(e.clientX, e.clientY, 10, true);
+    };
+
+    // Mobile: Touch drag / scroll trail
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const x = touch.clientX;
+      const y = touch.clientY;
+      const dx = x - lastX;
+      const dy = y - lastY;
+      if (dx * dx + dy * dy > 16) {
+        createSpark(x, y, 2, false);
+        lastX = x;
+        lastY = y;
+      }
+    };
+
+    // Mobile: Touch tap burst
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      lastX = touch.clientX;
+      lastY = touch.clientY;
+      createSpark(touch.clientX, touch.clientY, 7, true);
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
 
     const handleVisibility = () => {
       if (document.hidden) {
@@ -135,7 +168,7 @@ export function CursorSparks() {
         p.alpha -= p.decay;
         p.size *= 0.95;
 
-        if (p.alpha <= 0.01 || p.size <= 0.3) {
+        if (p.alpha <= 0.02 || p.size <= 0.4) {
           particles.splice(i, 1);
           continue;
         }
@@ -148,11 +181,11 @@ export function CursorSparks() {
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Cross sparkle for larger embers without shadowBlur
-        if (p.size > 2.2) {
+        // White hot center core on prominent embers
+        if (p.size > 2) {
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size * 0.45, 0, Math.PI * 2);
+          ctx.arc(p.x, p.y, p.size * 0.4, 0, Math.PI * 2);
           ctx.fill();
         }
       }
@@ -164,6 +197,8 @@ export function CursorSparks() {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('visibilitychange', handleVisibility);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
@@ -172,7 +207,7 @@ export function CursorSparks() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-[9999] size-full"
+      className="pointer-events-none fixed inset-0 z-[9999] size-full touch-none"
       aria-hidden="true"
     />
   );

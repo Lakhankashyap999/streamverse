@@ -72,46 +72,46 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             Gaming <span className="text-blush">•</span> Entertainment <span className="text-blush">•</span> Community
           </motion.p>
 
-          <motion.h1 {...item(1)} id="hero-title" className="mt-6 text-5xl font-bold leading-[0.98] sm:text-6xl xl:text-7xl">
+          <motion.h1 {...item(1)} id="hero-title" className="mt-4 sm:mt-6 text-4xl font-bold leading-[1.05] sm:text-6xl xl:text-7xl break-words">
             Welcome to
             <span className="mt-1 block font-script text-[1.12em] italic leading-[1.05] text-gradient">My World</span>
           </motion.h1>
 
-          <motion.p {...item(2)} className="mt-6 font-display text-xl font-semibold sm:text-2xl">
+          <motion.p {...item(2)} className="mt-4 sm:mt-6 font-display text-lg sm:text-2xl font-semibold">
             I'm <span className="text-gradient-gold">{profile.gaming_name}</span>
-            {profile.tagline && <span className="text-mute"> — {profile.tagline}</span>}
+            {profile.tagline && <span className="text-mute block sm:inline"> — {profile.tagline}</span>}
           </motion.p>
 
-          <motion.p {...item(3)} className="mt-4 max-w-xl text-base leading-relaxed text-mute sm:text-lg">
+          <motion.p {...item(3)} className="mt-3 sm:mt-4 max-w-xl text-sm sm:text-lg leading-relaxed text-mute">
             Marathon <span className="font-semibold text-gold">TOP 100 rank pushes</span>,{' '}
             <span className="font-semibold text-blush">rush gameplay</span>, clutch{' '}
             <span className="font-semibold text-violet-300">squad fights</span> and non-stop fun with the{' '}
             {SITE.communityName} ❤️
           </motion.p>
 
-          <motion.div {...item(4)} className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ExternalButton href={youtubeLiveUrl(profile)} hosts={['youtube.com']} size="lg" icon={<Play className="size-5 fill-current" aria-hidden />}>
+          <motion.div {...item(4)} className="mt-6 sm:mt-8 flex flex-col gap-3 sm:flex-row w-full sm:w-auto">
+            <ExternalButton href={youtubeLiveUrl(profile)} hosts={['youtube.com']} size="lg" icon={<Play className="size-5 fill-current" aria-hidden />} className="w-full sm:w-auto justify-center">
               Watch My Stream
             </ExternalButton>
-            <ButtonLink to="/highlights" variant="secondary" size="lg" iconRight={<ArrowRight className="size-5" aria-hidden />}>
+            <ButtonLink to="/highlights" variant="secondary" size="lg" iconRight={<ArrowRight className="size-5" aria-hidden />} className="w-full sm:w-auto justify-center">
               Explore Highlights
             </ButtonLink>
           </motion.div>
 
-          <motion.div {...item(5)} className="mt-8 flex flex-wrap items-center gap-4">
+          <motion.div {...item(5)} className="mt-6 sm:mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
             <SocialIconRow profile={profile} />
             {profile.game_id && (
               <button
                 type="button"
                 onClick={() => copy(profile.game_id!, 'Game ID')}
-                className="clip-angle-sm group flex items-center gap-3 border border-gold/30 bg-gold/5 px-4 py-2 text-left transition hover:bg-gold/10"
+                className="clip-angle-sm group flex items-center justify-between gap-3 border border-gold/30 bg-gold/5 px-4 py-2 text-left transition hover:bg-gold/10 max-w-full"
                 aria-label={`Copy BGMI ID ${profile.game_id}`}
               >
-                <span>
+                <div>
                   <span className="block font-display text-[0.62rem] font-semibold uppercase tracking-[0.25em] text-gold">BGMI ID</span>
-                  <span className="font-display text-base font-bold tabular-nums tracking-wider">{profile.game_id}</span>
-                </span>
-                <Copy className="size-4 text-mute group-hover:text-gold" aria-hidden />
+                  <span className="font-display text-sm sm:text-base font-bold tabular-nums tracking-wider">{profile.game_id}</span>
+                </div>
+                <Copy className="size-4 text-mute group-hover:text-gold shrink-0" aria-hidden />
               </button>
             )}
           </motion.div>
@@ -157,6 +157,8 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
                 width={800}
                 height={800}
                 fetchPriority="high"
+                loading="eager"
+                decoding="async"
               />
 
               {/* Cinematic Vignette & Neon Gradients */}
@@ -164,13 +166,13 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               <div className="absolute inset-0 bg-gradient-to-r from-base/30 via-transparent to-base/30" />
 
               {/* PUBG HUD Coordinates & Reticle */}
-              <div className="absolute left-4 top-4 flex items-center gap-2 font-mono text-[0.68rem] font-bold uppercase tracking-[0.25em] text-gold/90 bg-base/60 backdrop-blur-sm px-2.5 py-1 rounded border border-gold/20">
-                <Crosshair className="size-3 text-gold animate-spin" style={{ animationDuration: '10s' }} />
-                <span>POCHINKI · LIVE ZONE</span>
+              <div className="absolute left-3 top-3 sm:left-4 sm:top-4 flex items-center gap-1.5 sm:gap-2 font-mono text-[0.62rem] sm:text-[0.68rem] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-gold/90 bg-base/70 backdrop-blur-sm px-2 sm:px-2.5 py-1 rounded border border-gold/20">
+                <Crosshair className="size-2.5 sm:size-3 text-gold animate-spin" style={{ animationDuration: '10s' }} />
+                <span>POCHINKI ZONE</span>
               </div>
 
               {/* Live Match Telemetry Chip */}
-              <div className="absolute right-4 top-4 hidden sm:flex items-center gap-2 font-mono text-[0.65rem] text-mute bg-base/70 backdrop-blur-sm px-2.5 py-1 rounded border border-line">
+              <div className="absolute right-3 top-3 sm:right-4 sm:top-4 hidden sm:flex items-center gap-2 font-mono text-[0.65rem] text-mute bg-base/70 backdrop-blur-sm px-2.5 py-1 rounded border border-line">
                 <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 <span>60 FPS</span>
                 <span className="text-line">|</span>
@@ -180,7 +182,7 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               </div>
 
               {/* Tactical Crosshair Watermark */}
-              <svg className="absolute right-[12%] bottom-[24%] size-20 text-white/20 pointer-events-none" viewBox="0 0 64 64" aria-hidden>
+              <svg className="absolute right-[12%] bottom-[24%] size-16 sm:size-20 text-white/20 pointer-events-none" viewBox="0 0 64 64" aria-hidden>
                 <circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 2" />
                 <circle cx="32" cy="32" r="14" fill="none" stroke="#f472b6" strokeWidth="1.5" />
                 <path d="M32 2v12M32 50v12M2 32h12M50 32h12" stroke="currentColor" strokeWidth="1.5" />
@@ -188,14 +190,14 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               </svg>
 
               {/* Dynamic Kill Feed Banner */}
-              <div className="absolute inset-x-4 bottom-4 glass rounded-xl p-2.5 border border-blush/30 shadow-lg flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 min-w-0">
+              <div className="absolute inset-x-2 sm:inset-x-4 bottom-2 sm:bottom-4 glass rounded-xl p-2 sm:p-2.5 border border-blush/30 shadow-lg flex items-center justify-between gap-2 overflow-hidden">
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
                   <span className="shrink-0 size-2 rounded-full bg-red-500 animate-ping" />
-                  <span className="font-mono text-xs font-bold text-ink truncate">
+                  <span className="font-mono text-[11px] sm:text-xs font-bold text-ink truncate">
                     <span className="text-gold">KhushiYT</span> eliminated <span className="text-rose-400">Enemy</span> with <span className="text-amber-300">M416 [Headshot]</span>
                   </span>
                 </div>
-                <span className="shrink-0 font-mono text-[10px] text-mute uppercase tracking-widest hidden sm:inline">
+                <span className="shrink-0 font-mono text-[9px] sm:text-[10px] text-mute uppercase tracking-widest hidden md:inline">
                   LIVE KILL FEED
                 </span>
               </div>
@@ -203,42 +205,42 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           </div>
 
           {/* Creator Profile Chip */}
-          <div className="glass absolute -top-5 left-3 sm:-left-5 flex items-center gap-3 rounded-2xl p-2.5 pr-4 shadow-xl z-20 border border-blush/40 lg:animate-float">
+          <div className="glass absolute -top-4 left-2 sm:-left-5 sm:-top-5 flex items-center gap-2.5 sm:gap-3 rounded-2xl p-2 sm:p-2.5 pr-3 sm:pr-4 shadow-xl z-20 border border-blush/40 lg:animate-float max-w-[85vw] sm:max-w-none">
             <SafeImage
               src={profile.avatar_url}
               alt={`${profile.gaming_name} profile photo`}
-              className="size-11 rounded-xl border-2 border-blush/80 object-cover"
+              className="size-9 sm:size-11 rounded-xl border-2 border-blush/80 object-cover shrink-0"
               width={44}
               height={44}
               loading="eager"
             />
-            <div>
-              <p className="font-display text-sm font-bold flex items-center gap-1.5">
+            <div className="min-w-0">
+              <p className="font-display text-xs sm:text-sm font-bold flex items-center gap-1.5 truncate">
                 {profile.gaming_name}
-                <span className="inline-block size-2 rounded-full bg-emerald-400" title="Online" />
+                <span className="inline-block size-2 rounded-full bg-emerald-400 shrink-0" title="Online" />
               </p>
-              <p className="text-xs text-mute font-mono">{profile.handle}</p>
+              <p className="text-[11px] sm:text-xs text-mute font-mono truncate">{profile.handle}</p>
             </div>
           </div>
 
           {/* Stream Status Chip */}
-          <div className="glass absolute -bottom-6 -left-3 sm:-left-6 max-w-[17rem] rounded-2xl p-4 shadow-xl z-20 border border-ultra/40">
+          <div className="glass absolute -bottom-5 left-2 sm:-left-6 sm:-bottom-6 max-w-[88vw] sm:max-w-[17rem] rounded-2xl p-3 sm:p-4 shadow-xl z-20 border border-ultra/40">
             {live.kind === 'live' ? (
-              <p className="flex items-center gap-2 font-display text-sm font-bold text-red-400">
-                <span className="size-2.5 rounded-full bg-bad animate-pulse-dot" aria-hidden />
+              <p className="flex items-center gap-2 font-display text-xs sm:text-sm font-bold text-red-400">
+                <span className="size-2 rounded-full bg-bad animate-pulse-dot" aria-hidden />
                 LIVE ON YOUTUBE
               </p>
             ) : live.kind === 'upcoming' ? (
               <>
-                <p className="hud-label">Next Stream{live.stream.is_sample ? ' · Scheduled' : ''}</p>
-                <div className="mt-2">
+                <p className="hud-label text-[0.65rem] sm:text-[0.7rem]">Next Stream{live.stream.is_sample ? ' · Scheduled' : ''}</p>
+                <div className="mt-1.5 sm:mt-2">
                   <Countdown target={live.stream.scheduled_at!} compact />
                 </div>
               </>
             ) : (
               <>
-                <p className="hud-label">Broadcast Status</p>
-                <p className="mt-1 text-sm text-mute">
+                <p className="hud-label text-[0.65rem] sm:text-[0.7rem]">Broadcast Status</p>
+                <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-mute">
                   Offline{live.stream ? ` · Last stream ${relativeTime(live.stream.scheduled_at)}` : ''}
                 </p>
               </>

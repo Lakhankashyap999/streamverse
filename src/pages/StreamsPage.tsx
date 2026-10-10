@@ -53,38 +53,38 @@ export function StreamsPage() {
       <PageContainer className="py-12 space-y-16">
         {/* Official YouTube Channel Banner Card */}
         <div className="relative overflow-hidden rounded-2xl border border-line bg-card shadow-2xl">
-          <div className="relative aspect-[1024/166] w-full bg-surface">
+          <div className="relative aspect-[16/6] sm:aspect-[1024/166] min-h-[95px] sm:min-h-[140px] w-full bg-surface overflow-hidden">
             <SafeImage
               src={profile.banner_url}
               alt={`${profile.gaming_name} YouTube Channel Banner`}
               className="size-full object-cover"
             />
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-4 p-4 sm:px-6 bg-[#101426]/95 backdrop-blur-md border-t border-line">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:px-6 bg-[#101426]/95 backdrop-blur-md border-t border-line">
+            <div className="flex items-center gap-3 min-w-0">
               <SafeImage
                 src={profile.avatar_url}
                 alt=""
-                className="size-12 rounded-xl border-2 border-blush object-cover shadow-md"
+                className="size-11 sm:size-12 rounded-xl border-2 border-blush object-cover shadow-md shrink-0"
               />
-              <div>
-                <h2 className="font-display font-bold text-lg text-ink flex items-center gap-2">
-                  {profile.gaming_name}
-                  <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-red-600/20 text-red-400 border border-red-500/30 font-semibold">
-                    OFFICIAL YOUTUBE CHANNEL
+              <div className="min-w-0">
+                <h2 className="font-display font-bold text-base sm:text-lg text-ink flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <span>{profile.gaming_name}</span>
+                  <span className="text-[9px] sm:text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-red-600/20 text-red-400 border border-red-500/30 font-semibold whitespace-nowrap">
+                    OFFICIAL YOUTUBE
                   </span>
                 </h2>
-                <p className="text-xs text-mute font-mono">
-                  {profile.handle} · {profile.stats_snapshot?.subscribers ?? '27.6K'} Subscribers · 1.1K Videos
+                <p className="text-xs text-mute font-mono truncate">
+                  {profile.handle} · {profile.stats_snapshot?.subscribers ?? '27.6K'} Subscribers
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
               <a
                 href={profile.youtube_url ?? '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="clip-angle-sm flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-display font-bold text-xs uppercase tracking-wider px-5 py-2 transition shadow-lg shadow-red-600/30"
+                className="clip-angle-sm flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 transition shadow-lg shadow-red-600/30 w-full sm:w-auto text-center"
               >
                 Subscribe on YouTube ➔
               </a>
