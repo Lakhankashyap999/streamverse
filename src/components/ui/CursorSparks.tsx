@@ -56,22 +56,28 @@ export function CursorSparks() {
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
-    const createSpark = (x: number, y: number, count = 3, isBurst = false) => {
-      for (let i = 0; i < count; i++) {
+    const isMobile = window.innerWidth < 640;
+    const maxParticles = isMobile ? 25 : 45;
+
+    const createSpark = (x: number, y: number, count = 2, isBurst = false) => {
+      if (particles.length >= maxParticles) return;
+
+      const actualCount = isMobile ? Math.min(count, 2) : count;
+      for (let i = 0; i < actualCount; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = isBurst ? Math.random() * 4 + 2 : Math.random() * 2 + 0.5;
+        const speed = isBurst ? Math.random() * 3.5 + 1.5 : Math.random() * 1.6 + 0.4;
         const color = SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)];
 
         particles.push({
           x,
           y,
-          vx: Math.cos(angle) * speed + (Math.random() - 0.5),
-          vy: Math.sin(angle) * speed - (isBurst ? 1.5 : 0.8), // upward drift like embers
-          size: isBurst ? Math.random() * 4 + 2.5 : Math.random() * 3 + 1.5,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - (isBurst ? 1.2 : 0.6),
+          size: isBurst ? Math.random() * 3.5 + 2 : Math.random() * 2.5 + 1.2,
           color,
           alpha: 1,
-          decay: isBurst ? Math.random() * 0.03 + 0.02 : Math.random() * 0.04 + 0.03,
-          glow: Math.random() * 8 + 4,
+          decay: isBurst ? Math.random() * 0.035 + 0.025 : Math.random() * 0.05 + 0.035,
+          glow: Math.random() * 4 + 2,
         });
       }
 
@@ -85,31 +91,32 @@ export function CursorSparks() {
       const x = e.clientX;
       const y = e.clientY;
 
-      // Only spawn if moved at least 4px to avoid clustering
       const dx = x - lastX;
       const dy = y - lastY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      const dist = dx * dx + dy * dy;
 
-      if (dist > 4) {
-        createSpark(x, y, 3, false);
+      if (dist > 36) { // moved > 6px
+        createSpark(x, y, isMobile ? 1 : 2, false);
         lastX = x;
         lastY = y;
       }
     };
 
     const handlePointerDown = (e: PointerEvent) => {
-      createSpark(e.clientX, e.clientY, 12, true);
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!e.touches[0]) return;
-      const touch = e.touches[0];
-      createSpark(touch.clientX, touch.clientY, 2, false);
+      createSpark(e.clientX, e.clientY, isMobile ? 8 : 12, true);
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        particles.length = 0;
+        isRunning = false;
+        ctx.clearRect(0, 0, width, height);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
 
     const render = () => {
       if (particles.length === 0) {
@@ -124,39 +131,30 @@ export function CursorSparks() {
         const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.03; // slight gravity
+        p.vy += 0.02; // gentle gravity
         p.alpha -= p.decay;
-        p.size *= 0.96; // shrink over time
+        p.size *= 0.95;
 
-        if (p.alpha <= 0 || p.size <= 0.3) {
+        if (p.alpha <= 0.01 || p.size <= 0.3) {
           particles.splice(i, 1);
           continue;
         }
 
-        ctx.save();
-        ctx.globalAlpha = Math.max(0, p.alpha);
-        ctx.shadowBlur = p.glow;
-        ctx.shadowColor = p.color;
+        ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
 
-        // Draw diamond spark / ember
+        // Draw particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Cross star sparkle on larger embers
+        // Cross sparkle for larger embers without shadowBlur
         if (p.size > 2.2) {
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 0.8;
+          ctx.fillStyle = '#ffffff';
           ctx.beginPath();
-          ctx.moveTo(p.x - p.size * 1.5, p.y);
-          ctx.lineTo(p.x + p.size * 1.5, p.y);
-          ctx.moveTo(p.x, p.y - p.size * 1.5);
-          ctx.lineTo(p.x, p.y + p.size * 1.5);
-          ctx.stroke();
+          ctx.arc(p.x, p.y, p.size * 0.45, 0, Math.PI * 2);
+          ctx.fill();
         }
-
-        ctx.restore();
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -166,7 +164,7 @@ export function CursorSparks() {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerdown', handlePointerDown);
-      window.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('visibilitychange', handleVisibility);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
   }, []);

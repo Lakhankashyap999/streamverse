@@ -69,15 +69,17 @@
   }
 
   .glass {
-    background: linear-gradient(160deg, rgb(27 33 64 / 0.72), rgb(16 20 38 / 0.6));
+    background: linear-gradient(160deg, rgb(27 33 64 / 0.8), rgb(16 20 38 / 0.72));
     border: 1px solid var(--color-line);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transform: translateZ(0);
   }
 
   .panel {
-    @apply rounded-2xl border border-line bg-card/80;
+    @apply rounded-2xl border border-line bg-card/85;
     box-shadow: var(--shadow-card);
+    transform: translateZ(0);
   }
 
   /* PUBG-style angled corners */
