@@ -1,0 +1,182 @@
+import type { CommunityPost, Highlight, Poll, Stream, Suggestion, Video } from '../types';
+
+/**
+ * DEMO DATA — shown only when Supabase is not configured.
+ * Every record has `is_sample: true` and is labelled "Sample" in the UI.
+ * Stream titles/durations/thumbnails come from the creator's channel screenshot,
+ * but the real YouTube video IDs were not provided, so watch links point to the
+ * channel's Live tab until real links are added from the dashboard.
+ * No view counts, votes or engagement numbers are fabricated.
+ */
+
+const H = 36e5;
+const now = Date.now();
+const iso = (ms: number) => new Date(ms).toISOString();
+
+/** Next occurrence of a given IST hour, `days` ahead. */
+function istSlot(days: number, hourIst: number): string {
+  const d = new Date(now + days * 864e5);
+  // IST is UTC+05:30
+  return iso(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), hourIst, 0) - 5.5 * H);
+}
+
+const TITLE = 'TOP 100 RankPush With Rush Gameplay 🔴 | BGMI';
+const durations = ['6:04:53', '7:06:50', '6:33:30', '7:52:09', '7:44:39'];
+const ago = [16 * H, 26 * H, 50 * H, 74 * H, 98 * H];
+
+const base = { created_at: iso(now - 120 * H), updated_at: iso(now - 120 * H), is_sample: true } as const;
+
+export const demoStreams: Stream[] = [
+  ...durations.map<Stream>((dur, i) => ({
+    ...base,
+    id: `demo-stream-past-${i + 1}`,
+    title: TITLE,
+    description: 'Marathon rank-push livestream with rush gameplay. (Sample — add the real YouTube link from the dashboard.)',
+    youtube_video_id: null,
+    stream_url: 'https://www.youtube.com/@khusiytlive/streams',
+    thumbnail_url: i === 0 ? '/images/creator/pubg-stream-thumbnail-hd.webp' : `/images/creator/stream-thumb-${i + 1}.webp`,
+    scheduled_at: iso(now - ago[i]),
+    timezone: 'Asia/Kolkata',
+    status: 'completed',
+    duration_label: dur,
+    is_published: true,
+    is_featured: i === 0,
+  })),
+  {
+    ...base,
+    id: 'demo-stream-next-1',
+    title: 'TOP 100 Rank Push — Rush Gameplay Live',
+    description: 'Sample upcoming stream to preview the schedule layout. Real times are set by the creator.',
+    youtube_video_id: null,
+    stream_url: 'https://www.youtube.com/@khusiytlive/live',
+    thumbnail_url: '/images/creator/pubg-stream-thumbnail-hd.webp',
+    scheduled_at: istSlot(1, 14),
+    timezone: 'Asia/Kolkata',
+    status: 'scheduled',
+    duration_label: null,
+    is_published: true,
+    is_featured: true,
+  },
+  {
+    ...base,
+    id: 'demo-stream-next-2',
+    title: 'Squad Rush Night with the KhushiYT Family',
+    description: 'Sample upcoming stream. Replace or delete from the dashboard.',
+    youtube_video_id: null,
+    stream_url: 'https://www.youtube.com/@khusiytlive/live',
+    thumbnail_url: '/images/creator/stream-thumb-4.webp',
+    scheduled_at: istSlot(3, 20),
+    timezone: 'Asia/Kolkata',
+    status: 'scheduled',
+    duration_label: null,
+    is_published: true,
+    is_featured: false,
+  },
+];
+
+export const demoVideos: Video[] = durations.map<Video>((dur, i) => ({
+  ...base,
+  id: `demo-video-${i + 1}`,
+  title: TITLE,
+  description: 'Full livestream replay. (Sample — the real video link has not been added yet.)',
+  youtube_video_id: '',
+  thumbnail_url: i === 0 ? '/images/creator/pubg-stream-thumbnail-hd.webp' : `/images/creator/stream-thumb-${i + 1}.webp`,
+  category: 'Live Stream',
+  duration_label: dur,
+  published_at: iso(now - ago[i]),
+  is_published: true,
+  is_featured: i < 2,
+}));
+
+export const demoHighlights: Highlight[] = [
+  { t: 'Red-Dot Rush Push', c: 'Best Clutches', img: 'gameplay-scope' },
+  { t: 'Squad Drop Chaos', c: 'Squad Gameplay', img: 'insta-gameplay' },
+  { t: 'Live Stream Reactions', c: 'Funny Moments', img: 'insta-streaming' },
+  { t: 'Headset On, Game Face On', c: 'Favourite Clips', img: 'insta-headset' },
+  { t: 'TOP 100 Rank Push Moments', c: 'Challenges', img: 'stream-thumb-3' },
+  { t: 'Final Circle Rush', c: 'Best Clutches', img: 'stream-thumb-5' },
+].map<Highlight>((h, i) => ({
+  ...base,
+  id: `demo-highlight-${i + 1}`,
+  title: h.t,
+  description: 'Placeholder highlight — replace it with a real clip from the dashboard.',
+  youtube_video_id: '',
+  thumbnail_url: `/images/creator/${h.img}.webp`,
+  category: h.c as Highlight['category'],
+  is_featured: i < 2,
+  is_published: true,
+}));
+
+export const demoPolls: Poll[] = [
+  {
+    ...base,
+    id: 'demo-poll-1',
+    question: 'What should the next weekend stream be?',
+    options: [
+      { id: 'a', label: 'TOP 100 Rank Push marathon' },
+      { id: 'b', label: 'Squad rush challenge' },
+      { id: 'c', label: 'Chill classic matches' },
+      { id: 'd', label: 'Custom rooms with viewers' },
+    ],
+    starts_at: iso(now - 24 * H),
+    ends_at: iso(now + 6 * 24 * H),
+    status: 'active',
+    results_visibility: 'after_vote',
+  },
+];
+
+export const demoCommunityPosts: CommunityPost[] = [
+  {
+    ...base,
+    id: 'demo-post-1',
+    kind: 'announcement',
+    title: 'Welcome to the KhushiYT Family hub',
+    body: 'This is a sample announcement. Stream news and updates from Khushi will appear here once published.',
+    rules: null,
+    closes_at: null,
+    status: 'open',
+    registration_open: false,
+    registration_url: null,
+    is_published: true,
+  },
+  {
+    ...base,
+    id: 'demo-post-2',
+    kind: 'challenge',
+    title: 'Pistol-Only Chicken Dinner',
+    body: 'Sample challenge: can you win a classic match using only pistols? Share your clip on Discord.',
+    rules: 'Classic mode only\nPistols and melee only after landing\nPost clips in the Discord challenge channel',
+    closes_at: iso(now + 10 * 24 * H),
+    status: 'open',
+    registration_open: false,
+    registration_url: null,
+    is_published: true,
+  },
+  {
+    ...base,
+    id: 'demo-post-3',
+    kind: 'match',
+    title: 'Community Custom Room',
+    body: 'Sample event card. Registration stays closed until Khushi officially announces a community match.',
+    rules: null,
+    closes_at: null,
+    status: 'upcoming',
+    registration_open: false,
+    registration_url: null,
+    is_published: true,
+  },
+];
+
+export const demoSuggestions: Suggestion[] = [
+  {
+    id: 'demo-suggestion-1',
+    type: 'stream_idea',
+    message: 'Sample suggestion: a full squad rush stream where viewers vote on the drop location.',
+    display_name: 'Sample visitor',
+    status: 'pending',
+    is_published: false,
+    created_at: iso(now - 5 * H),
+    reviewed_at: null,
+    is_sample: true,
+  },
+];
