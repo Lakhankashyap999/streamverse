@@ -202,56 +202,104 @@
 }
 
 /* ───────────────────────── Loader: soldier firing ───────────────────────── */
-.sv-recoil { animation: sv-recoil 0.2s steps(1, end) infinite; transform-origin: 96px 92px; }
+.sv-recoil {
+  animation: sv-recoil 0.24s cubic-bezier(0.15, 0.85, 0.35, 1.2) infinite;
+  transform-origin: 96px 92px;
+  will-change: transform;
+}
 @keyframes sv-recoil {
-  0% { transform: translateX(-3px) rotate(-1.5deg); }
-  45% { transform: translateX(0) rotate(0); }
+  0% { transform: translate3d(-3.5px, 0.5px, 0) rotate(-1.8deg); }
+  35% { transform: translate3d(-1px, 0, 0) rotate(-0.5deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(0); }
 }
-.sv-flash { animation: sv-flash 0.2s steps(1, end) infinite; transform-origin: 206px 86px; }
+.sv-flash {
+  animation: sv-flash 0.24s ease-out infinite;
+  transform-origin: 206px 86px;
+  will-change: transform, opacity;
+}
 @keyframes sv-flash {
-  0% { opacity: 1; transform: scale(1); }
-  20% { opacity: 0.6; transform: scale(0.7); }
-  40%, 100% { opacity: 0; transform: scale(0.4); }
+  0% { opacity: 1; transform: scale(1.15); }
+  18% { opacity: 0.85; transform: scale(0.9); }
+  38% { opacity: 0.2; transform: scale(0.5); }
+  48%, 100% { opacity: 0; transform: scale(0.3); }
 }
-.sv-bullet { animation: sv-bullet 0.6s linear infinite; opacity: 0; }
-.sv-bullet:nth-of-type(2) { animation-delay: 0.2s; }
-.sv-bullet:nth-of-type(3) { animation-delay: 0.4s; }
+.sv-bullet {
+  animation: sv-bullet 0.48s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.sv-bullet:nth-of-type(1) { animation-delay: 0s; }
+.sv-bullet:nth-of-type(2) { animation-delay: 0.16s; }
+.sv-bullet:nth-of-type(3) { animation-delay: 0.32s; }
 @keyframes sv-bullet {
-  0% { transform: translateX(0); opacity: 1; }
-  80% { opacity: 1; }
-  100% { transform: translateX(150px); opacity: 0; }
+  0% { transform: translate3d(0, 0, 0) scaleX(0.8); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translate3d(145px, 0, 0) scaleX(1.3); opacity: 0; }
 }
-.sv-shell { animation: sv-shell 0.6s cubic-bezier(0.3, 0.6, 0.6, 1) infinite; opacity: 0; transform-box: fill-box; }
+.sv-shell {
+  animation: sv-shell 0.6s cubic-bezier(0.25, 0.7, 0.5, 1) infinite;
+  opacity: 0;
+  transform-box: fill-box;
+  will-change: transform, opacity;
+}
+.sv-shell:nth-of-type(1) { animation-delay: 0s; }
 .sv-shell:nth-of-type(2) { animation-delay: 0.2s; }
 .sv-shell:nth-of-type(3) { animation-delay: 0.4s; }
 @keyframes sv-shell {
-  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
-  35% { transform: translate(-10px, -22px) rotate(200deg); opacity: 1; }
-  100% { transform: translate(-26px, 92px) rotate(560deg); opacity: 0; }
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 1; }
+  40% { transform: translate3d(-12px, -24px, 0) rotate(180deg); opacity: 1; }
+  100% { transform: translate3d(-30px, 95px, 0) rotate(540deg); opacity: 0; }
 }
-.sv-hit { animation: sv-hit 0.2s steps(1, end) infinite; transform-origin: 352px 92px; }
+.sv-hit {
+  animation: sv-hit 0.24s ease-out infinite;
+  transform-origin: 352px 92px;
+  will-change: transform, opacity;
+}
 @keyframes sv-hit {
-  0% { opacity: 0; }
-  40% { opacity: 1; transform: scale(1.1); }
-  70%, 100% { opacity: 0; }
+  0%, 20% { opacity: 0; transform: scale(0.8); }
+  35% { opacity: 1; transform: scale(1.2); }
+  70% { opacity: 0.4; transform: scale(0.9); }
+  100% { opacity: 0; transform: scale(0.7); }
 }
-.sv-target { animation: sv-target 0.2s ease-out infinite; transform-origin: 352px 160px; }
+.sv-target {
+  animation: sv-target 0.24s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transform-origin: 352px 186px;
+  will-change: transform;
+}
 @keyframes sv-target {
   0% { transform: rotate(0); }
-  50% { transform: rotate(2.5deg); }
+  25% { transform: rotate(3deg); }
+  60% { transform: rotate(-1deg); }
   100% { transform: rotate(0); }
 }
-.sv-smoke { animation: sv-smoke 1.2s ease-out infinite; opacity: 0; }
+.sv-smoke {
+  animation: sv-smoke 1.2s cubic-bezier(0.1, 0.5, 0.5, 1) infinite;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.sv-smoke:nth-of-type(1) { animation-delay: 0s; }
 .sv-smoke:nth-of-type(2) { animation-delay: 0.4s; }
 .sv-smoke:nth-of-type(3) { animation-delay: 0.8s; }
 @keyframes sv-smoke {
-  0% { transform: translate(0, 0) scale(0.4); opacity: 0.5; }
-  100% { transform: translate(18px, -26px) scale(1.6); opacity: 0; }
+  0% { transform: translate3d(0, 0, 0) scale(0.5); opacity: 0.6; }
+  100% { transform: translate3d(22px, -30px, 0) scale(1.8); opacity: 0; }
 }
-.sv-breathe { animation: sv-breathe 2.4s ease-in-out infinite; transform-origin: 90px 190px; }
-@keyframes sv-breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.008); } }
-.sv-ammo { animation: sv-ammo 1.8s steps(10, end) infinite; transform-origin: left; }
-@keyframes sv-ammo { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.sv-breathe {
+  animation: sv-breathe 2.4s ease-in-out infinite;
+  transform-origin: 90px 190px;
+  will-change: transform;
+}
+@keyframes sv-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.012) translateY(-0.5px); }
+}
+.sv-ammo {
+  animation: sv-ammo-glow 1.5s ease-in-out infinite alternate;
+}
+@keyframes sv-ammo-glow {
+  from { opacity: 0.75; filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.4)); }
+  to { opacity: 1; filter: drop-shadow(0 0 6px rgba(244, 114, 182, 0.8)); }
+}
 
 /* ───────────────────────── PUBG Airdrop Smoke & HUD ───────────────────────── */
 @keyframes red-smoke-plume {

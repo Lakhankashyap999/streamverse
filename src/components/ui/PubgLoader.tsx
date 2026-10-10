@@ -139,15 +139,22 @@ export function PubgLoader({
 }) {
   const [tipIndex, setTipIndex] = useState(0);
   const [ammoCount, setAmmoCount] = useState(30);
+  const [tipFade, setTipFade] = useState(true);
 
   useEffect(() => {
+    // Smooth, leisurely tip progression without frantic re-renders
     const tipTimer = setInterval(() => {
-      setTipIndex((prev) => (prev + 1) % TIPS.length);
-    }, 1200);
+      setTipFade(false);
+      setTimeout(() => {
+        setTipIndex((prev) => (prev + 1) % TIPS.length);
+        setTipFade(true);
+      }, 200);
+    }, 1800);
 
+    // Optimized ammo countdown ticking every 350ms instead of 100ms
     const ammoTimer = setInterval(() => {
-      setAmmoCount((prev) => (prev > 1 ? prev - 1 : 30));
-    }, 100);
+      setAmmoCount((prev) => (prev > 5 ? prev - 3 : 30));
+    }, 350);
 
     return () => {
       clearInterval(tipTimer);
@@ -160,32 +167,36 @@ export function PubgLoader({
       role="status"
       aria-live="polite"
       className={cn(
-        'flex flex-col items-center justify-center gap-5 px-6 text-center select-none',
+        'flex flex-col items-center justify-center gap-4 sm:gap-6 px-4 text-center select-none overflow-x-hidden',
         fullscreen
           ? 'fixed inset-0 z-[999] bg-[#090b16] transition-opacity duration-500'
-          : 'min-h-[60vh] py-16',
+          : 'min-h-[50vh] py-12',
       )}
     >
       {fullscreen && (
         <>
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-60" aria-hidden />
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 size-[38rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-ultra/20"
+            className="pointer-events-none absolute left-1/2 top-1/2 size-[30rem] sm:size-[38rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-ultra/20"
             style={{ boxShadow: 'inset 0 0 100px rgb(139 92 246 / 0.2), 0 0 80px rgb(192 38 211 / 0.15)' }}
             aria-hidden
           />
-          {/* Tactical HUD Header */}
-          <div className="absolute top-6 inset-x-6 flex items-center justify-between font-mono text-xs text-mute/80 sm:px-8">
-            <div className="flex items-center gap-3">
-              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-display tracking-widest text-gold font-bold">BGMI MATCH PROTOCOL</span>
-              <span className="hidden sm:inline border border-line px-2 py-0.5 rounded text-[10px] text-mute">ASIA SERVER · 20ms</span>
+          {/* Tactical HUD Header - Fully mobile friendly */}
+          <div className="absolute top-4 sm:top-6 inset-x-3 sm:inset-x-8 flex items-center justify-between font-mono text-xs text-mute/80 z-20">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span className="font-display tracking-wider sm:tracking-widest text-gold font-bold text-[11px] sm:text-xs truncate">
+                BGMI PROTOCOL
+              </span>
+              <span className="hidden md:inline border border-line px-2 py-0.5 rounded text-[10px] text-mute whitespace-nowrap">
+                ASIA SERVER · 20ms
+              </span>
             </div>
             {onComplete && (
               <button
                 type="button"
                 onClick={onComplete}
-                className="clip-angle-sm flex items-center gap-2 border border-gold/40 bg-gold/10 px-4 py-1.5 font-display text-xs font-bold uppercase tracking-wider text-gold hover:bg-gold hover:text-base transition cursor-pointer"
+                className="clip-angle-sm shrink-0 flex items-center gap-1.5 border border-gold/40 bg-gold/10 px-3 sm:px-4 py-1.5 font-display text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gold hover:bg-gold hover:text-base transition cursor-pointer"
               >
                 Skip Intro ➔
               </button>
@@ -194,21 +205,24 @@ export function PubgLoader({
         </>
       )}
 
-      {/* Soldier Shooting Art */}
-      <div className={cn('relative drop-shadow-[0_0_35px_rgba(192,38,211,0.35)]', fullscreen ? 'w-full max-w-xl' : 'w-full max-w-sm')}>
+      {/* Soldier Shooting Art - Scaled nicely across mobile and desktop */}
+      <div className={cn(
+        'relative drop-shadow-[0_0_35px_rgba(192,38,211,0.35)] will-change-transform',
+        fullscreen ? 'w-full max-w-[320px] sm:max-w-md md:max-w-xl' : 'w-full max-w-xs sm:max-w-sm'
+      )}>
         <SoldierFiring />
       </div>
 
-      {/* Tactical Ammo & Status Bar */}
-      <div className="relative w-full max-w-xs">
-        <div className="mb-2 flex items-center justify-between font-display text-[0.7rem] font-semibold uppercase tracking-[0.3em]">
+      {/* Tactical Ammo & Status Bar - Never clips text */}
+      <div className="relative w-full max-w-[290px] sm:max-w-xs px-2">
+        <div className="mb-2 flex items-center justify-between font-display text-[0.65rem] sm:text-[0.7rem] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.3em]">
           <span className="text-gold flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-amber-400 animate-ping" />
             Firing Simulation
           </span>
           <span className="text-pink-400 font-mono font-bold">{ammoCount} / 30 AMMO</span>
         </div>
-        <div className="flex h-2.5 gap-1" aria-hidden>
+        <div className="flex h-2 sm:h-2.5 gap-1" aria-hidden>
           {Array.from({ length: 10 }).map((_, i) => (
             <span key={i} className="relative flex-1 overflow-hidden rounded-sm bg-white/10">
               <span
@@ -218,18 +232,25 @@ export function PubgLoader({
             </span>
           ))}
         </div>
-        <p className="mt-3 text-sm text-mute font-medium h-5 transition-all duration-300">
-          {TIPS[tipIndex]}
-        </p>
+
+        {/* Tip Container: Flexbox with generous height prevents cutoff on mobile wrap */}
+        <div className="mt-3 min-h-[3.25rem] sm:min-h-[2.5rem] flex items-center justify-center text-center">
+          <p className={cn(
+            'text-xs sm:text-sm text-mute font-medium leading-relaxed max-w-xs transition-opacity duration-200',
+            tipFade ? 'opacity-100' : 'opacity-0'
+          )}>
+            {TIPS[tipIndex]}
+          </p>
+        </div>
       </div>
 
       {fullscreen && (
-        <div className="relative mt-2 flex flex-col items-center gap-1">
-          <p className="font-display text-2xl font-black tracking-widest">
+        <div className="relative mt-1 sm:mt-2 flex flex-col items-center gap-1">
+          <p className="font-display text-xl sm:text-2xl font-black tracking-widest">
             <span className="text-gradient-gold">KHUSHI</span>
             <span className="text-gradient ml-1">YT</span>
           </p>
-          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-mute/70">
+          <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.25em] uppercase text-mute/70">
             OFFICIAL BATTLEGROUNDS HUB
           </span>
         </div>
