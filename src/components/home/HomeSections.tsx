@@ -570,8 +570,14 @@ export function CommunityPreview({ polls, posts, loading }: { polls: Poll[]; pos
 
   return (
     <section className="relative overflow-hidden py-20" aria-labelledby="comm-title">
-      <img src="/images/art/battleground-map.webp" alt="" aria-hidden loading="lazy" className="absolute inset-0 -z-10 size-full object-cover opacity-25" />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#090b16,rgba(9,11,22,0.75)_30%,rgba(9,11,22,0.75)_70%,#090b16)]" />
+      <img
+        src="/images/art/battleground-map.jpg"
+        alt=""
+        aria-hidden
+        loading="lazy"
+        className="absolute inset-0 -z-10 size-full object-cover opacity-55 filter brightness-110 contrast-120 saturate-110"
+      />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#090b16_0%,rgba(9,11,22,0.45)_30%,rgba(9,11,22,0.45)_70%,#090b16_100%)]" />
       <div className="container-x">
         <SectionHeading
           eyebrow="Squad up"
