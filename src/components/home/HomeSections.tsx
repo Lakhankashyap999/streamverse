@@ -197,8 +197,8 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
                 <circle cx="32" cy="32" r="2.5" fill="#fbbf24" />
               </svg>
 
-              {/* Dynamic Kill Feed Banner */}
-              <div className="absolute inset-x-2 sm:inset-x-4 bottom-2 sm:bottom-4 glass rounded-xl p-2 sm:p-2.5 border border-blush/30 shadow-lg flex items-center justify-between gap-2 overflow-hidden">
+              {/* Dynamic Kill Feed Banner - Positioned at top just like authentic PUBG gameplay */}
+              <div className="absolute inset-x-2 sm:inset-x-4 top-12 sm:top-14 glass rounded-xl p-2 sm:p-2.5 border border-blush/30 shadow-lg flex items-center justify-between gap-2 overflow-hidden z-10">
                 <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
                   <span className="shrink-0 size-2 rounded-full bg-red-500 animate-ping" />
                   <span className="font-mono text-[11px] sm:text-xs font-bold text-ink truncate">
@@ -231,13 +231,29 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             </div>
           </div>
 
-          {/* Stream Status Chip */}
-          <div className="glass absolute -bottom-5 left-2 sm:-left-6 sm:-bottom-6 max-w-[88vw] sm:max-w-[17rem] rounded-2xl p-3 sm:p-4 shadow-xl z-20 border border-ultra/40">
+          {/* Stream Status Chip - Clear of any overlapping elements */}
+          <div className="glass absolute -bottom-5 left-2 sm:-left-6 sm:-bottom-6 max-w-[88vw] sm:max-w-[19rem] rounded-2xl p-3 sm:p-4 shadow-xl z-20 border border-ultra/40">
             {live.kind === 'live' ? (
-              <p className="flex items-center gap-2 font-display text-xs sm:text-sm font-bold text-red-400">
-                <span className="size-2 rounded-full bg-bad animate-pulse-dot" aria-hidden />
-                LIVE ON YOUTUBE
-              </p>
+              <a
+                href={live.stream?.youtube_video_id ? `https://www.youtube.com/watch?v=${live.stream.youtube_video_id}` : (profile.youtube_url ? `${profile.youtube_url}/live` : 'https://www.youtube.com/@khusiytlive/live')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 group cursor-pointer"
+              >
+                <span className="relative flex size-2.5 shrink-0">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
+                  <span className="relative inline-flex size-2.5 rounded-full bg-red-500" />
+                </span>
+                <div className="min-w-0">
+                  <p className="font-display text-xs sm:text-sm font-bold text-red-400 group-hover:text-red-300 flex items-center gap-1.5 uppercase tracking-wider">
+                    LIVE ON YOUTUBE
+                    <span className="rounded bg-red-600/30 px-1.5 py-0.5 text-[9px] font-mono text-red-300 border border-red-500/40">WATCH NOW ➔</span>
+                  </p>
+                  <p className="text-[11px] text-mute font-mono truncate max-w-[15rem]">
+                    {live.stream?.title || 'BGMI Rank Push Livestream'}
+                  </p>
+                </div>
+              </a>
             ) : live.kind === 'upcoming' ? (
               <>
                 <p className="hud-label text-[0.65rem] sm:text-[0.7rem]">Next Stream{live.stream.is_sample ? ' · Scheduled' : ''}</p>
@@ -256,7 +272,7 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           </div>
 
           {/* Top 100 Rank Push Badge */}
-          <div className="clip-angle-sm absolute -right-2 bottom-12 hidden items-center gap-2 bg-[linear-gradient(110deg,#fde68a,#fbbf24,#fb923c)] px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-wider text-base shadow-lg z-20 sm:flex">
+          <div className="clip-angle-sm absolute -right-2 sm:-right-4 -bottom-3 sm:-bottom-4 hidden items-center gap-2 bg-[linear-gradient(110deg,#fde68a,#fbbf24,#fb923c)] px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-wider text-base shadow-lg z-20 sm:flex">
             <Trophy className="size-4" aria-hidden /> TOP 100 CONQUEROR
           </div>
         </motion.div>
