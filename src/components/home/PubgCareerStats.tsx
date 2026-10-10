@@ -153,8 +153,8 @@ export function PubgCareerStats() {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line/80 bg-[#161c30]/90 px-4 py-3 sm:px-6">
             <div className="flex items-center gap-2">
               <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-wider text-ink">
-                DATA <span className="text-mute">·</span> STATISTICS
+              <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-wider text-white">
+                DATA <span className="text-slate-400">·</span> STATISTICS
               </span>
               <span className="hidden sm:inline-block rounded bg-red-600/20 px-2 py-0.5 text-[10px] font-mono font-bold text-red-400 border border-red-500/30">
                 VERIFIED ID: 5112658248
@@ -163,14 +163,14 @@ export function PubgCareerStats() {
 
             {/* Tactical Dropdown Badges */}
             <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-ink border border-line">
-                CURRENT SEASON <ChevronDown className="size-3 text-mute" />
+              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-slate-200 border border-line">
+                CURRENT SEASON <ChevronDown className="size-3 text-slate-400" />
               </span>
-              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-ink border border-line">
-                RANKED <ChevronDown className="size-3 text-mute" />
+              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-slate-200 border border-line">
+                RANKED <ChevronDown className="size-3 text-slate-400" />
               </span>
-              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-ink border border-line">
-                TPP Squad <ChevronDown className="size-3 text-mute" />
+              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-slate-200 border border-line">
+                TPP Squad <ChevronDown className="size-3 text-slate-400" />
               </span>
             </div>
           </div>
@@ -185,7 +185,7 @@ export function PubgCareerStats() {
                   <h3 className="font-display font-black text-5xl sm:text-6xl tracking-tighter text-transparent bg-clip-text bg-[linear-gradient(180deg,#fff8db_0%,#fbbf24_45%,#d97706_85%,#92400e_100%)] drop-shadow-[0_4px_16px_rgba(251,191,36,0.4)]">
                     SSS
                   </h3>
-                  <div className="text-xs font-mono text-ink font-bold tracking-wider mt-0.5">
+                  <div className="text-xs font-mono text-slate-200 font-bold tracking-wider mt-0.5">
                     Rating: <span className="text-gold font-bold text-sm">96.5</span>
                   </div>
                 </div>
@@ -318,24 +318,24 @@ export function PubgCareerStats() {
               {/* Top Overview Black Strip (5 Columns) */}
               <div className="grid grid-cols-5 divide-x divide-line/60 bg-[#0d101c] py-4 px-2 sm:px-4 text-center border-b border-line/60">
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-mute uppercase tracking-wider">Matches Played</p>
-                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-ink mt-0.5">252</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">Matches Played</p>
+                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-white mt-0.5">252</p>
                 </div>
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-mute uppercase tracking-wider">Wins</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">Wins</p>
                   <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-emerald-400 mt-0.5">115</p>
                 </div>
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-mute uppercase tracking-wider">Top 10</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">Top 10</p>
                   <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-cyan-400 mt-0.5">217</p>
                 </div>
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-mute uppercase tracking-wider">Eliminations</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">Eliminations</p>
                   <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-rose-400 mt-0.5">2308</p>
                 </div>
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-mute uppercase tracking-wider">F/D Ratio</p>
-                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-gradient-gold mt-0.5">9.16</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">F/D Ratio</p>
+                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-amber-300 mt-0.5">9.16</p>
                 </div>
               </div>
 
@@ -348,16 +348,16 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 flex-1 text-center">
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Win Ratio</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">45.6%</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Win Ratio</p>
+                      <p className="text-xs sm:text-base font-bold text-emerald-400 mt-0.5">45.6%</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Top 10 Rate</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">86.1%</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Top 10 Rate</p>
+                      <p className="text-xs sm:text-base font-bold text-cyan-400 mt-0.5">86.1%</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Accuracy</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">15.4%</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Accuracy</p>
+                      <p className="text-xs sm:text-base font-bold text-amber-300 mt-0.5">15.4%</p>
                     </div>
                   </div>
                 </div>
@@ -369,15 +369,15 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 flex-1 text-center">
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Headshot Rate</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">15.8%</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Headshot Rate</p>
+                      <p className="text-xs sm:text-base font-bold text-rose-400 mt-0.5">15.8%</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Headshots</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">364</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Headshots</p>
+                      <p className="text-xs sm:text-base font-bold text-pink-300 mt-0.5">364</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">AVG Damage</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">AVG Damage</p>
                       <p className="text-xs sm:text-base font-bold text-amber-300 mt-0.5">2137.5</p>
                     </div>
                   </div>
@@ -390,15 +390,15 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 flex-1 text-center">
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Total Damage</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">538658.6</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Total Damage</p>
+                      <p className="text-xs sm:text-base font-bold text-fuchsia-300 mt-0.5">538658.6</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Most Eliminations</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Most Eliminations</p>
                       <p className="text-xs sm:text-base font-bold text-rose-400 mt-0.5">24</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Highest Damage</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Highest Damage</p>
                       <p className="text-xs sm:text-base font-bold text-gold mt-0.5">10299</p>
                     </div>
                   </div>
@@ -411,16 +411,16 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 flex-1 text-center">
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Total Assists</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">1024</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Total Assists</p>
+                      <p className="text-xs sm:text-base font-bold text-cyan-400 mt-0.5">1024</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Avg. Assists</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">4.1</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Avg. Assists</p>
+                      <p className="text-xs sm:text-base font-bold text-sky-300 mt-0.5">4.1</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-mute uppercase">Longest Traveled</p>
-                      <p className="text-xs sm:text-base font-bold text-ink mt-0.5">18.41 KM</p>
+                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Longest Traveled</p>
+                      <p className="text-xs sm:text-base font-bold text-teal-300 mt-0.5">18.41 KM</p>
                     </div>
                   </div>
                 </div>
@@ -497,17 +497,17 @@ export function PubgCareerStats() {
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-fuchsia-300 uppercase tracking-widest block font-bold">PRIMARY AR</span>
-              <p className="font-display font-bold text-base text-ink mt-0.5">M416 Glacier (Max)</p>
+              <p className="font-display font-bold text-base text-white mt-0.5">M416 Glacier (Max)</p>
               <p className="text-xs text-mute mt-1 font-mono">5.56mm · 6x to 3x Pull · Compensator · Ext. Quickdraw Mag</p>
             </div>
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-amber-300 uppercase tracking-widest block font-bold">SECONDARY SNIPER</span>
-              <p className="font-display font-bold text-base text-ink mt-0.5">AWM Monster One-Shot</p>
+              <p className="font-display font-bold text-base text-white mt-0.5">AWM Monster One-Shot</p>
               <p className="text-xs text-mute mt-1 font-mono">.300 Magnum · 8x Scope · Cheek Pad · Suppressor</p>
             </div>
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-cyan-300 uppercase tracking-widest block font-bold">CLOSE COMBAT / CQB</span>
-              <p className="font-display font-bold text-base text-ink mt-0.5">UMP45 / DBS Rush</p>
+              <p className="font-display font-bold text-base text-white mt-0.5">UMP45 / DBS Rush</p>
               <p className="text-xs text-mute mt-1 font-mono">Laser Sight · Red Dot · Extreme Hipfire Accuracy</p>
             </div>
           </div>
