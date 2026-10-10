@@ -24,9 +24,10 @@ export function Logo({ compact = false }: { compact?: boolean }) {
     <Link to="/" className="group flex items-center gap-2.5 rounded-lg" aria-label={`${profile.gaming_name} — home`}>
       <img src="/icons/logo.svg" alt="" width={36} height={36} className="size-9 transition-transform group-hover:rotate-6" />
       {!compact && (
-        <span className="font-display text-lg font-bold leading-none tracking-wide">
+        <span className="font-display text-lg font-bold leading-none tracking-wide flex items-center gap-1">
           <span className="text-gradient-gold">{profile.gaming_name.slice(0, -2) || profile.gaming_name}</span>
           <span className="text-gradient">{profile.gaming_name.length > 2 ? profile.gaming_name.slice(-2) : ''}</span>
+          <span className="text-xs text-pink-400 select-none">🌸</span>
         </span>
       )}
     </Link>

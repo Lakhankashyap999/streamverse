@@ -17,6 +17,7 @@ import { highlightToMedia, videoToMedia } from '../videos/mappers';
 import { PollCard } from '../community/PollCard';
 import { CommunityPostCard } from '../community/CommunityPostCard';
 import { AnimatedCounter } from '../ui/AnimatedCounter';
+import { SakuraPetals } from '../ui/SakuraPetals';
 
 /* ───────────────────────── helpers ───────────────────────── */
 
@@ -52,15 +53,19 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
       <div className="absolute -left-40 top-20 -z-10 size-[34rem] rounded-full bg-neon/20 blur-[120px]" />
       <div className="absolute -right-40 bottom-0 -z-10 size-[30rem] rounded-full bg-ultra/20 blur-[120px]" />
       <div className="absolute right-1/3 top-1/3 -z-10 size-72 rounded-full bg-gold/10 blur-[100px]" />
-      {!reduce &&
-        PARTICLES.map(([x, y, d], i) => (
-          <span
-            key={i}
-            aria-hidden
-            className="absolute -z-10 size-1 rounded-full bg-blush/80"
-            style={{ left: `${x}%`, top: `${y}%`, animation: `drift ${6 + (i % 4)}s ease-in ${d}s infinite`, ['--dx' as string]: `${(i % 2 ? 1 : -1) * 24}px` }}
-          />
-        ))}
+      {!reduce && (
+        <>
+          <SakuraPetals count={14} />
+          {PARTICLES.map(([x, y, d], i) => (
+            <span
+              key={i}
+              aria-hidden
+              className="absolute -z-10 size-1 rounded-full bg-blush/80"
+              style={{ left: `${x}%`, top: `${y}%`, animation: `drift ${6 + (i % 4)}s ease-in ${d}s infinite`, ['--dx' as string]: `${(i % 2 ? 1 : -1) * 24}px` }}
+            />
+          ))}
+        </>
+      )}
 
       <CompassStrip className="absolute inset-x-0 top-20 hidden md:block lg:top-24" />
 
@@ -69,12 +74,13 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
         <div className="order-1 lg:order-1">
           <motion.div {...item(0)} className="w-full">
             <div className="glass inline-flex flex-wrap items-center gap-1.5 sm:gap-2 rounded-full px-3 py-1 sm:px-4 sm:py-1.5 font-display text-[0.62rem] sm:text-[0.7rem] font-semibold uppercase tracking-[0.08em] sm:tracking-[0.22em] text-mute max-w-full">
-              <Crosshair className="size-3 sm:size-3.5 text-gold shrink-0" aria-hidden />
+              <span className="text-pink-400 select-none text-[0.8rem]" aria-hidden>🌸</span>
               <span className="whitespace-nowrap">Gaming</span>
               <span className="text-blush select-none">•</span>
               <span className="whitespace-nowrap">Entertainment</span>
               <span className="text-blush select-none">•</span>
               <span className="whitespace-nowrap">Community</span>
+              <span className="text-pink-400 select-none text-[0.8rem]" aria-hidden>🌸</span>
             </div>
           </motion.div>
 
@@ -271,6 +277,26 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             )}
           </div>
 
+          {/* Cute Pink Gamer Teddy Mascot Badge - Mobile Responsive */}
+          <div className="glass absolute top-20 -right-2 sm:top-24 sm:-right-6 flex items-center gap-2 rounded-2xl p-1.5 sm:p-2 pr-3 sm:pr-3.5 shadow-xl z-20 border border-pink-400/50 bg-[#12162a]/90 backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-pink-400">
+            <div className="relative size-9 sm:size-11 rounded-xl overflow-hidden bg-base border border-pink-400/40 shrink-0">
+              <img
+                src="/images/art/pink-gamer-teddy.jpg"
+                alt="Khushi's Pink Gamer Teddy Mascot"
+                className="size-full object-cover"
+                width={44}
+                height={44}
+              />
+              <span className="absolute bottom-0.5 right-0.5 size-1.5 rounded-full bg-pink-400 animate-pulse" />
+            </div>
+            <div className="min-w-0">
+              <p className="font-display text-[10px] sm:text-xs font-bold text-white flex items-center gap-1 uppercase truncate">
+                Teddy <span>🧸</span>
+              </p>
+              <p className="text-[9px] sm:text-[10px] text-pink-300 font-mono truncate">Mascot 🌸</p>
+            </div>
+          </div>
+
           {/* Top 100 Rank Push Badge */}
           <div className="clip-angle-sm absolute -right-2 sm:-right-4 -bottom-3 sm:-bottom-4 hidden items-center gap-2 bg-[linear-gradient(110deg,#fde68a,#fbbf24,#fb923c)] px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-wider text-base shadow-lg z-20 sm:flex">
             <Trophy className="size-4" aria-hidden /> TOP 100 CONQUEROR
@@ -322,9 +348,13 @@ export function CreatorIntro({ profile }: { profile: Profile }) {
                 {profile.tagline && (
                   <span className="rounded-full border border-blush/30 bg-neon/10 px-3 py-1 text-sm text-fuchsia-200">🎮 {profile.tagline}</span>
                 )}
-                <span className="rounded-full border border-line bg-white/5 px-3 py-1 text-sm text-mute">
-                  <Heart className="mr-1 inline size-3.5 text-blush" aria-hidden />
+                <span className="rounded-full border border-pink-400/30 bg-pink-500/10 px-3 py-1 text-sm text-pink-200 flex items-center gap-1">
+                  <span>🌸</span>
                   {SITE.communityName}
+                </span>
+                <span className="rounded-full border border-pink-400/30 bg-pink-500/10 px-3 py-1 text-sm text-pink-200 flex items-center gap-1">
+                  <span>🧸</span>
+                  Teddy Squad
                 </span>
               </div>
             </div>

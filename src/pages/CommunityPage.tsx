@@ -36,7 +36,7 @@ export function CommunityPage() {
       <PageHeader
         eyebrow="Safe Zone Hub"
         title="Community"
-        highlight="Family"
+        highlight="Family 🌸"
         description={`Your squad center. Vote on upcoming stream game modes, test your skills in challenges, and send suggestions directly to ${profile.gaming_name}.`}
       />
 

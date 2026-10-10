@@ -44,6 +44,11 @@ export function AboutPage() {
                   className="w-full aspect-square object-cover rounded-2xl"
                 />
               </div>
+              {/* Cute Mascot sticker */}
+              <div className="absolute -top-3 -left-3 glass px-2.5 py-1.5 rounded-2xl flex items-center gap-2 border border-pink-400/50 shadow-xl bg-card/90">
+                <img src="/images/art/pink-gamer-teddy.jpg" alt="Mascot" className="size-7 rounded-lg object-cover" />
+                <span className="font-display text-xs font-bold text-white flex items-center gap-1">Teddy 🧸</span>
+              </div>
               {profile.country && (
                 <div className="absolute -bottom-4 right-6 glass px-4 py-2 rounded-xl flex items-center gap-2 font-display text-sm font-semibold text-ink shadow-xl">
                   <MapPin className="size-4 text-blush" /> {profile.country}
