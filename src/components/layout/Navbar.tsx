@@ -55,17 +55,45 @@ export function WaveSubscribeText({ uppercase = false }: { uppercase?: boolean }
   );
 }
 
-export function Logo({ compact = false }: { compact?: boolean }) {
+export function Logo({
+  compact = false,
+  showStatus = false,
+  isLive = false,
+}: {
+  compact?: boolean;
+  showStatus?: boolean;
+  isLive?: boolean;
+}) {
   const { profile } = useProfile();
   return (
     <Link to="/" className="group flex items-center gap-1.5 sm:gap-2 rounded-lg shrink-0 min-w-0" aria-label={`${profile.gaming_name} — home`}>
       <img src="/icons/logo.svg" alt="" width={32} height={32} className="size-7 sm:size-9 transition-transform group-hover:rotate-6 shrink-0" />
       {!compact && (
-        <span className="font-display text-sm sm:text-lg font-bold leading-none tracking-wide flex items-center gap-1 whitespace-nowrap shrink-0">
-          <span className="text-gradient-gold">{profile.gaming_name.slice(0, -2) || profile.gaming_name}</span>
-          <span className="text-gradient">{profile.gaming_name.length > 2 ? profile.gaming_name.slice(-2) : ''}</span>
-          <span className="text-[11px] sm:text-xs text-pink-400 select-none">🌸</span>
-        </span>
+        <div className="flex flex-col justify-center leading-none">
+          <span className="font-display text-sm sm:text-lg font-bold leading-none tracking-wide flex items-center gap-1 whitespace-nowrap shrink-0">
+            <span className="text-gradient-gold">{profile.gaming_name.slice(0, -2) || profile.gaming_name}</span>
+            <span className="text-gradient">{profile.gaming_name.length > 2 ? profile.gaming_name.slice(-2) : ''}</span>
+            <span className="text-[11px] sm:text-xs text-pink-400 select-none">🌸</span>
+          </span>
+          {showStatus && (
+            <span className="flex items-center gap-1 mt-1 select-none font-mono text-[9px] sm:text-[10px] tracking-wider leading-none">
+              {isLive ? (
+                <span className="inline-flex items-center gap-1 font-bold text-red-400">
+                  <span className="relative flex size-1.5 shrink-0">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
+                    <span className="relative inline-flex size-2 rounded-full bg-red-500" />
+                  </span>
+                  <span>LIVE NOW</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 font-semibold text-slate-400">
+                  <span className="size-1.5 rounded-full bg-slate-500 shrink-0" />
+                  <span>OFFLINE</span>
+                </span>
+              )}
+            </span>
+          )}
+        </div>
       )}
     </Link>
   );
@@ -159,7 +187,7 @@ export function Navbar() {
         Skip to content
       </a>
       <nav className="container-x flex h-16 items-center justify-between gap-4 lg:h-18" aria-label="Main">
-        <Logo />
+        <Logo showStatus isLive={isLive} />
         <ul className="hidden items-center gap-1 lg:flex">
           {NAV_ITEMS.map((item) => (
             <li key={item.to}>
@@ -189,13 +217,13 @@ export function Navbar() {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Official YouTube Subscribe Button with Smooth Wave Animation */}
           <a
             href={youtubeSubscribeUrl(profile)}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex items-center gap-1 sm:gap-1.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white px-2 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-bold transition shadow-[0_0_14px_rgba(239,68,68,0.5)] cursor-pointer hover:scale-105 active:scale-95 border border-red-400/40 shrink-0"
+            className="group relative flex items-center gap-1.5 sm:gap-2 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-bold transition shadow-[0_0_14px_rgba(239,68,68,0.5)] cursor-pointer hover:scale-105 active:scale-95 border border-red-400/40 shrink-0"
             aria-label="Subscribe to KhushiYT on YouTube"
           >
             <motion.span
@@ -211,34 +239,6 @@ export function Navbar() {
             </span>
           </a>
 
-          {isLive ? (
-            <a
-              href={liveUrl ?? undefined}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-red-500/50 bg-red-600/20 px-2 py-0.5 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-mono font-bold text-red-300 transition hover:bg-red-600/30 shadow-[0_0_12px_rgba(239,68,68,0.3)] shrink-0"
-              aria-label="KhushiYT is streaming live now on YouTube"
-            >
-              <span className="relative flex size-2 shrink-0">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
-                <span className="relative inline-flex size-2 rounded-full bg-red-500" />
-              </span>
-              <span className="font-mono text-[10px] sm:text-xs font-bold text-red-400">LIVE</span>
-              <span className="hidden md:inline font-mono text-[11px] text-red-300/80">NOW</span>
-            </a>
-          ) : (
-            <a
-              href={profile.youtube_url ?? 'https://www.youtube.com/@khusiytlive'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden xs:flex items-center gap-1.5 rounded-full border border-line bg-card/80 px-2 py-0.5 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-mono text-slate-300 transition hover:text-white hover:border-slate-500/50 shrink-0"
-              aria-label="KhushiYT is currently offline. Visit YouTube channel"
-              title="Currently offline · Streams every night at 10 PM IST"
-            >
-              <span className="size-1.5 rounded-full bg-slate-500 shrink-0" />
-              <span className="font-mono text-[10px] sm:text-[11px] font-semibold text-slate-400">OFFLINE</span>
-            </a>
-          )}
           <button
             ref={menuBtn}
             type="button"
