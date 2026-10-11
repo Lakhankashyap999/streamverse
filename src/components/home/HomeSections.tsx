@@ -51,10 +51,10 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
 
   return (
     <section className="relative isolate overflow-hidden pb-16 pt-24 sm:pt-28 lg:min-h-[100svh] lg:pb-20" aria-labelledby="hero-title">
-      <div className="absolute inset-0 -z-10 bg-grid opacity-60 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
-      <div className="absolute -left-40 top-20 -z-10 size-[34rem] rounded-full bg-neon/20 blur-[120px]" />
-      <div className="absolute -right-40 bottom-0 -z-10 size-[30rem] rounded-full bg-ultra/20 blur-[120px]" />
-      <div className="absolute right-1/3 top-1/3 -z-10 size-72 rounded-full bg-gold/10 blur-[100px]" />
+      <div className="absolute inset-0 -z-10 bg-grid opacity-60 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)] pointer-events-none" />
+      <div className="pointer-events-none absolute -left-40 top-20 -z-10 size-[34rem] rounded-full bg-neon/15 blur-[80px] transform-gpu" />
+      <div className="pointer-events-none absolute -right-40 bottom-0 -z-10 size-[30rem] rounded-full bg-ultra/15 blur-[80px] transform-gpu" />
+      <div className="pointer-events-none absolute right-1/3 top-1/3 -z-10 size-72 rounded-full bg-gold/10 blur-[70px] transform-gpu" />
       {!reduce && (
         <>
           <SakuraPetals count={14} />
@@ -237,7 +237,11 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             <div className="min-w-0">
               <p className="font-display text-xs sm:text-sm font-bold flex items-center gap-1.5 truncate">
                 {profile.gaming_name}
-                <span className="inline-block size-2 rounded-full bg-emerald-400 shrink-0" title="Online" />
+                {live.kind === 'live' ? (
+                  <span className="inline-block size-2 rounded-full bg-red-500 animate-pulse shrink-0" title="Live Now" />
+                ) : (
+                  <span className="inline-block size-2 rounded-full bg-slate-500 shrink-0" title="Currently Offline" />
+                )}
               </p>
               <p className="text-[11px] sm:text-xs text-mute font-mono truncate">{profile.handle}</p>
             </div>

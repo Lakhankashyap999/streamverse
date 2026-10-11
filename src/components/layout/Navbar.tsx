@@ -28,28 +28,13 @@ export function WaveSubscribeText({ uppercase = false }: { uppercase?: boolean }
   return (
     <span className="inline-flex items-center tracking-wider font-extrabold select-none py-0.5" aria-label="Subscribe">
       {letters.map((char, idx) => (
-        <motion.span
+        <span
           key={idx}
-          className="inline-block"
-          animate={{
-            y: [0, -3.5, 0],
-            color: ['#ffffff', '#fde047', '#ffffff'],
-            textShadow: [
-              '0 0 0px rgba(253,224,71,0)',
-              '0 0 8px rgba(253,224,71,0.9)',
-              '0 0 0px rgba(253,224,71,0)',
-            ],
-          }}
-          transition={{
-            duration: 1.2,
-            repeat: Infinity,
-            repeatDelay: 0.8,
-            delay: idx * 0.08,
-            ease: [0.45, 0, 0.55, 1],
-          }}
+          className="wave-char"
+          style={{ '--char-i': idx } as React.CSSProperties}
         >
           {char}
-        </motion.span>
+        </span>
       ))}
     </span>
   );

@@ -58,7 +58,7 @@ export function SakuraPetals({ count = 12, className = '' }: { count?: number; c
             } as React.CSSProperties
           }
         >
-          <svg viewBox="0 0 24 32" className="size-full drop-shadow-[0_2px_8px_rgba(244,114,182,0.35)]">
+          <svg viewBox="0 0 24 32" className="size-full">
             <defs>
               <linearGradient id={`sakura-grad-${p.id}`} x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stopColor="#fbcfe8" stopOpacity="0.95" />

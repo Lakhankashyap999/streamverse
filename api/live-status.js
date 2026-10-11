@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 's-maxage=45, stale-while-revalidate=90');
+  res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
 
   try {
     const response = await fetch('https://www.youtube.com/@khusiytlive/live', {
@@ -13,13 +13,22 @@ export default async function handler(req, res) {
 
     const html = await response.text();
 
-    const isLive =
-      html.includes('"isLive":true') ||
-      html.includes('"isLiveBroadcast":true') ||
-      html.includes('"status":"LIVE"');
+    // YouTube explicitly flags active livestreams with "isLiveNow": true in player metadata.
+    // When offline or scheduled/upcoming, YouTube includes "LIVE_STREAM_OFFLINE" or "isLiveNow": false.
+    const isOffline =
+      html.includes('"LIVE_STREAM_OFFLINE"') ||
+      html.includes('"isLiveNow":false') ||
+      html.includes('LIVE_STREAM_OFFLINE');
 
     const isUpcoming =
-      html.includes('"isUpcoming":true') || html.includes('upcomingEventData');
+      html.includes('"isUpcoming":true') ||
+      html.includes('upcomingEventData') ||
+      html.includes('"status":"UPCOMING"');
+
+    const isLiveNowMatch = /"isLiveNow"\s*:\s*true/.test(html);
+
+    // Active live ONLY if isLiveNow is true AND not offline
+    const isLive = Boolean(isLiveNowMatch && !isOffline);
 
     const vidMatch = html.match(
       /<link rel="canonical" href="https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})">/
@@ -30,24 +39,25 @@ export default async function handler(req, res) {
       html.match(/<title>([^<]+)<\/title>/);
 
     const title = titleMatch ? titleMatch[1].replace(' - YouTube', '') : null;
-    const videoId = vidMatch ? vidMatch[1] : (isLive ? 'WWeleSTclPg' : null);
+    const videoId = vidMatch ? vidMatch[1] : null;
 
     return res.status(200).json({
       isLive,
       isUpcoming,
-      videoId,
-      title: title || (isLive ? 'TOP 100 Rank Push With Rush Gameplay 🔴 | BGMI' : null),
+      videoId: isLive ? videoId : null,
+      title: isLive ? title : null,
       streamUrl: videoId ? `https://www.youtube.com/watch?v=${videoId}` : 'https://www.youtube.com/@khusiytlive/live',
       channelUrl: 'https://www.youtube.com/@khusiytlive',
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {
+    // If checking YouTube fails, default strictly to offline (never false-positive live)
     return res.status(200).json({
-      isLive: true,
+      isLive: false,
       isUpcoming: false,
-      videoId: 'WWeleSTclPg',
-      title: 'BGMI OCEAN ODYSSEY IS BACK🐟| RANK PUSH🔥',
-      streamUrl: 'https://www.youtube.com/watch?v=WWeleSTclPg',
+      videoId: null,
+      title: null,
+      streamUrl: 'https://www.youtube.com/@khusiytlive/live',
       channelUrl: 'https://www.youtube.com/@khusiytlive',
       fallback: true,
       updatedAt: new Date().toISOString(),

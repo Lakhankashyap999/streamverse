@@ -221,6 +221,24 @@
   15% { opacity: 0.9; }
   100% { transform: translate3d(var(--dx, 20px), -120px, 0); opacity: 0; }
 }
+@keyframes wave-letter {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+    color: #ffffff;
+    text-shadow: 0 0 0 rgba(253, 224, 71, 0);
+  }
+  30% {
+    transform: translate3d(0, -3.5px, 0);
+    color: #fde047;
+    text-shadow: 0 0 8px rgba(253, 224, 71, 0.9);
+  }
+}
+.wave-char {
+  display: inline-block;
+  will-change: transform;
+  animation: wave-letter 1.8s ease-in-out infinite;
+  animation-delay: calc(var(--char-i, 0) * 0.08s);
+}
 
 /* ───────────────────────── Loader: soldier firing ───────────────────────── */
 .sv-recoil {
@@ -386,6 +404,6 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .sv-bullet, .sv-shell, .sv-smoke, .sv-hit, .sakura-petal { display: none; }
+  .sv-bullet, .sv-shell, .sv-smoke, .sv-hit, .sakura-petal, .wave-char { animation: none !important; }
   .sv-flash { opacity: 0.8; }
 }
