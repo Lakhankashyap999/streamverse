@@ -11,22 +11,28 @@ interface Particle {
   decay: number;
 }
 
-const SPARK_COLORS = ['#fbbf24', '#f59e0b', '#f472b6', '#fb923c', '#ffffff'];
+const SPARK_COLORS = [
+  '#fbbf24', // bright gold spark
+  '#f59e0b', // amber fire
+  '#f472b6', // neon pink blossom spark
+  '#fb923c', // fiery orange
+  '#ffffff', // white hot spark
+  '#e879f9', // neon purple-pink
+];
 
 /**
- * Super-smooth, hardware-accelerated Ember Sparks cursor trail.
- * - Automatically disables on touch/mobile devices to prevent scrolling jank.
- * - Throttles mouse movement to requestAnimationFrame to prevent high-DPI mouse polling lag.
- * - Idle-pauses RAF loop when cursor stops to save 100% CPU/GPU cycles.
+ * Super-smooth PUBG Ember Sparks trail for BOTH Desktop Mouse & Mobile Touch.
+ * - Hardware accelerated at native 1x DPR to guarantee 60-120 FPS on all mobile GPUs.
+ * - RequestAnimationFrame throttled particle generation (zero polling lag).
+ * - Instant touch/tap bursts and fluid drag trails.
+ * - Zero CPU/GPU idle cost when not touching or moving.
  */
 export function CursorSparks() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    // Disable on touch devices (mobile phones/tablets) and reduced motion
-    const isTouch = window.matchMedia('(pointer: coarse)').matches || !window.matchMedia('(hover: hover)').matches;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (isTouch || prefersReducedMotion) return;
+    if (prefersReducedMotion) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -36,49 +42,46 @@ export function CursorSparks() {
 
     let width = window.innerWidth;
     let height = window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
     const setupCanvas = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
+      canvas.width = width;
+      canvas.height = height;
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
     };
     setupCanvas();
 
     let animationFrameId: number = 0;
     const particles: Particle[] = [];
-    let mouseX = -100;
-    let mouseY = -100;
+    let currentX = -100;
+    let currentY = -100;
     let lastSpawnX = -100;
     let lastSpawnY = -100;
     let isMoving = false;
     let isLooping = false;
-    const maxParticles = 24;
+    const maxParticles = 32;
 
     const handleResize = () => {
       setupCanvas();
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
-    const spawnEmbers = (x: number, y: number, count = 1, isBurst = false) => {
+    const spawnEmbers = (x: number, y: number, count = 2, isBurst = false) => {
       if (particles.length >= maxParticles) return;
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = isBurst ? Math.random() * 2.8 + 1.2 : Math.random() * 1.2 + 0.3;
+        const speed = isBurst ? Math.random() * 2.8 + 1.2 : Math.random() * 1.4 + 0.4;
         particles.push({
           x,
           y,
           vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed - (isBurst ? 1 : 0.4),
-          size: isBurst ? Math.random() * 3 + 1.5 : Math.random() * 2.2 + 1,
+          vy: Math.sin(angle) * speed - (isBurst ? 1.2 : 0.5), // gentle upward float
+          size: isBurst ? Math.random() * 3.2 + 1.8 : Math.random() * 2.5 + 1.2,
           color: SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)],
           alpha: 1,
-          decay: isBurst ? Math.random() * 0.04 + 0.025 : Math.random() * 0.05 + 0.035,
+          decay: isBurst ? Math.random() * 0.035 + 0.025 : Math.random() * 0.045 + 0.03,
         });
       }
     };
@@ -90,22 +93,50 @@ export function CursorSparks() {
       }
     };
 
+    // Desktop Mouse Move
     const handlePointerMove = (e: PointerEvent) => {
       if (e.pointerType === 'touch') return;
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      currentX = e.clientX;
+      currentY = e.clientY;
       isMoving = true;
       startLoop();
     };
 
+    // Desktop Click Burst
     const handlePointerDown = (e: PointerEvent) => {
       if (e.pointerType === 'touch') return;
+      currentX = e.clientX;
+      currentY = e.clientY;
       spawnEmbers(e.clientX, e.clientY, 8, true);
+      startLoop();
+    };
+
+    // Mobile Touch Drag Trail
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      currentX = touch.clientX;
+      currentY = touch.clientY;
+      isMoving = true;
+      startLoop();
+    };
+
+    // Mobile Touch Tap Burst
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      currentX = touch.clientX;
+      currentY = touch.clientY;
+      lastSpawnX = touch.clientX;
+      lastSpawnY = touch.clientY;
+      spawnEmbers(touch.clientX, touch.clientY, 6, true);
       startLoop();
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
     window.addEventListener('pointerdown', handlePointerDown, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
 
     const handleVisibility = () => {
       if (document.hidden) {
@@ -118,14 +149,14 @@ export function CursorSparks() {
     document.addEventListener('visibilitychange', handleVisibility);
 
     const tick = () => {
-      // Spawn ember if cursor moved far enough
+      // Spawn ember in RAF when moving, distance-throttled to avoid redundant allocations
       if (isMoving) {
-        const dx = mouseX - lastSpawnX;
-        const dy = mouseY - lastSpawnY;
-        if (dx * dx + dy * dy > 36) {
-          spawnEmbers(mouseX, mouseY, 1, false);
-          lastSpawnX = mouseX;
-          lastSpawnY = mouseY;
+        const dx = currentX - lastSpawnX;
+        const dy = currentY - lastSpawnY;
+        if (dx * dx + dy * dy > 36) { // ~6px distance
+          spawnEmbers(currentX, currentY, 2, false);
+          lastSpawnX = currentX;
+          lastSpawnY = currentY;
         }
         isMoving = false;
       }
@@ -142,9 +173,9 @@ export function CursorSparks() {
         const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.02;
+        p.vy += 0.02; // gentle gravity
         p.alpha -= p.decay;
-        p.size *= 0.95;
+        p.size *= 0.96;
 
         if (p.alpha <= 0.02 || p.size <= 0.4) {
           particles.splice(i, 1);
@@ -153,9 +184,18 @@ export function CursorSparks() {
 
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
+
+        // White glowing hot center on prominent sparks
+        if (p.size > 2) {
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * 0.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       animationFrameId = requestAnimationFrame(tick);
@@ -165,6 +205,8 @@ export function CursorSparks() {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('visibilitychange', handleVisibility);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
@@ -173,7 +215,7 @@ export function CursorSparks() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-[9999] size-full touch-none will-change-transform"
+      className="pointer-events-none fixed inset-0 z-[9999] size-full touch-none"
       aria-hidden="true"
     />
   );
