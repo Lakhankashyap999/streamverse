@@ -1,136 +1,315 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Crosshair,
-  Flame,
-  Gamepad2,
   Shield,
-  Skull,
-  Sparkles,
   Target,
   Trophy,
   Zap,
   ChevronDown,
   Activity,
+  Award,
+  Crown,
+  Check,
+  Heart,
 } from 'lucide-react';
-import { AnimatedCounter } from '../ui/AnimatedCounter';
 import { SectionHeading, Reveal } from '../ui/Display';
 
-interface StatMetric {
+export interface SeasonData {
   id: string;
-  label: string;
-  value: number;
-  decimals: number;
-  suffix: string;
-  prefix?: string;
-  badge: string;
-  badgeColor: string;
-  icon: typeof Trophy;
-  colorClass: string;
-  description: string;
+  name: string;
+  shortName: string;
+  tierBadge: string;
+  tierScore: string;
+  tierLabel: string;
+  isCurrent?: boolean;
+  radar: {
+    winRatio: number;
+    feedback: number;
+    support: number;
+    survived: number;
+    combat: number;
+  };
+  overview: {
+    matches: number;
+    wins: number;
+    top10: number;
+    eliminations: number;
+    fdRatio: number;
+  };
+  details: {
+    winRatioPct: string;
+    top10RatePct: string;
+    accuracyPct: string;
+    headshotRatePct: string;
+    headshots: number;
+    avgDamage: string;
+    totalDamage: string;
+    mostEliminations: number;
+    highestDamage: number;
+    totalAssists: number;
+    avgAssists: string;
+    longestTraveled: string;
+  };
 }
 
-/** Verified Official In-Game Stats from Screenshot (media_1791653398557.jpg) */
-const STATS_DATA: StatMetric[] = [
+/** Verified Official In-Game Season Records from Screenshots */
+const SEASONS: SeasonData[] = [
   {
-    id: 'fd_ratio',
-    label: 'F/D Ratio (K/D)',
-    value: 9.16,
-    decimals: 2,
-    suffix: '',
-    badge: 'SSS Rating',
-    badgeColor: 'border-amber-400/40 text-amber-300 bg-amber-400/10',
-    icon: Crosshair,
-    colorClass: 'text-gradient-gold',
-    description: 'Eliminations to deaths ratio in Ranked TPP Squad',
+    id: 'current',
+    name: 'CURRENT SEASON',
+    shortName: 'Current Season',
+    tierBadge: 'Ace Dominator ⭐ 24',
+    tierScore: '8544',
+    tierLabel: 'Season Rating · Rank #817 (Top Region)',
+    isCurrent: true,
+    radar: {
+      winRatio: 98.5,
+      feedback: 90.2,
+      support: 100.0,
+      survived: 88.5,
+      combat: 97.2,
+    },
+    overview: {
+      matches: 258,
+      wins: 118,
+      top10: 217,
+      eliminations: 2379,
+      fdRatio: 9.22,
+    },
+    details: {
+      winRatioPct: '45.7%',
+      top10RatePct: '84.1%',
+      accuracyPct: '12.5%',
+      headshotRatePct: '18.2%',
+      headshots: 433,
+      avgDamage: '2127.8',
+      totalDamage: '548983.0',
+      mostEliminations: 27,
+      highestDamage: 4890,
+      totalAssists: 1084,
+      avgAssists: '4.2',
+      longestTraveled: '18.15 KM',
+    },
   },
   {
-    id: 'eliminations',
-    label: 'Total Eliminations',
-    value: 2308,
-    decimals: 0,
-    suffix: '',
-    badge: '2.3K+ Frags',
-    badgeColor: 'border-rose-400/40 text-rose-300 bg-rose-400/10',
-    icon: Skull,
-    colorClass: 'text-rose-400',
-    description: 'Total enemy players eliminated across 252 matches',
+    id: 's30',
+    name: 'SEASON 30',
+    shortName: 'Season 30',
+    tierBadge: 'SSS',
+    tierScore: '96.9',
+    tierLabel: 'Combat Rating · SSS Grade',
+    radar: {
+      winRatio: 98.9,
+      feedback: 91.3,
+      support: 100.0,
+      survived: 89.0,
+      combat: 98.0,
+    },
+    overview: {
+      matches: 598,
+      wins: 285,
+      top10: 544,
+      eliminations: 5727,
+      fdRatio: 9.58,
+    },
+    details: {
+      winRatioPct: '47.7%',
+      top10RatePct: '91.0%',
+      accuracyPct: '12.7%',
+      headshotRatePct: '16.0%',
+      headshots: 915,
+      avgDamage: '1671.7',
+      totalDamage: '999665.8',
+      mostEliminations: 30,
+      highestDamage: 8357,
+      totalAssists: 2541,
+      avgAssists: '4.2',
+      longestTraveled: '17.28 KM',
+    },
   },
   {
-    id: 'matches',
-    label: 'Matches Played',
-    value: 252,
-    decimals: 0,
-    suffix: '',
-    badge: 'Ranked Push',
-    badgeColor: 'border-purple-400/40 text-purple-300 bg-purple-400/10',
-    icon: Gamepad2,
-    colorClass: 'text-violet-400',
-    description: 'Current season competitive squad matches grinded',
+    id: 's29',
+    name: 'SEASON 29',
+    shortName: 'Season 29',
+    tierBadge: 'SSS',
+    tierScore: '94.7',
+    tierLabel: 'Combat Rating · SSS Grade',
+    radar: {
+      winRatio: 98.1,
+      feedback: 86.2,
+      support: 100.0,
+      survived: 83.8,
+      combat: 94.1,
+    },
+    overview: {
+      matches: 338,
+      wins: 153,
+      top10: 288,
+      eliminations: 2340,
+      fdRatio: 6.92,
+    },
+    details: {
+      winRatioPct: '45.3%',
+      top10RatePct: '85.2%',
+      accuracyPct: '11.6%',
+      headshotRatePct: '18.7%',
+      headshots: 437,
+      avgDamage: '1185.8',
+      totalDamage: '400784.8',
+      mostEliminations: 25,
+      highestDamage: 5314,
+      totalAssists: 1180,
+      avgAssists: '3.5',
+      longestTraveled: '16.25 KM',
+    },
   },
   {
-    id: 'win_rate',
-    label: 'Win Ratio',
-    value: 45.6,
-    decimals: 1,
-    suffix: '%',
-    badge: '115 Dinners',
-    badgeColor: 'border-emerald-400/40 text-emerald-300 bg-emerald-400/10',
-    icon: Trophy,
-    colorClass: 'text-emerald-400',
-    description: 'Winner Winner Chicken Dinners conversion rate (115 Wins)',
+    id: 's28',
+    name: 'SEASON 28',
+    shortName: 'Season 28',
+    tierBadge: 'SSS',
+    tierScore: '96.0',
+    tierLabel: 'Combat Rating · SSS Grade',
+    radar: {
+      winRatio: 98.9,
+      feedback: 88.7,
+      support: 100.0,
+      survived: 88.1,
+      combat: 95.9,
+    },
+    overview: {
+      matches: 508,
+      wins: 267,
+      top10: 461,
+      eliminations: 4056,
+      fdRatio: 7.98,
+    },
+    details: {
+      winRatioPct: '52.6%',
+      top10RatePct: '90.7%',
+      accuracyPct: '12.0%',
+      headshotRatePct: '21.0%',
+      headshots: 853,
+      avgDamage: '1281.0',
+      totalDamage: '650732.8',
+      mostEliminations: 27,
+      highestDamage: 3734,
+      totalAssists: 1750,
+      avgAssists: '3.4',
+      longestTraveled: '16.09 KM',
+    },
   },
   {
-    id: 'top10_rate',
-    label: 'Top 10 Rate',
-    value: 86.1,
-    decimals: 1,
-    suffix: '%',
-    badge: '217 Top 10s',
-    badgeColor: 'border-cyan-400/40 text-cyan-300 bg-cyan-400/10',
-    icon: Shield,
-    colorClass: 'text-cyan-400',
-    description: 'Survival into final circle top 10 squads (217 matches)',
+    id: 's27',
+    name: 'S27',
+    shortName: 'Season 27',
+    tierBadge: 'SSS',
+    tierScore: '97.7',
+    tierLabel: 'Combat Rating · SSS Grade',
+    radar: {
+      winRatio: 99.2,
+      feedback: 93.7,
+      support: 100.0,
+      survived: 92.4,
+      combat: 97.9,
+    },
+    overview: {
+      matches: 637,
+      wins: 400,
+      top10: 593,
+      eliminations: 6042,
+      fdRatio: 9.49,
+    },
+    details: {
+      winRatioPct: '62.8%',
+      top10RatePct: '93.1%',
+      accuracyPct: '12.3%',
+      headshotRatePct: '17.5%',
+      headshots: 1058,
+      avgDamage: '1457.5',
+      totalDamage: '928440.3',
+      mostEliminations: 29,
+      highestDamage: 4036,
+      totalAssists: 2194,
+      avgAssists: '3.4',
+      longestTraveled: '17.31 KM',
+    },
   },
   {
-    id: 'avg_damage',
-    label: 'AVG Match Damage',
-    value: 2137.5,
-    decimals: 1,
-    suffix: ' HP',
-    badge: 'Heavy Impact',
-    badgeColor: 'border-amber-400/40 text-amber-300 bg-amber-400/10',
-    icon: Zap,
-    colorClass: 'text-amber-300',
-    description: 'Consistent combat firepower dealt per match',
-  },
-  {
-    id: 'most_kills',
-    label: 'Most Eliminations',
-    value: 24,
-    decimals: 0,
-    suffix: ' Kills',
-    badge: 'Single Match Record',
-    badgeColor: 'border-red-400/40 text-red-300 bg-red-400/10',
-    icon: Flame,
-    colorClass: 'text-gradient-gold',
-    description: 'Highest elimination clutch in a single classic match',
-  },
-  {
-    id: 'total_damage',
-    label: 'Total Season Damage',
-    value: 538658,
-    decimals: 0,
-    suffix: ' HP',
-    badge: '538K+ Firepower',
-    badgeColor: 'border-fuchsia-400/40 text-fuchsia-300 bg-fuchsia-400/10',
-    icon: Sparkles,
-    colorClass: 'text-gradient',
-    description: 'Total cumulative combat damage dealt to opponents',
+    id: 'c9s26',
+    name: 'C9S26',
+    shortName: 'Cycle 9 Season 26',
+    tierBadge: 'SS+',
+    tierScore: '94.4',
+    tierLabel: 'Combat Rating · SS+ Grade',
+    radar: {
+      winRatio: 98.0,
+      feedback: 85.6,
+      support: 100.0,
+      survived: 81.7,
+      combat: 94.6,
+    },
+    overview: {
+      matches: 632,
+      wins: 256,
+      top10: 533,
+      eliminations: 4650,
+      fdRatio: 7.36,
+    },
+    details: {
+      winRatioPct: '40.5%',
+      top10RatePct: '84.3%',
+      accuracyPct: '12.3%',
+      headshotRatePct: '18.0%',
+      headshots: 835,
+      avgDamage: '1201.0',
+      totalDamage: '759002.6',
+      mostEliminations: 25,
+      highestDamage: 3205,
+      totalAssists: 2107,
+      avgAssists: '3.3',
+      longestTraveled: '23.99 KM',
+    },
   },
 ];
 
+/** Verified In-Game Honor Titles from Screenshot (media_1791724431585_fb07fbcb.jpg) */
+const VERIFIED_TITLES = [
+  { name: 'Season 12 Conq', type: 'Conqueror Crown', tier: 'red', desc: 'Ranked Season 12 Top 500 Conqueror' },
+  { name: 'Mythic Fashion', type: 'Mythic Collection', tier: 'red', desc: '300+ Permanent Mythic Outfits' },
+  { name: 'Unique Destiny', type: 'Special Achievement', tier: 'red', desc: '6000+ Achievement Milestone' },
+  { name: 'Perfectionist', type: 'Royale Pass Mastery', tier: 'red', desc: 'Max Royale Pass Multi-Season' },
+  { name: 'Overachiever', type: 'Honor Milestone', tier: 'red', desc: '2800+ Achievement Points' },
+  { name: 'Well-Liked', type: 'Popularity Honor', tier: 'purple', desc: '10,000+ Likes & Synergies' },
+  { name: 'Weapon Master', type: 'Armory Elite', tier: 'purple', desc: 'Multi-Class Eliminations Mastery' },
+  { name: '1235 Box Collect', type: 'Collector Honor', tier: 'purple', desc: 'Collector Showcase Milestone' },
+  { name: 'Veteran', type: 'Battleground Legacy', tier: 'purple', desc: '8 Years Active Battleground Veteran' },
+  { name: '#1/100', type: 'Lone Survivor', tier: 'purple', desc: 'Solo vs Squad Solo Chicken Dinner' },
+];
+
 export function PubgCareerStats() {
+  const [selectedSeasonId, setSelectedSeasonId] = useState<string>('current');
   const [chartType, setChartType] = useState<'radar' | 'curve'>('radar');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const activeSeason = SEASONS.find((s) => s.id === selectedSeasonId) ?? SEASONS[0];
+
+  // Dynamic Pentagon Polygon Points Calculation from Active Season
+  const cx = 130;
+  const cy = 115;
+  const r0 = (activeSeason.radar.winRatio / 100) * 75;
+  const r1 = (activeSeason.radar.feedback / 100) * 75;
+  const r2 = (activeSeason.radar.support / 100) * 75;
+  const r3 = (activeSeason.radar.survived / 100) * 75;
+  const r4 = (activeSeason.radar.combat / 100) * 75;
+
+  const pt0 = `${cx},${(cy - r0).toFixed(2)}`;
+  const pt1 = `${(cx + r1 * 0.951).toFixed(2)},${(cy - r1 * 0.309).toFixed(2)}`;
+  const pt2 = `${(cx + r2 * 0.588).toFixed(2)},${(cy + r2 * 0.809).toFixed(2)}`;
+  const pt3 = `${(cx - r3 * 0.588).toFixed(2)},${(cy + r3 * 0.809).toFixed(2)}`;
+  const pt4 = `${(cx - r4 * 0.951).toFixed(2)},${(cy - r4 * 0.309).toFixed(2)}`;
+  const polygonPoints = `${pt0} ${pt1} ${pt2} ${pt3} ${pt4}`;
 
   return (
     <section className="container-x py-16 sm:py-24 relative isolate overflow-x-hidden" aria-labelledby="career-stats-heading">
@@ -143,203 +322,335 @@ export function PubgCareerStats() {
         title="Official BGMI"
         highlight="Career Statistics"
         id="career-stats-heading"
-        description="Verified in-game performance metrics — Season ranked TPP Squad statistics updated directly from player profile."
+        description="Verified in-game performance metrics — Ranked TPP Squad multi-season telemetry updated directly from player profile."
       />
 
       {/* ────────────────── OFFICIAL BGMI IN-GAME STATS DASHBOARD ────────────────── */}
       <Reveal>
         <div className="relative mb-12 overflow-hidden rounded-2xl border border-line bg-[#101422] shadow-2xl">
-          {/* Header Bar with Filters */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line/80 bg-[#161c30]/90 px-4 py-3 sm:px-6">
+          {/* Header Bar with Interactive Season Selector & Tactical Filters */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line/80 bg-[#161c30]/95 px-4 py-3 sm:px-6">
             <div className="flex items-center gap-2">
               <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-wider text-white">
                 DATA <span className="text-slate-400">·</span> STATISTICS
               </span>
               <span className="hidden sm:inline-block rounded bg-red-600/20 px-2 py-0.5 text-[10px] font-mono font-bold text-red-400 border border-red-500/30">
-                VERIFIED ID: 5112658248
+                UID: 5112658248
               </span>
             </div>
 
-            {/* Tactical Dropdown Badges */}
-            <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-slate-200 border border-line">
-                CURRENT SEASON <ChevronDown className="size-3 text-slate-400" />
+            {/* Tactical Interactive Dropdown Selectors */}
+            <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] relative">
+              {/* Season Selection Dropdown */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsDropdownOpen((o) => !o)}
+                  className="flex items-center gap-1.5 rounded bg-[#212946] hover:bg-[#2b3558] px-3 py-1.5 text-white font-bold border border-line shadow transition cursor-pointer"
+                  aria-expanded={isDropdownOpen}
+                >
+                  <span className="text-amber-300 font-bold">{activeSeason.name}</span>
+                  <ChevronDown className={`size-3.5 text-slate-300 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-full mt-1.5 w-48 rounded-xl border border-line bg-[#13172b] p-1.5 shadow-2xl z-50 backdrop-blur-xl"
+                    >
+                      <div className="px-2 py-1 text-[10px] uppercase font-bold text-slate-400 border-b border-line/50 mb-1">
+                        Select Season
+                      </div>
+                      {SEASONS.map((s) => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedSeasonId(s.id);
+                            setIsDropdownOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left text-xs font-mono transition cursor-pointer ${
+                            selectedSeasonId === s.id
+                              ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30'
+                              : 'text-slate-200 hover:bg-white/5 hover:text-white'
+                          }`}
+                        >
+                          <span>{s.name}</span>
+                          {selectedSeasonId === s.id && <Check className="size-3.5 text-amber-300" />}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Mode Badges */}
+              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2.5 py-1.5 text-slate-200 border border-line/60">
+                RANKED
               </span>
-              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-slate-200 border border-line">
-                RANKED <ChevronDown className="size-3 text-slate-400" />
-              </span>
-              <span className="flex items-center gap-1 rounded bg-[#212946] px-2.5 py-1 text-slate-200 border border-line">
-                TPP Squad <ChevronDown className="size-3 text-slate-400" />
+              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2.5 py-1.5 text-slate-200 border border-line/60">
+                TPP Squad
               </span>
             </div>
           </div>
 
-          {/* Main Telemetry Container (Split: Radar / SSS on Left, Full Table on Right) */}
+          {/* Main Telemetry Container (Split: Radar / Curve on Left, Full Table on Right) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-line/60">
-            {/* Left Column: SSS Grade & 5-Axis Combat Radar */}
+            {/* Left Column: SSS / Dominator Grade & Chart (Radar vs Curve) */}
             <div className="lg:col-span-4 p-5 sm:p-6 flex flex-col items-center justify-between bg-[#121629]/60">
-              {/* SSS Badge */}
+              {/* Dynamic Tier Badge */}
               <div className="text-center w-full">
                 <div className="inline-block relative">
-                  <h3 className="font-display font-black text-5xl sm:text-6xl tracking-tighter text-transparent bg-clip-text bg-[linear-gradient(180deg,#fff8db_0%,#fbbf24_45%,#d97706_85%,#92400e_100%)] drop-shadow-[0_4px_16px_rgba(251,191,36,0.4)]">
-                    SSS
+                  <h3 className="font-display font-black text-4xl sm:text-5xl tracking-tighter text-transparent bg-clip-text bg-[linear-gradient(180deg,#fff8db_0%,#fbbf24_45%,#d97706_85%,#92400e_100%)] drop-shadow-[0_4px_16px_rgba(251,191,36,0.4)]">
+                    {activeSeason.tierBadge}
                   </h3>
                   <div className="text-xs font-mono text-slate-200 font-bold tracking-wider mt-0.5">
-                    Rating: <span className="text-gold font-bold text-sm">96.5</span>
+                    Rating: <span className="text-amber-300 font-bold text-sm">{activeSeason.tierScore}</span>
                   </div>
+                  <p className="text-[10px] font-mono text-slate-400 mt-0.5">{activeSeason.tierLabel}</p>
                 </div>
               </div>
 
-              {/* Pentagon Radar Chart SVG */}
-              <div className="relative my-3 w-full max-w-[270px] aspect-[260/220]">
-                <svg viewBox="0 0 260 220" className="size-full overflow-visible" role="img" aria-label="BGMI 5-Axis Combat Telemetry Radar">
-                  <defs>
-                    <linearGradient id="radar-fill" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#4f75d9" stopOpacity="0.75" />
-                      <stop offset="100%" stopColor="#253c7a" stopOpacity="0.55" />
-                    </linearGradient>
-                  </defs>
+              {/* Interactive Graphic: Pentagon Radar Chart OR Ace Dominator Progression Curve */}
+              <div className="relative my-3 w-full max-w-[280px] aspect-[260/220] flex items-center justify-center">
+                {chartType === 'radar' ? (
+                  <svg viewBox="0 0 260 220" className="size-full overflow-visible" role="img" aria-label="BGMI 5-Axis Combat Telemetry Radar">
+                    <defs>
+                      <linearGradient id="radar-fill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#4f75d9" stopOpacity="0.75" />
+                        <stop offset="100%" stopColor="#253c7a" stopOpacity="0.55" />
+                      </linearGradient>
+                    </defs>
 
-                  {/* Concentric Pentagon Background Grids (20%, 40%, 60%, 80%, 100%) */}
-                  {[0.2, 0.4, 0.6, 0.8, 1].map((scale, idx) => (
+                    {/* Concentric Pentagon Background Grids (20%, 40%, 60%, 80%, 100%) */}
+                    {[0.2, 0.4, 0.6, 0.8, 1].map((scale, idx) => (
+                      <polygon
+                        key={idx}
+                        points={`
+                          ${130},${115 - 75 * scale}
+                          ${130 + 75 * scale * 0.951},${115 - 75 * scale * 0.309}
+                          ${130 + 75 * scale * 0.588},${115 + 75 * scale * 0.809}
+                          ${130 - 75 * scale * 0.588},${115 + 75 * scale * 0.809}
+                          ${130 - 75 * scale * 0.951},${115 - 75 * scale * 0.309}
+                        `}
+                        fill="none"
+                        stroke="#283556"
+                        strokeWidth={idx === 4 ? '1.5' : '1'}
+                        strokeDasharray={idx < 4 ? '2 2' : undefined}
+                      />
+                    ))}
+
+                    {/* Center Spoke Lines */}
+                    {[
+                      [130, 115 - 75],
+                      [130 + 75 * 0.951, 115 - 75 * 0.309],
+                      [130 + 75 * 0.588, 115 + 75 * 0.809],
+                      [130 - 75 * 0.588, 115 + 75 * 0.809],
+                      [130 - 75 * 0.951, 115 - 75 * 0.309],
+                    ].map(([x, y], i) => (
+                      <line key={i} x1="130" y1="115" x2={x} y2={y} stroke="#283556" strokeWidth="1" />
+                    ))}
+
+                    {/* Dynamic Radar Polygon based on Selected Season */}
                     <polygon
-                      key={idx}
-                      points={`
-                        ${130},${115 - 75 * scale}
-                        ${130 + 75 * scale * 0.951},${115 - 75 * scale * 0.309}
-                        ${130 + 75 * scale * 0.588},${115 + 75 * scale * 0.809}
-                        ${130 - 75 * scale * 0.588},${115 + 75 * scale * 0.809}
-                        ${130 - 75 * scale * 0.951},${115 - 75 * scale * 0.309}
-                      `}
-                      fill="none"
-                      stroke="#283556"
-                      strokeWidth={idx === 4 ? '1.5' : '1'}
-                      strokeDasharray={idx < 4 ? '2 2' : undefined}
+                      points={polygonPoints}
+                      fill="url(#radar-fill)"
+                      stroke="#7096e8"
+                      strokeWidth="2"
+                      strokeLinejoin="round"
+                      className="drop-shadow-[0_0_12px_rgba(79,117,217,0.6)] transition-all duration-500 ease-out"
                     />
-                  ))}
 
-                  {/* Center Spoke Lines */}
-                  {[
-                    [130, 115 - 75],
-                    [130 + 75 * 0.951, 115 - 75 * 0.309],
-                    [130 + 75 * 0.588, 115 + 75 * 0.809],
-                    [130 - 75 * 0.588, 115 + 75 * 0.809],
-                    [130 - 75 * 0.951, 115 - 75 * 0.309],
-                  ].map(([x, y], i) => (
-                    <line key={i} x1="130" y1="115" x2={x} y2={y} stroke="#283556" strokeWidth="1" />
-                  ))}
+                    {/* Vertex Points */}
+                    {[
+                      [cx, cy - r0],
+                      [cx + r1 * 0.951, cy - r1 * 0.309],
+                      [cx + r2 * 0.588, cy + r2 * 0.809],
+                      [cx - r3 * 0.588, cy + r3 * 0.809],
+                      [cx - r4 * 0.951, cy - r4 * 0.309],
+                    ].map(([x, y], i) => (
+                      <circle key={i} cx={x} cy={y} r="3" fill="#ffffff" stroke="#3b82f6" strokeWidth="1.5" />
+                    ))}
 
-                  {/* Radar Polygon with Exact Values */}
-                  {/* Top: 98.2 | Feedback: 90.6 | Support: 100.0 | Survived: 88.2 | Combat: 97.6 */}
-                  <polygon
-                    points="130,41.35 194.63,94.00 174.08,175.68 91.12,168.52 60.39,92.38"
-                    fill="url(#radar-fill)"
-                    stroke="#7096e8"
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                    className="drop-shadow-[0_0_12px_rgba(79,117,217,0.6)]"
-                  />
+                    {/* Data Labels Matching In-Game UI */}
+                    <text x="130" y="24" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      Win Ratio
+                    </text>
+                    <text x="130" y="36" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      {activeSeason.radar.winRatio.toFixed(1)}
+                    </text>
 
-                  {/* Vertex Points */}
-                  {[
-                    [130, 41.35],
-                    [194.63, 94.00],
-                    [174.08, 175.68],
-                    [91.12, 168.52],
-                    [60.39, 92.38],
-                  ].map(([x, y], i) => (
-                    <circle key={i} cx={x} cy={y} r="3" fill="#ffffff" stroke="#3b82f6" strokeWidth="1.5" />
-                  ))}
+                    <text x="212" y="90" textAnchor="start" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      Feedback
+                    </text>
+                    <text x="212" y="102" textAnchor="start" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      {activeSeason.radar.feedback.toFixed(1)}
+                    </text>
 
-                  {/* Data Labels Matching In-Game Screenshot */}
-                  <text x="130" y="24" textAnchor="middle" fill="#e2e8f0" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    Win Ratio
-                  </text>
-                  <text x="130" y="36" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    98.2
-                  </text>
+                    <text x="188" y="196" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      Support
+                    </text>
+                    <text x="188" y="208" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      {activeSeason.radar.support.toFixed(1)}
+                    </text>
 
-                  <text x="210" y="90" textAnchor="start" fill="#e2e8f0" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    Feedback
-                  </text>
-                  <text x="210" y="102" textAnchor="start" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    90.6
-                  </text>
+                    <text x="72" y="196" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      Survived
+                    </text>
+                    <text x="72" y="208" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      {activeSeason.radar.survived.toFixed(1)}
+                    </text>
 
-                  <text x="186" y="196" textAnchor="middle" fill="#e2e8f0" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    Support
-                  </text>
-                  <text x="186" y="208" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    100.0
-                  </text>
+                    <text x="48" y="90" textAnchor="end" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      Combat
+                    </text>
+                    <text x="48" y="102" textAnchor="end" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                      {activeSeason.radar.combat.toFixed(1)}
+                    </text>
+                  </svg>
+                ) : (
+                  /* Authentic Ace Dominator Tier Progression Curve Graph (media_1791724419376_e62a34eb.jpg) */
+                  <div className="size-full flex flex-col justify-between p-2 rounded-xl bg-[#0d1020]/90 border border-blue-500/20 shadow-inner">
+                    <svg viewBox="0 0 240 180" className="size-full" role="img" aria-label="Ace Dominator Score Progression Curve">
+                      <defs>
+                        <linearGradient id="curve-gradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
+                          <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+                        </linearGradient>
+                      </defs>
 
-                  <text x="74" y="196" textAnchor="middle" fill="#e2e8f0" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    Survived
-                  </text>
-                  <text x="74" y="208" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    88.2
-                  </text>
+                      {/* Tier Milestone Horizontal Guides */}
+                      <line x1="20" y1="35" x2="225" y2="35" stroke="#475569" strokeWidth="0.8" strokeDasharray="3 3" />
+                      <text x="22" y="30" fill="#94a3b8" fontSize="8" fontFamily="monospace" fontWeight="bold">
+                        Ace Dominator 6700
+                      </text>
 
-                  <text x="50" y="90" textAnchor="end" fill="#e2e8f0" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    Combat
-                  </text>
-                  <text x="50" y="102" textAnchor="end" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
-                    97.6
-                  </text>
-                </svg>
+                      <line x1="20" y1="85" x2="225" y2="85" stroke="#475569" strokeWidth="0.8" strokeDasharray="3 3" />
+                      <text x="22" y="80" fill="#60a5fa" fontSize="8" fontFamily="monospace" fontWeight="bold">
+                        Ace Dominator 6500
+                      </text>
+
+                      <line x1="20" y1="140" x2="225" y2="140" stroke="#475569" strokeWidth="0.8" strokeDasharray="3 3" />
+                      <text x="22" y="135" fill="#94a3b8" fontSize="8" fontFamily="monospace" fontWeight="bold">
+                        Ace Dominator 6300
+                      </text>
+
+                      {/* Progression Curve Area Fill */}
+                      <path
+                        d="M 25 125 C 60 120, 80 110, 105 102 C 130 96, 150 95, 175 75 C 195 68, 210 67, 225 66 L 225 155 L 25 155 Z"
+                        fill="url(#curve-gradient)"
+                      />
+
+                      {/* Main Blue Progression Line */}
+                      <path
+                        d="M 25 125 C 60 120, 80 110, 105 102 C 130 96, 150 95, 175 75 C 195 68, 210 67, 225 66"
+                        fill="none"
+                        stroke="#38bdf8"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        className="drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]"
+                      />
+
+                      {/* Milestone Checkpoint Nodes */}
+                      {[
+                        [25, 125],
+                        [50, 122],
+                        [75, 115],
+                        [100, 104],
+                        [125, 98],
+                        [150, 96],
+                        [175, 75],
+                        [195, 68],
+                        [210, 67],
+                        [225, 66],
+                      ].map(([x, y], idx) => (
+                        <circle key={idx} cx={x} cy={y} r="2.5" fill="#ffffff" stroke="#0284c7" strokeWidth="1.5" />
+                      ))}
+
+                      {/* Timeline Labels */}
+                      <text x="25" y="165" fill="#94a3b8" fontSize="9" fontFamily="monospace" fontWeight="bold">
+                        10/09
+                      </text>
+                      <text x="205" y="165" fill="#38bdf8" fontSize="9" fontFamily="monospace" fontWeight="bold">
+                        10/11
+                      </text>
+                    </svg>
+                    <div className="text-center font-mono text-[10px] text-sky-300 font-bold">
+                      Ace Dominator 6580+ PTS · Current Rank Push
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Chart Switcher Buttons */}
-              <div className="flex items-center gap-1 bg-[#1e253d] p-1 rounded border border-line">
+              {/* Chart Switcher Buttons (Functional Toggle) */}
+              <div className="flex items-center gap-1 bg-[#1e253d] p-1 rounded-xl border border-line">
                 <button
                   type="button"
                   onClick={() => setChartType('radar')}
-                  className={`px-3 py-1 text-xs font-mono rounded transition cursor-pointer ${
-                    chartType === 'radar' ? 'bg-[#3b4872] text-white font-bold' : 'text-mute hover:text-ink'
+                  className={`px-3 py-1 text-xs font-mono rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                    chartType === 'radar'
+                      ? 'bg-[#3b4872] text-white font-bold shadow-md shadow-blue-500/20'
+                      : 'text-slate-300 hover:text-white'
                   }`}
                 >
-                  ⬟ Radar
+                  <span>⬟</span> Radar
                 </button>
                 <button
                   type="button"
                   onClick={() => setChartType('curve')}
-                  className={`px-3 py-1 text-xs font-mono rounded transition cursor-pointer ${
-                    chartType === 'curve' ? 'bg-[#3b4872] text-white font-bold' : 'text-mute hover:text-ink'
+                  className={`px-3 py-1 text-xs font-mono rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                    chartType === 'curve'
+                      ? 'bg-[#3b4872] text-white font-bold shadow-md shadow-blue-500/20'
+                      : 'text-slate-300 hover:text-white'
                   }`}
                 >
-                  📈 Curve
+                  <span>📈</span> Curve
                 </button>
               </div>
             </div>
 
-            {/* Right Column: 5 Top Overview Columns + 4 Performance Matrix Rows */}
+            {/* Right Column: 5 Top Overview Columns + 4 Performance Matrix Rows (Always White & Vivid on PC) */}
             <div className="lg:col-span-8 flex flex-col justify-between">
               {/* Top Overview Black Strip (5 Columns) */}
               <div className="grid grid-cols-5 divide-x divide-line/60 bg-[#0d101c] py-4 px-2 sm:px-4 text-center border-b border-line/60">
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">Matches Played</p>
-                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-white mt-0.5">252</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Matches Played</p>
+                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-white mt-0.5">
+                    {activeSeason.overview.matches}
+                  </p>
                 </div>
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">Wins</p>
-                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-emerald-400 mt-0.5">115</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Wins</p>
+                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-emerald-400 mt-0.5">
+                    {activeSeason.overview.wins}
+                  </p>
                 </div>
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">Top 10</p>
-                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-cyan-400 mt-0.5">217</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Top 10</p>
+                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-cyan-400 mt-0.5">
+                    {activeSeason.overview.top10}
+                  </p>
                 </div>
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">Eliminations</p>
-                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-rose-400 mt-0.5">2308</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Eliminations</p>
+                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-rose-400 mt-0.5">
+                    {activeSeason.overview.eliminations}
+                  </p>
                 </div>
                 <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-400 uppercase tracking-wider">F/D Ratio</p>
-                  <p className="font-mono text-base sm:text-2xl md:text-3xl font-bold text-amber-300 mt-0.5">9.16</p>
+                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">F/D Ratio</p>
+                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-amber-300 mt-0.5">
+                    {activeSeason.overview.fdRatio.toFixed(2)}
+                  </p>
                 </div>
               </div>
 
-              {/* 4 Performance Rows Matching the In-Game UI */}
+              {/* 4 Performance Rows Matching In-Game UI (Explicit Crisp Colors on PC and Mobile) */}
               <div className="divide-y divide-line/40 font-mono">
                 {/* Row 1: Chicken Dinner / Win Stats */}
                 <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 hover:bg-white/[0.02] transition">
@@ -348,16 +659,16 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 flex-1 text-center">
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Win Ratio</p>
-                      <p className="text-xs sm:text-base font-bold text-emerald-400 mt-0.5">45.6%</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Win Ratio</p>
+                      <p className="text-xs sm:text-lg font-black text-emerald-400 mt-0.5">{activeSeason.details.winRatioPct}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Top 10 Rate</p>
-                      <p className="text-xs sm:text-base font-bold text-cyan-400 mt-0.5">86.1%</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Top 10 Rate</p>
+                      <p className="text-xs sm:text-lg font-black text-cyan-400 mt-0.5">{activeSeason.details.top10RatePct}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Accuracy</p>
-                      <p className="text-xs sm:text-base font-bold text-amber-300 mt-0.5">15.4%</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Accuracy</p>
+                      <p className="text-xs sm:text-lg font-black text-amber-300 mt-0.5">{activeSeason.details.accuracyPct}</p>
                     </div>
                   </div>
                 </div>
@@ -369,16 +680,16 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 flex-1 text-center">
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Headshot Rate</p>
-                      <p className="text-xs sm:text-base font-bold text-rose-400 mt-0.5">15.8%</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Headshot Rate</p>
+                      <p className="text-xs sm:text-lg font-black text-rose-400 mt-0.5">{activeSeason.details.headshotRatePct}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Headshots</p>
-                      <p className="text-xs sm:text-base font-bold text-pink-300 mt-0.5">364</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Headshots</p>
+                      <p className="text-xs sm:text-lg font-black text-pink-300 mt-0.5">{activeSeason.details.headshots}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">AVG Damage</p>
-                      <p className="text-xs sm:text-base font-bold text-amber-300 mt-0.5">2137.5</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">AVG Damage</p>
+                      <p className="text-xs sm:text-lg font-black text-amber-300 mt-0.5">{activeSeason.details.avgDamage}</p>
                     </div>
                   </div>
                 </div>
@@ -390,16 +701,16 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 flex-1 text-center">
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Total Damage</p>
-                      <p className="text-xs sm:text-base font-bold text-fuchsia-300 mt-0.5">538658.6</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Total Damage</p>
+                      <p className="text-xs sm:text-lg font-black text-fuchsia-300 mt-0.5">{activeSeason.details.totalDamage}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Most Eliminations</p>
-                      <p className="text-xs sm:text-base font-bold text-rose-400 mt-0.5">24</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Most Eliminations</p>
+                      <p className="text-xs sm:text-lg font-black text-rose-400 mt-0.5">{activeSeason.details.mostEliminations}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Highest Damage</p>
-                      <p className="text-xs sm:text-base font-bold text-gold mt-0.5">10299</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Highest Damage</p>
+                      <p className="text-xs sm:text-lg font-black text-amber-300 mt-0.5">{activeSeason.details.highestDamage}</p>
                     </div>
                   </div>
                 </div>
@@ -411,33 +722,33 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-2 flex-1 text-center">
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Total Assists</p>
-                      <p className="text-xs sm:text-base font-bold text-cyan-400 mt-0.5">1024</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Total Assists</p>
+                      <p className="text-xs sm:text-lg font-black text-cyan-400 mt-0.5">{activeSeason.details.totalAssists}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Avg. Assists</p>
-                      <p className="text-xs sm:text-base font-bold text-sky-300 mt-0.5">4.1</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Avg. Assists</p>
+                      <p className="text-xs sm:text-lg font-black text-sky-300 mt-0.5">{activeSeason.details.avgAssists}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] sm:text-xs text-slate-400 uppercase font-medium">Longest Traveled</p>
-                      <p className="text-xs sm:text-base font-bold text-teal-300 mt-0.5">18.41 KM</p>
+                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Longest Traveled</p>
+                      <p className="text-xs sm:text-lg font-black text-teal-300 mt-0.5">{activeSeason.details.longestTraveled}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Bottom In-Game Actions */}
-              <div className="flex items-center justify-between border-t border-line/60 bg-[#0e1220] px-4 py-3 sm:px-6 font-mono text-xs text-mute">
-                <div className="flex items-center gap-4">
-                  <span className="flex items-center gap-1.5 text-mute hover:text-ink cursor-pointer transition">
+              <div className="flex items-center justify-between border-t border-line/60 bg-[#0e1220] px-4 py-3 sm:px-6 font-mono text-xs">
+                <div className="flex items-center gap-4 text-slate-300">
+                  <span className="flex items-center gap-1.5 hover:text-white cursor-pointer transition">
                     <Shield className="size-3.5 text-rose-400" /> Report
                   </span>
-                  <span className="flex items-center gap-1.5 text-mute hover:text-ink cursor-pointer transition">
+                  <span className="flex items-center gap-1.5 hover:text-white cursor-pointer transition">
                     <Activity className="size-3.5 text-cyan-400" /> Compare
                   </span>
                 </div>
-                <span className="text-[11px] text-mute/80 hidden sm:inline">
-                  Asia Server · Squad TPP · Updated Live
+                <span className="text-[11px] text-slate-300 font-bold hidden sm:inline">
+                  Asia Server · Squad TPP · {activeSeason.name}
                 </span>
               </div>
             </div>
@@ -445,70 +756,152 @@ export function PubgCareerStats() {
         </div>
       </Reveal>
 
-      {/* ────────────────── 8 ANIMATED METRIC CARDS ON SCROLL ────────────────── */}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {STATS_DATA.map((item, idx) => {
-          const Icon = item.icon;
-          return (
-            <Reveal key={item.id} delay={idx * 0.05}>
-              <div className="group panel relative h-full flex flex-col justify-between p-6 transition-all duration-300 hover:-translate-y-1 hover:border-ultra/40 hover:shadow-[0_15px_30px_-10px_rgba(192,38,211,0.25)]">
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="grid size-10 place-items-center rounded-xl bg-surface border border-line group-hover:border-blush/40 transition">
-                      <Icon className="size-5 text-gold group-hover:text-blush transition" />
-                    </span>
-                    <span className={`font-mono text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${item.badgeColor}`}>
-                      {item.badge}
-                    </span>
-                  </div>
-
-                  <p className="text-xs font-semibold uppercase tracking-wider text-mute mb-1 font-display">
-                    {item.label}
-                  </p>
-
-                  <div className="text-3xl sm:text-4xl font-black font-display tracking-tight my-1">
-                    <AnimatedCounter
-                      to={item.value}
-                      decimals={item.decimals}
-                      suffix={item.suffix}
-                      prefix={item.prefix}
-                      className={item.colorClass}
-                      duration={1800}
-                    />
-                  </div>
-                </div>
-
-                <p className="mt-3 text-xs text-mute/80 leading-relaxed border-t border-line/60 pt-3">
-                  {item.description}
-                </p>
+      {/* ────────────────── OFFICIAL BASIC INFO & PROFILE SHOWCASE BAR ────────────────── */}
+      <Reveal delay={0.1}>
+        <div className="mb-12 rounded-2xl border border-line bg-[#11162a]/90 p-5 sm:p-7 shadow-xl backdrop-blur-md">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-line/60">
+            {/* Player Identity Block */}
+            <div className="flex items-center gap-4">
+              <div className="relative size-16 sm:size-20 shrink-0 rounded-2xl border-2 border-amber-400/80 bg-gradient-to-br from-amber-400/20 to-pink-500/20 p-1 shadow-lg shadow-amber-500/20">
+                <img
+                  src="/images/creator/khushi-avatar-gamer.webp"
+                  alt="FRAGxKhusiYT Avatar"
+                  className="size-full object-cover rounded-xl"
+                />
+                <span className="absolute -bottom-2 -right-2 rounded-md bg-amber-400 px-1.5 py-0.5 font-mono text-[10px] font-black text-slate-950 shadow">
+                  Lv.91
+                </span>
               </div>
-            </Reveal>
-          );
-        })}
-      </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="font-gaming text-xl sm:text-2xl font-bold text-white tracking-wide">
+                    ♀ FRAGxKhusiYT
+                  </h3>
+                  <span className="rounded bg-red-600/20 border border-red-500/40 px-2 py-0.5 font-mono text-[10px] font-bold text-red-300">
+                    FRAGOFFICIALS Leader
+                  </span>
+                </div>
+                <p className="font-mono text-xs text-slate-300 mt-1 flex items-center gap-2">
+                  <span>UID: <strong className="text-amber-300">5112658248</strong></span>
+                  <span className="text-white/40">·</span>
+                  <span>Region: <strong className="text-white">India 🇮🇳</strong></span>
+                </p>
+                <div className="flex items-center gap-2 mt-2 font-mono text-[11px]">
+                  <span className="text-pink-300 bg-pink-500/10 border border-pink-500/30 px-2 py-0.5 rounded-full flex items-center gap-1 font-bold">
+                    <Heart className="size-3 fill-pink-400 text-pink-400" />
+                    Partner: TOM and FRAGxKhu...
+                  </span>
+                </div>
+              </div>
+            </div>
 
-      {/* ────────────────── SIGNATURE COMBAT LOADOUT ────────────────── */}
+            {/* Quick Profile Milestones */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center font-mono">
+              <div className="rounded-xl border border-line bg-card/60 p-3">
+                <span className="text-[10px] uppercase text-slate-400 font-bold block">Master Collector</span>
+                <span className="text-sm sm:text-base font-black text-amber-300 mt-0.5 block">Level 100</span>
+              </div>
+              <div className="rounded-xl border border-line bg-card/60 p-3">
+                <span className="text-[10px] uppercase text-slate-400 font-bold block">Lifetime Matches</span>
+                <span className="text-sm sm:text-base font-black text-white mt-0.5 block">21,728</span>
+              </div>
+              <div className="rounded-xl border border-line bg-card/60 p-3">
+                <span className="text-[10px] uppercase text-slate-400 font-bold block">Achievement Points</span>
+                <span className="text-sm sm:text-base font-black text-cyan-300 mt-0.5 block">⭐ 8,820</span>
+              </div>
+              <div className="rounded-xl border border-line bg-card/60 p-3">
+                <span className="text-[10px] uppercase text-slate-400 font-bold block">Played For</span>
+                <span className="text-sm sm:text-base font-black text-emerald-300 mt-0.5 block">8 Years</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+
+      {/* ────────────────── OFFICIAL HONOR & 79 TITLES SHOWCASE (media_1791724431585_fb07fbcb.jpg) ────────────────── */}
+      <Reveal delay={0.15}>
+        <div className="mb-12 rounded-2xl border border-line bg-[#101424] p-5 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-line/60">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
+                <Award className="size-4" /> HONOR · ACHIEVEMENTS
+              </p>
+              <h3 className="font-display text-xl sm:text-2xl font-bold text-white mt-1">
+                Official In-Game Titles Showcase
+              </h3>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-amber-400/15 border border-amber-400/30 px-3.5 py-1.5 font-mono text-xs text-amber-300 flex items-center gap-2">
+                <Crown className="size-4 text-amber-400" />
+                <span>Total Titles: <strong className="text-white text-sm">79</strong></span>
+              </div>
+            </div>
+          </div>
+
+          {/* 10 Verified Titles Grid matching In-game Screenshot */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5 font-mono">
+            {VERIFIED_TITLES.map((t) => {
+              const isRed = t.tier === 'red';
+              return (
+                <div
+                  key={t.name}
+                  className={`group relative overflow-hidden rounded-xl border p-3 transition flex flex-col justify-between ${
+                    isRed
+                      ? 'border-red-500/30 bg-gradient-to-b from-red-950/30 to-[#12162a] hover:border-red-500/60'
+                      : 'border-purple-500/30 bg-gradient-to-b from-purple-950/30 to-[#12162a] hover:border-purple-500/60'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span
+                      className={`size-6 rounded-lg grid place-items-center text-xs font-bold ${
+                        isRed ? 'bg-red-600/30 text-red-300' : 'bg-purple-600/30 text-purple-300'
+                      }`}
+                    >
+                      {isRed ? '👑' : '⭐'}
+                    </span>
+                    <span
+                      className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                        isRed ? 'bg-red-500/20 text-red-300' : 'bg-purple-500/20 text-purple-300'
+                      }`}
+                    >
+                      {isRed ? 'Mythic' : 'Epic'}
+                    </span>
+                  </div>
+                  <h4 className="font-gaming text-sm font-bold text-white tracking-wide truncate group-hover:text-amber-300 transition">
+                    {t.name}
+                  </h4>
+                  <p className="text-[10px] text-slate-300 mt-1 line-clamp-2 leading-tight">
+                    {t.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </Reveal>
+
+      {/* ────────────────── SIGNATURE COMBAT LOADOUT & SENSITIVITY ────────────────── */}
       <Reveal delay={0.2}>
-        <div className="mt-10 panel p-6 border-line bg-card/60">
-          <div className="flex items-center gap-2 mb-4 font-display text-sm font-bold uppercase tracking-widest text-gold">
+        <div className="panel p-6 border-line bg-card/60">
+          <div className="flex items-center gap-2 mb-4 font-display text-sm font-bold uppercase tracking-widest text-amber-400">
             <Target className="size-4" />
-            Signature Combat Loadout & Sensitivity
+            Signature Combat Loadout & Gun Lab Showcase
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-fuchsia-300 uppercase tracking-widest block font-bold">PRIMARY AR</span>
-              <p className="font-display font-bold text-base text-white mt-0.5">M416 Glacier (Max)</p>
-              <p className="text-xs text-mute mt-1 font-mono">5.56mm · 6x to 3x Pull · Compensator · Ext. Quickdraw Mag</p>
+              <p className="font-display font-bold text-base text-white mt-0.5">M416 Glacier (Max Level)</p>
+              <p className="text-xs text-slate-300 mt-1 font-mono">5.56mm · 6x to 3x Pull · Compensator · Ext. Quickdraw Mag</p>
             </div>
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-amber-300 uppercase tracking-widest block font-bold">SECONDARY SNIPER</span>
               <p className="font-display font-bold text-base text-white mt-0.5">AWM Monster One-Shot</p>
-              <p className="text-xs text-mute mt-1 font-mono">.300 Magnum · 8x Scope · Cheek Pad · Suppressor</p>
+              <p className="text-xs text-slate-300 mt-1 font-mono">.300 Magnum · 8x Scope · Cheek Pad · Suppressor</p>
             </div>
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-cyan-300 uppercase tracking-widest block font-bold">CLOSE COMBAT / CQB</span>
               <p className="font-display font-bold text-base text-white mt-0.5">UMP45 / DBS Rush</p>
-              <p className="text-xs text-mute mt-1 font-mono">Laser Sight · Red Dot · Extreme Hipfire Accuracy</p>
+              <p className="text-xs text-slate-300 mt-1 font-mono">Laser Sight · Red Dot · Extreme Hipfire Accuracy</p>
             </div>
           </div>
         </div>
