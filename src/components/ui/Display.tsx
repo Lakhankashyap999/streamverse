@@ -58,10 +58,10 @@ export function SectionHeading({
           <Crosshair className="size-3.5" aria-hidden />
           {eyebrow}
         </p>
-        <h2 id={id} className="mt-3 text-3xl font-bold leading-tight sm:text-4xl">
+        <h2 id={id} className="mt-2.5 text-2xl font-bold leading-tight sm:text-4xl">
           {title} {highlight && <span className="text-gradient">{highlight}</span>}
         </h2>
-        {description && <p className="mt-3 text-base text-mute sm:text-lg">{description}</p>}
+        {description && <p className="mt-2 text-xs text-slate-300 sm:text-base leading-relaxed">{description}</p>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>

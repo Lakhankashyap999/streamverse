@@ -61,13 +61,13 @@ export function VideoCard({ item, onPlay, priority = false }: { item: MediaItem;
         </span>
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex items-center gap-2 text-xs text-mute">
-          {item.category && <span className="font-display font-semibold uppercase tracking-wider text-blush">{item.category}</span>}
-          {item.category && item.date && <span aria-hidden>•</span>}
-          {item.date && <time dateTime={item.date}>{formatDate(item.date)}</time>}
+        <div className="flex items-center gap-2 text-xs">
+          {item.category && <span className="font-gaming font-bold uppercase tracking-wider text-pink-400 text-xs">{item.category}</span>}
+          {item.category && item.date && <span className="text-white/40">•</span>}
+          {item.date && <time dateTime={item.date} className="text-slate-300 font-medium">{formatDate(item.date)}</time>}
         </div>
-        <h3 className="line-clamp-2 text-base font-semibold leading-snug group-hover:text-white">{item.title}</h3>
-        <span className="mt-auto pt-1 text-sm font-semibold text-gold">
+        <h3 className="line-clamp-2 font-display text-base font-bold leading-snug text-white group-hover:text-amber-300 transition-colors">{item.title}</h3>
+        <span className="mt-auto pt-1 text-sm font-semibold text-amber-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
           {hasVideo ? 'Watch now' : external ? 'Watch on YouTube' : 'Video link coming soon'}
           <span aria-hidden> →</span>
         </span>
@@ -92,6 +92,113 @@ export function VideoCard({ item, onPlay, priority = false }: { item: MediaItem;
         <div className={cls}>{content}</div>
       )}
     </motion.article>
+  );
+}
+
+/** Mobile-exclusive compact ZigZag card layout */
+function MobileZigzagVideoCard({
+  item,
+  index,
+  onPlay,
+  priority = false,
+}: {
+  item: MediaItem;
+  index: number;
+  onPlay(item: MediaItem): void;
+  priority?: boolean;
+}) {
+  const isEven = index % 2 === 0;
+  const hasVideo = isValidVideoId(item.youtubeId);
+  const thumb = item.thumbnail || (hasVideo ? ytThumb(item.youtubeId!) : null);
+  const external = !hasVideo ? safeExternalUrl(item.fallbackUrl, ['youtube.com', 'youtu.be']) : null;
+
+  const thumbBox = (
+    <div className="relative w-32 xs:w-36 shrink-0 aspect-[16/10] rounded-xl overflow-hidden bg-surface border border-line shadow-inner">
+      <SafeImage
+        src={thumb}
+        alt=""
+        className="size-full object-cover"
+        loading={priority ? 'eager' : 'lazy'}
+        width={240}
+        height={150}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-base/80 via-transparent to-transparent" />
+      {item.duration && (
+        <span className="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-0.5 font-mono text-[9px] font-bold text-white shadow">
+          {item.duration}
+        </span>
+      )}
+      <span className="absolute left-1/2 top-1/2 grid size-7 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/20 backdrop-blur-sm">
+        {hasVideo ? <Play className="ml-0.5 size-3.5 fill-white text-white" aria-hidden /> : <ExternalLink className="size-3.5 text-white" aria-hidden />}
+      </span>
+    </div>
+  );
+
+  const infoBox = (
+    <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+      <div>
+        <div className="flex items-center gap-1.5 text-[10px] mb-1">
+          <span className={cn('font-gaming font-bold uppercase tracking-wider', isEven ? 'text-pink-400' : 'text-amber-400')}>
+            {item.category || 'Live Stream'}
+          </span>
+          {item.date && (
+            <>
+              <span className="text-white/40">•</span>
+              <time dateTime={item.date} className="text-slate-300 font-medium">
+                {formatDate(item.date)}
+              </time>
+            </>
+          )}
+        </div>
+        <h4 className="font-display text-xs font-bold leading-snug text-white line-clamp-2">
+          {item.title}
+        </h4>
+      </div>
+      <div className="pt-2 flex items-center justify-between">
+        <span className={cn('font-mono text-[10px] font-bold flex items-center gap-1', isEven ? 'text-amber-300' : 'text-pink-300')}>
+          {hasVideo ? 'Play Now ➔' : 'Watch on YT ➔'}
+        </span>
+      </div>
+    </div>
+  );
+
+  const containerCls = cn(
+    'group flex items-center gap-3 p-2.5 rounded-2xl bg-card/90 border border-line transition shadow-md active:scale-[0.99]',
+    isEven ? 'border-l-4 border-l-pink-500' : 'border-r-4 border-r-amber-400',
+  );
+
+  return (
+    <div>
+      {hasVideo ? (
+        <button type="button" onClick={() => onPlay(item)} className={cn(containerCls, 'w-full text-left')} aria-label={`Play: ${item.title}`}>
+          {isEven ? (
+            <>
+              {thumbBox}
+              {infoBox}
+            </>
+          ) : (
+            <>
+              {infoBox}
+              {thumbBox}
+            </>
+          )}
+        </button>
+      ) : (
+        <a href={external ?? '#'} target="_blank" rel="noopener noreferrer" className={containerCls} aria-label={`${item.title} (opens YouTube)`}>
+          {isEven ? (
+            <>
+              {thumbBox}
+              {infoBox}
+            </>
+          ) : (
+            <>
+              {infoBox}
+              {thumbBox}
+            </>
+          )}
+        </a>
+      )}
+    </div>
   );
 }
 
@@ -133,7 +240,15 @@ export function VideoGrid({ items, columns = 3, priorityCount = 0 }: { items: Me
   const cols = { 2: 'sm:grid-cols-2', 3: 'sm:grid-cols-2 lg:grid-cols-3', 4: 'sm:grid-cols-2 lg:grid-cols-4' }[columns];
   return (
     <>
-      <div className={cn('grid gap-5', cols)}>
+      {/* Mobile-optimized Zigzag layout (hidden on sm+) */}
+      <div className="flex flex-col gap-3 sm:hidden">
+        {items.map((item, i) => (
+          <MobileZigzagVideoCard key={item.id} item={item} index={i} onPlay={setPlaying} priority={i < priorityCount} />
+        ))}
+      </div>
+
+      {/* Tablet & Desktop Grid (hidden on mobile) */}
+      <div className={cn('hidden sm:grid gap-5', cols)}>
         {items.map((item, i) => (
           <VideoCard key={item.id} item={item} onPlay={setPlaying} priority={i < priorityCount} />
         ))}

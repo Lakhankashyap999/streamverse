@@ -18,6 +18,7 @@ import { PollCard } from '../community/PollCard';
 import { CommunityPostCard } from '../community/CommunityPostCard';
 import { AnimatedCounter } from '../ui/AnimatedCounter';
 import { SakuraPetals } from '../ui/SakuraPetals';
+import { PubgLiveKillFeed } from './PubgLiveKillFeed';
 
 /* ───────────────────────── helpers ───────────────────────── */
 
@@ -291,8 +292,8 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           </div>
 
           {/* Top 100 Rank Push Badge */}
-          <div className="clip-angle-sm absolute -right-2 sm:-right-4 -bottom-3 sm:-bottom-4 hidden items-center gap-2 bg-[linear-gradient(110deg,#fde68a,#fbbf24,#fb923c)] px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-wider text-base shadow-lg z-20 sm:flex">
-            <Trophy className="size-4" aria-hidden /> TOP 100 CONQUEROR
+          <div className="clip-angle-sm absolute -right-2 sm:-right-4 -bottom-3 sm:-bottom-4 hidden items-center gap-2 bg-[linear-gradient(110deg,#fde68a,#fbbf24,#fb923c)] px-3.5 py-1.5 font-display text-xs font-black uppercase tracking-wider text-slate-950 shadow-lg z-20 sm:flex">
+            <Trophy className="size-4 text-slate-950" aria-hidden /> TOP 100 CONQUEROR
           </div>
         </motion.div>
       </div>
@@ -501,7 +502,9 @@ export function HighlightFilters({ categories, value, onChange }: { categories: 
           onClick={() => onChange(c)}
           className={cn(
             'clip-angle-sm shrink-0 border px-4 py-2 font-display text-sm font-semibold transition',
-            value === c ? 'border-transparent bg-[linear-gradient(110deg,#fbbf24,#f472b6,#8b5cf6)] text-base' : 'border-line bg-card text-mute hover:text-ink',
+            value === c
+              ? 'border-transparent bg-[linear-gradient(110deg,#fbbf24,#f472b6,#8b5cf6)] text-slate-950 font-bold shadow-md shadow-pink-500/20'
+              : 'border-line bg-card text-slate-200 hover:text-white',
           )}
         >
           {c}
@@ -535,6 +538,10 @@ export function FeaturedHighlights({ highlights, loading, error, onRetry, channe
             </ButtonLink>
           }
         />
+
+        {/* Dynamic PUBG Battle Log & Kill Feed */}
+        <PubgLiveKillFeed className="mb-8" />
+
         {loading ? (
           <LoadingState count={3} label="Loading highlights" />
         ) : error ? (

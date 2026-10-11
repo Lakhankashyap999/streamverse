@@ -14,6 +14,7 @@ import {
   SocialSection,
 } from '../components/home/HomeSections';
 import { PubgCareerStats } from '../components/home/PubgCareerStats';
+import { PubgAirdropDivider } from '../components/home/PubgAirdropDivider';
 
 const TICKER_ITEMS = [
   '👑 WINNER WINNER CHICKEN DINNER (+42 PTS)',
@@ -63,6 +64,8 @@ export function HomePage() {
         onRetry={rVideos}
         channel={profile.youtube_url}
       />
+
+      <PubgAirdropDivider />
 
       <FeaturedHighlights
         highlights={highlightList}

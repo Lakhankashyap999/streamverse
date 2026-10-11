@@ -50,8 +50,8 @@ export function CommunityPage() {
             onClick={() => setActiveTab('all')}
             className={`clip-angle-sm px-5 py-2 font-display text-sm font-semibold transition ${
               activeTab === 'all'
-                ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-base'
-                : 'bg-card text-mute hover:text-ink'
+                ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black shadow-md shadow-pink-500/20'
+                : 'bg-card text-slate-300 hover:text-white'
             }`}
           >
             All Activity
@@ -63,8 +63,8 @@ export function CommunityPage() {
             onClick={() => setActiveTab('polls')}
             className={`clip-angle-sm flex items-center gap-2 px-5 py-2 font-display text-sm font-semibold transition ${
               activeTab === 'polls'
-                ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-base'
-                : 'bg-card text-mute hover:text-ink'
+                ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black shadow-md shadow-pink-500/20'
+                : 'bg-card text-slate-300 hover:text-white'
             }`}
           >
             <Vote className="size-4" /> Polls ({pollList.length})
@@ -76,8 +76,8 @@ export function CommunityPage() {
             onClick={() => setActiveTab('challenges')}
             className={`clip-angle-sm flex items-center gap-2 px-5 py-2 font-display text-sm font-semibold transition ${
               activeTab === 'challenges'
-                ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-base'
-                : 'bg-card text-mute hover:text-ink'
+                ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black shadow-md shadow-pink-500/20'
+                : 'bg-card text-slate-300 hover:text-white'
             }`}
           >
             <Trophy className="size-4" /> Challenges & Matches ({challenges.length + matches.length})
@@ -89,8 +89,8 @@ export function CommunityPage() {
             onClick={() => setActiveTab('suggestions')}
             className={`clip-angle-sm flex items-center gap-2 px-5 py-2 font-display text-sm font-semibold transition ${
               activeTab === 'suggestions'
-                ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-base'
-                : 'bg-card text-mute hover:text-ink'
+                ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black shadow-md shadow-pink-500/20'
+                : 'bg-card text-slate-300 hover:text-white'
             }`}
           >
             <Lightbulb className="size-4" /> Fan Suggestions

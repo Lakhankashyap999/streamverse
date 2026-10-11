@@ -79,6 +79,33 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', onKey);
   }, [open]);
 
+  const [isLive, setIsLive] = useState(profile.live_status_mode === 'live');
+
+  useEffect(() => {
+    if (profile.live_status_mode === 'live') {
+      setIsLive(true);
+      return;
+    }
+    if (profile.live_status_mode === 'offline') {
+      setIsLive(false);
+      return;
+    }
+    let alive = true;
+    fetch('/api/live-status')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (alive && data) {
+          setIsLive(Boolean(data.isLive));
+        }
+      })
+      .catch(() => {
+        if (alive) setIsLive(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [profile.live_status_mode]);
+
   const liveUrl = youtubeLiveUrl(profile);
 
   return (
@@ -126,20 +153,34 @@ export function Navbar() {
           ))}
         </ul>
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          <a
-            href={liveUrl ?? undefined}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-600/15 px-2.5 py-1 text-xs font-mono font-bold text-red-300 transition hover:bg-red-600/25 sm:px-3.5 sm:py-1.5"
-            aria-label="Watch live on YouTube"
-          >
-            <span className="relative flex size-2 shrink-0">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
-              <span className="relative inline-flex size-2 rounded-full bg-red-500" />
-            </span>
-            <span className="font-mono text-xs font-bold text-red-400">LIVE</span>
-            <span className="hidden md:inline font-mono text-[11px] text-red-300/80">ON YT</span>
-          </a>
+          {isLive ? (
+            <a
+              href={liveUrl ?? undefined}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-600/20 px-2.5 py-1 text-xs font-mono font-bold text-red-300 transition hover:bg-red-600/30 sm:px-3 sm:py-1.5 shadow-[0_0_12px_rgba(239,68,68,0.3)]"
+              aria-label="KhushiYT is streaming live now on YouTube"
+            >
+              <span className="relative flex size-2 shrink-0">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
+                <span className="relative inline-flex size-2 rounded-full bg-red-500" />
+              </span>
+              <span className="font-mono text-xs font-bold text-red-400">LIVE</span>
+              <span className="hidden md:inline font-mono text-[11px] text-red-300/80">NOW</span>
+            </a>
+          ) : (
+            <a
+              href={profile.youtube_url ?? 'https://www.youtube.com/@khusiytlive'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-full border border-line bg-card/80 px-2.5 py-1 text-xs font-mono text-slate-300 transition hover:text-white hover:border-slate-500/50 sm:px-3 sm:py-1.5"
+              aria-label="KhushiYT is currently offline. Visit YouTube channel"
+              title="Currently offline · Streams every night at 10 PM IST"
+            >
+              <span className="size-2 rounded-full bg-slate-500 shrink-0" />
+              <span className="font-mono text-[11px] font-semibold text-slate-300">OFFLINE</span>
+            </a>
+          )}
           <button
             ref={menuBtn}
             type="button"
@@ -193,8 +234,13 @@ export function Navbar() {
                   </motion.li>
                 ))}
               </ul>
-              <ExternalButton href={liveUrl} hosts={['youtube.com']} size="lg" icon={<Radio className="size-5" aria-hidden />}>
-                Watch Live on YouTube
+              <ExternalButton
+                href={isLive ? liveUrl : (profile.youtube_url ?? liveUrl)}
+                hosts={['youtube.com']}
+                size="lg"
+                icon={<Radio className="size-5" aria-hidden />}
+              >
+                {isLive ? 'Watch Live on YouTube' : 'Visit YouTube Channel'}
               </ExternalButton>
               <SocialIconRow profile={profile} />
             </div>

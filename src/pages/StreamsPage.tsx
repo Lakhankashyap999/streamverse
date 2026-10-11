@@ -119,8 +119,8 @@ export function StreamsPage() {
                 onClick={() => setTab('all')}
                 className={`clip-angle-sm px-5 py-2 font-display text-sm font-semibold transition ${
                   tab === 'all'
-                    ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-base'
-                    : 'bg-card text-mute hover:text-ink'
+                    ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black shadow-md shadow-pink-500/20'
+                    : 'bg-card text-slate-300 hover:text-white'
                 }`}
               >
                 All Streams
@@ -132,8 +132,8 @@ export function StreamsPage() {
                 onClick={() => setTab('upcoming')}
                 className={`clip-angle-sm flex items-center gap-2 px-5 py-2 font-display text-sm font-semibold transition ${
                   tab === 'upcoming'
-                    ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-base'
-                    : 'bg-card text-mute hover:text-ink'
+                    ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black shadow-md shadow-pink-500/20'
+                    : 'bg-card text-slate-300 hover:text-white'
                 }`}
               >
                 <Calendar className="size-4" /> Upcoming ({upcomingStreams.length})
@@ -145,8 +145,8 @@ export function StreamsPage() {
                 onClick={() => setTab('past')}
                 className={`clip-angle-sm flex items-center gap-2 px-5 py-2 font-display text-sm font-semibold transition ${
                   tab === 'past'
-                    ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-base'
-                    : 'bg-card text-mute hover:text-ink'
+                    ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black shadow-md shadow-pink-500/20'
+                    : 'bg-card text-slate-300 hover:text-white'
                 }`}
               >
                 <History className="size-4" /> Previous Replays ({pastStreams.length})

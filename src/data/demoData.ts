@@ -14,25 +14,56 @@ const H = 36e5;
 const now = Date.now();
 const iso = (ms: number) => new Date(ms).toISOString();
 
-const TITLE = 'TOP 100 RankPush With Rush Gameplay 🔴 | BGMI';
-const durations = ['6:04:53', '7:06:50', '6:33:30', '7:52:09', '7:44:39'];
+const videoDetails = [
+  {
+    title: 'TOP 100 Conqueror Rank Push Marathon 🔴 | BGMI',
+    description: 'Pochinki night battles, M416 Glacier headshots, and marathon Conqueror rank push session.',
+    thumb: '/images/creator/stream-thumb-1.jpg',
+    duration: '6:04:53',
+  },
+  {
+    title: '100-Player High Voltage Custom Room Showdown 🏆 | BGMI',
+    description: 'Intense 100-player custom room madness, air drop chaos, and high adrenaline squad fights.',
+    thumb: '/images/creator/stream-thumb-2.jpg',
+    duration: '7:06:50',
+  },
+  {
+    title: 'AWM Glacier 1v4 Military Base Bridge Clutch 🎯 | BGMI',
+    description: 'Precision 8X scope sniper headshots across Sosnovka bridge with 24 kills finish.',
+    thumb: '/images/creator/stream-thumb-3.jpg',
+    duration: '6:33:30',
+  },
+  {
+    title: 'Bootcamp Squad Rush & Sanhok Madness 🔥 | 30+ Kills',
+    description: 'Aggressive quadra kill squad wipe, red smoke flare gun battle, and rush gameplay.',
+    thumb: '/images/creator/stream-thumb-4.jpg',
+    duration: '7:52:09',
+  },
+  {
+    title: 'Winner Winner Chicken Dinner Championship Victory 👑 | BGMI',
+    description: 'Epic championship finale, flare gun rocket celebration, and Conqueror title unlocked.',
+    thumb: '/images/creator/stream-thumb-5.jpg',
+    duration: '7:44:39',
+  },
+];
+
 const ago = [16 * H, 26 * H, 50 * H, 74 * H, 98 * H];
 
 const base = { created_at: iso(now - 120 * H), updated_at: iso(now - 120 * H), is_sample: true } as const;
 
 export const demoStreams: Stream[] = [
-  ...durations.map<Stream>((dur, i) => ({
+  ...videoDetails.map<Stream>((v, i) => ({
     ...base,
     id: `demo-stream-past-${i + 1}`,
-    title: TITLE,
-    description: 'Marathon rank-push livestream with rush gameplay. (Sample — add the real YouTube link from the dashboard.)',
+    title: v.title,
+    description: v.description,
     youtube_video_id: null,
     stream_url: 'https://www.youtube.com/@khusiytlive/streams',
-    thumbnail_url: i === 0 ? '/images/creator/pubg-stream-thumbnail-hd.webp' : `/images/creator/stream-thumb-${i + 1}.webp`,
+    thumbnail_url: v.thumb,
     scheduled_at: iso(now - ago[i]),
     timezone: 'Asia/Kolkata',
     status: 'completed',
-    duration_label: dur,
+    duration_label: v.duration,
     is_published: true,
     is_featured: i === 0,
   })),
@@ -43,7 +74,7 @@ export const demoStreams: Stream[] = [
     description: 'Every night at 10:00 PM IST — marathon rank pushes, viewer custom rooms, and squad clutches.',
     youtube_video_id: null,
     stream_url: 'https://www.youtube.com/@khusiytlive/live',
-    thumbnail_url: '/images/creator/pubg-stream-thumbnail-hd.webp',
+    thumbnail_url: '/images/creator/stream-thumb-1.jpg',
     scheduled_at: getDailyStreamTime(0),
     timezone: 'Asia/Kolkata',
     status: 'scheduled',
@@ -58,7 +89,7 @@ export const demoStreams: Stream[] = [
     description: 'High-kill squad rush matches, viewer custom rooms, and Conqueror rank push.',
     youtube_video_id: null,
     stream_url: 'https://www.youtube.com/@khusiytlive/live',
-    thumbnail_url: '/images/creator/stream-thumb-4.webp',
+    thumbnail_url: '/images/creator/stream-thumb-2.jpg',
     scheduled_at: getDailyStreamTime(1),
     timezone: 'Asia/Kolkata',
     status: 'scheduled',
@@ -68,15 +99,15 @@ export const demoStreams: Stream[] = [
   },
 ];
 
-export const demoVideos: Video[] = durations.map<Video>((dur, i) => ({
+export const demoVideos: Video[] = videoDetails.map<Video>((v, i) => ({
   ...base,
   id: `demo-video-${i + 1}`,
-  title: TITLE,
-  description: 'Full livestream replay. (Sample — the real video link has not been added yet.)',
+  title: v.title,
+  description: v.description,
   youtube_video_id: '',
-  thumbnail_url: i === 0 ? '/images/creator/pubg-stream-thumbnail-hd.webp' : `/images/creator/stream-thumb-${i + 1}.webp`,
+  thumbnail_url: v.thumb,
   category: 'Live Stream',
-  duration_label: dur,
+  duration_label: v.duration,
   published_at: iso(now - ago[i]),
   is_published: true,
   is_featured: i < 2,

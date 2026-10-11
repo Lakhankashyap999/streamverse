@@ -12,7 +12,7 @@ import { getDailyStreamTime } from '../utils/date';
 
 /** localStorage-backed store used only in DEMO MODE (no Supabase configured). */
 
-const PREFIX = 'sv-demo-v2:';
+const PREFIX = 'sv-demo-v3:';
 
 const seeds = {
   profiles: () => [DEFAULT_PROFILE],
