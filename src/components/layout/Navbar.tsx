@@ -141,18 +141,23 @@ export function Navbar() {
       return;
     }
     let alive = true;
-    fetch('/api/live-status')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (alive && data) {
-          setIsLive(Boolean(data.isLive));
-        }
-      })
-      .catch(() => {
-        if (alive) setIsLive(false);
-      });
+    const checkStatus = () => {
+      fetch(`/api/live-status?t=${Date.now()}`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (alive && data) {
+            setIsLive(Boolean(data.isLive));
+          }
+        })
+        .catch(() => {
+          if (alive) setIsLive(false);
+        });
+    };
+    checkStatus();
+    const interval = setInterval(checkStatus, 30000);
     return () => {
       alive = false;
+      clearInterval(interval);
     };
   }, [profile.live_status_mode]);
 
@@ -161,8 +166,8 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-50 transition-[background,border-color,backdrop-filter] duration-300',
-        scrolled || open ? 'border-b border-line bg-base/80 backdrop-blur-xl' : 'border-b border-transparent',
+        'fixed inset-x-0 top-0 z-50 bg-[#090b16]/92 backdrop-blur-md border-b transition-colors duration-200 transform-gpu',
+        scrolled || open ? 'border-line/70 shadow-lg shadow-black/20' : 'border-line/30',
       )}
     >
       <a
@@ -211,13 +216,9 @@ export function Navbar() {
             className="group relative flex items-center gap-1.5 sm:gap-2 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white px-2.5 py-1.5 sm:px-3.5 sm:py-2 text-[11px] sm:text-xs font-bold transition shadow-[0_0_14px_rgba(239,68,68,0.5)] cursor-pointer hover:scale-105 active:scale-95 border border-red-400/40 shrink-0"
             aria-label="Subscribe to KhushiYT on YouTube"
           >
-            <motion.span
-              animate={{ rotate: [0, -14, 14, -8, 8, 0] }}
-              transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }}
-              className="text-xs shrink-0 inline-block"
-            >
+            <span className="bell-shake text-xs shrink-0 select-none" aria-hidden="true">
               🔔
-            </motion.span>
+            </span>
             <WaveSubscribeText />
             <span className="hidden md:inline text-[9px] bg-black/35 px-1.5 py-0.5 rounded-full font-mono font-bold text-amber-200 ml-0.5">
               27.6K

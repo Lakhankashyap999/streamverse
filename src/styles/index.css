@@ -225,19 +225,33 @@
   0%, 100% {
     transform: translate3d(0, 0, 0);
     color: #ffffff;
-    text-shadow: 0 0 0 rgba(253, 224, 71, 0);
   }
-  30% {
-    transform: translate3d(0, -3.5px, 0);
+  35% {
+    transform: translate3d(0, -2.5px, 0);
     color: #fde047;
-    text-shadow: 0 0 8px rgba(253, 224, 71, 0.9);
   }
 }
 .wave-char {
   display: inline-block;
+  transform: translateZ(0);
   will-change: transform;
   animation: wave-letter 1.8s ease-in-out infinite;
   animation-delay: calc(var(--char-i, 0) * 0.08s);
+}
+
+@keyframes bell-ring {
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(-14deg); }
+  20%, 40% { transform: rotate(14deg); }
+  50% { transform: rotate(-8deg); }
+  60% { transform: rotate(8deg); }
+  70%, 90% { transform: rotate(0deg); }
+}
+.bell-shake {
+  display: inline-block;
+  transform-origin: 50% 0%;
+  animation: bell-ring 2.4s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* ───────────────────────── Loader: soldier firing ───────────────────────── */
@@ -404,6 +418,6 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .sv-bullet, .sv-shell, .sv-smoke, .sv-hit, .sakura-petal, .wave-char { animation: none !important; }
+  .sv-bullet, .sv-shell, .sv-smoke, .sv-hit, .sakura-petal, .wave-char, .bell-shake { animation: none !important; }
   .sv-flash { opacity: 0.8; }
 }

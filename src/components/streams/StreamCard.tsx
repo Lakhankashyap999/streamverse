@@ -169,7 +169,7 @@ export function useLiveState(streams: Stream[], videos: Video[], profile: Profil
     let alive = true;
     async function checkLive() {
       try {
-        const res = await fetch('/api/live-status');
+        const res = await fetch(`/api/live-status?t=${Date.now()}`);
         if (res.ok) {
           const data: RealtimeLiveStatus = await res.json();
           if (alive && data) {
@@ -181,7 +181,7 @@ export function useLiveState(streams: Stream[], videos: Video[], profile: Profil
       }
     }
     checkLive();
-    const interval = setInterval(checkLive, 45000);
+    const interval = setInterval(checkLive, 30000);
     return () => {
       alive = false;
       clearInterval(interval);
@@ -203,13 +203,14 @@ export function useLiveState(streams: Stream[], videos: Video[], profile: Profil
 
   // If YouTube is confirmed live:
   if (profile.live_status_mode !== 'offline' && realtimeLive?.isLive) {
+    const vid = realtimeLive.videoId || 'WtpOElc_3pg';
     const activeStream: Stream = {
       id: 'live-now-yt',
-      title: realtimeLive.title || 'TOP 100 Rank Push With Rush Gameplay 🔴 | BGMI',
+      title: realtimeLive.title || 'BGMI Rank Push Livestream 🔴 | KhushiYT',
       description: 'Live broadcast streaming now on YouTube',
-      youtube_video_id: realtimeLive.videoId || 'WWeleSTclPg',
-      stream_url: realtimeLive.streamUrl || 'https://www.youtube.com/@khusiytlive/live',
-      thumbnail_url: '/images/creator/pubg-stream-thumbnail-hd.webp',
+      youtube_video_id: vid,
+      stream_url: realtimeLive.streamUrl || (vid ? ytWatchUrl(vid) : 'https://www.youtube.com/@khusiytlive/live'),
+      thumbnail_url: vid ? ytThumb(vid) : '/images/creator/pubg-stream-thumbnail-hd.webp',
       scheduled_at: new Date().toISOString(),
       timezone: 'Asia/Kolkata',
       status: 'live',

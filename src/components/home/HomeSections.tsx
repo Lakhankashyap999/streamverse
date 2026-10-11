@@ -51,19 +51,19 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
 
   return (
     <section className="relative isolate overflow-hidden pb-16 pt-24 sm:pt-28 lg:min-h-[100svh] lg:pb-20" aria-labelledby="hero-title">
-      <div className="absolute inset-0 -z-10 bg-grid opacity-60 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)] pointer-events-none" />
-      <div className="pointer-events-none absolute -left-40 top-20 -z-10 size-[34rem] rounded-full bg-neon/15 blur-[80px] transform-gpu" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 -z-10 size-[30rem] rounded-full bg-ultra/15 blur-[80px] transform-gpu" />
-      <div className="pointer-events-none absolute right-1/3 top-1/3 -z-10 size-72 rounded-full bg-gold/10 blur-[70px] transform-gpu" />
+      <div className="absolute inset-0 -z-10 bg-grid opacity-50 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)] pointer-events-none" />
+      <div className="pointer-events-none absolute -left-40 top-20 -z-10 size-[32rem] rounded-full [background:radial-gradient(circle,rgba(192,38,211,0.14)_0%,transparent_70%)] transform-gpu" />
+      <div className="pointer-events-none absolute -right-40 bottom-0 -z-10 size-[30rem] rounded-full [background:radial-gradient(circle,rgba(139,92,246,0.14)_0%,transparent_70%)] transform-gpu" />
+      <div className="pointer-events-none absolute right-1/3 top-1/3 -z-10 size-72 rounded-full [background:radial-gradient(circle,rgba(251,191,36,0.09)_0%,transparent_70%)] transform-gpu" />
       {!reduce && (
         <>
-          <SakuraPetals count={14} />
-          {PARTICLES.map(([x, y, d], i) => (
+          <SakuraPetals count={8} />
+          {PARTICLES.slice(0, 6).map(([x, y, d], i) => (
             <span
               key={i}
               aria-hidden
-              className="absolute -z-10 size-1 rounded-full bg-blush/80"
-              style={{ left: `${x}%`, top: `${y}%`, animation: `drift ${6 + (i % 4)}s ease-in ${d}s infinite`, ['--dx' as string]: `${(i % 2 ? 1 : -1) * 24}px` }}
+              className="absolute -z-10 size-1 rounded-full bg-blush/70 pointer-events-none"
+              style={{ left: `${x}%`, top: `${y}%`, animation: `drift ${6 + (i % 4)}s ease-in ${d}s infinite`, ['--dx' as string]: `${(i % 2 ? 1 : -1) * 20}px` }}
             />
           ))}
         </>
@@ -116,13 +116,9 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white font-bold px-5 py-3 text-sm sm:text-base shadow-[0_0_25px_rgba(239,68,68,0.5)] transition hover:scale-105 active:scale-95 cursor-pointer w-full sm:w-auto border border-red-400/40"
               aria-label="Subscribe to KhushiYT on YouTube"
             >
-              <motion.span
-                animate={{ rotate: [0, -14, 14, -8, 8, 0] }}
-                transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }}
-                className="text-base"
-              >
+              <span className="bell-shake text-base select-none" aria-hidden="true">
                 🔔
-              </motion.span>
+              </span>
               <WaveSubscribeText />
               <span className="rounded-full bg-black/30 px-2 py-0.5 text-xs font-mono font-bold text-amber-300">27.6K</span>
             </a>
