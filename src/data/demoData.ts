@@ -1,4 +1,5 @@
 import type { CommunityPost, Highlight, Poll, Stream, Suggestion, Video } from '../types';
+import { getNextDailyStreamTime } from '../utils/date';
 
 /**
  * DEMO DATA — shown only when Supabase is not configured.
@@ -45,12 +46,12 @@ export const demoStreams: Stream[] = [
   {
     ...base,
     id: 'demo-stream-next-1',
-    title: 'TOP 100 Rank Push — Rush Gameplay Live',
-    description: 'Sample upcoming stream to preview the schedule layout. Real times are set by the creator.',
+    title: 'Daily BGMI Rank Push & Rush Gameplay — 10 PM IST',
+    description: 'Every night at 10:00 PM IST — marathon rank pushes, viewer custom rooms, and squad clutches.',
     youtube_video_id: null,
     stream_url: 'https://www.youtube.com/@khusiytlive/live',
     thumbnail_url: '/images/creator/pubg-stream-thumbnail-hd.webp',
-    scheduled_at: istSlot(1, 14),
+    scheduled_at: getNextDailyStreamTime(),
     timezone: 'Asia/Kolkata',
     status: 'scheduled',
     duration_label: null,

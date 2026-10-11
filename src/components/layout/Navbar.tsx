@@ -21,10 +21,10 @@ export const NAV_ITEMS = [
 export function Logo({ compact = false }: { compact?: boolean }) {
   const { profile } = useProfile();
   return (
-    <Link to="/" className="group flex items-center gap-2.5 rounded-lg" aria-label={`${profile.gaming_name} — home`}>
-      <img src="/icons/logo.svg" alt="" width={36} height={36} className="size-9 transition-transform group-hover:rotate-6" />
+    <Link to="/" className="group flex items-center gap-2 rounded-lg shrink-0 min-w-0" aria-label={`${profile.gaming_name} — home`}>
+      <img src="/icons/logo.svg" alt="" width={32} height={32} className="size-8 sm:size-9 transition-transform group-hover:rotate-6 shrink-0" />
       {!compact && (
-        <span className="font-display text-lg font-bold leading-none tracking-wide flex items-center gap-1">
+        <span className="font-display text-base sm:text-lg font-bold leading-none tracking-wide flex items-center gap-1 whitespace-nowrap shrink-0">
           <span className="text-gradient-gold">{profile.gaming_name.slice(0, -2) || profile.gaming_name}</span>
           <span className="text-gradient">{profile.gaming_name.length > 2 ? profile.gaming_name.slice(-2) : ''}</span>
           <span className="text-xs text-pink-400 select-none">🌸</span>
@@ -125,26 +125,31 @@ export function Navbar() {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-2">
-          <ExternalButton
-            href={liveUrl}
-            hosts={['youtube.com']}
-            size="sm"
-            className="hidden sm:inline-flex"
-            icon={<Radio className="size-4" aria-hidden />}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <a
+            href={liveUrl ?? undefined}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 rounded-full border border-red-500/40 bg-red-600/15 px-2.5 py-1 text-xs font-mono font-bold text-red-300 transition hover:bg-red-600/25 sm:px-3.5 sm:py-1.5"
+            aria-label="Watch live on YouTube"
           >
-            Watch Live
-          </ExternalButton>
+            <span className="relative flex size-2 shrink-0">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-red-500" />
+            </span>
+            <span className="font-mono text-xs font-bold text-red-400">LIVE</span>
+            <span className="hidden md:inline font-mono text-[11px] text-red-300/80">ON YT</span>
+          </a>
           <button
             ref={menuBtn}
             type="button"
-            className="glass grid size-11 place-items-center rounded-xl lg:hidden"
+            className="glass grid size-9 sm:size-10 place-items-center rounded-xl lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? 'Close menu' : 'Open menu'}
             onClick={() => setOpen((o) => !o)}
           >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+            {open ? <X className="size-4 sm:size-5" /> : <Menu className="size-4 sm:size-5" />}
           </button>
         </div>
       </nav>

@@ -88,3 +88,27 @@ export function googleCalendarUrl(title: string, startIso: string, hours = 3, de
   const params = new URLSearchParams({ action: 'TEMPLATE', text: title, dates: `${fmt(start)}/${fmt(end)}`, details });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
+
+/**
+ * Calculates the next occurrence of Khushi's daily 10:00 PM IST livestream.
+ * Returns ISO timestamp string in UTC.
+ */
+export function getNextDailyStreamTime(): string {
+  const now = new Date();
+  const istFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false,
+  });
+  const parts = Object.fromEntries(istFormatter.formatToParts(now).map((p) => [p.type, parseInt(p.value, 10)]));
+  // 22:00 is 10:00 PM IST. If current IST hour is >= 22, next stream is tomorrow at 22:00 IST.
+  const isPast10PM = parts.hour >= 22;
+  // In UTC, 22:00 IST is 16:30 UTC
+  const targetDate = new Date(Date.UTC(parts.year, parts.month - 1, parts.day + (isPast10PM ? 1 : 0), 16, 30, 0));
+  return targetDate.toISOString();
+}

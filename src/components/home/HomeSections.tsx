@@ -4,7 +4,7 @@ import { ArrowRight, Copy, Crosshair, Flame, Gamepad2, Heart, MapPin, Play, Spar
 import type { CommunityPost, Highlight, Poll, Profile, Stream, Video } from '../../types';
 import { SITE, youtubeLiveUrl } from '../../config/site';
 import { cn } from '../../utils/misc';
-import { relativeTime } from '../../utils/date';
+import { getNextDailyStreamTime } from '../../utils/date';
 import { ButtonLink, ExternalButton } from '../ui/Button';
 import { SafeImage, SectionHeading, Reveal } from '../ui/Display';
 import { CompassStrip, ZoneRing } from '../ui/Hud';
@@ -262,17 +262,23 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               </a>
             ) : live.kind === 'upcoming' ? (
               <>
-                <p className="hud-label text-[0.65rem] sm:text-[0.7rem]">Next Stream{live.stream.is_sample ? ' · Scheduled' : ''}</p>
+                <p className="hud-label text-[0.65rem] sm:text-[0.7rem] flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  Next Stream · Daily 10:00 PM
+                </p>
                 <div className="mt-1.5 sm:mt-2">
-                  <Countdown target={live.stream.scheduled_at!} compact />
+                  <Countdown target={live.stream?.scheduled_at || getNextDailyStreamTime()} compact />
                 </div>
               </>
             ) : (
               <>
-                <p className="hud-label text-[0.65rem] sm:text-[0.7rem]">Broadcast Status</p>
-                <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-mute">
-                  Offline{live.stream ? ` · Last stream ${relativeTime(live.stream.scheduled_at)}` : ''}
+                <p className="hud-label text-[0.65rem] sm:text-[0.7rem] flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  Next Stream · Daily 10:00 PM
                 </p>
+                <div className="mt-1.5 sm:mt-2">
+                  <Countdown target={getNextDailyStreamTime()} compact />
+                </div>
               </>
             )}
           </div>

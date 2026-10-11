@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { CalendarPlus, Clock, Radio, Tv } from 'lucide-react';
 import type { Profile, Stream, Video, YouTubeVideoInfo } from '../../types';
 import { useCountdown } from '../../hooks';
-import { formatDateTime, formatInZone, googleCalendarUrl, isFuture, relativeTime } from '../../utils/date';
+import { formatDateTime, formatInZone, getNextDailyStreamTime, googleCalendarUrl, isFuture, relativeTime } from '../../utils/date';
 import { isValidVideoId, ytThumb, ytWatchUrl } from '../../utils/youtube';
 import { youtubeService } from '../../services/youtubeService';
 import { youtubeLiveUrl, youtubeStreamsUrl } from '../../config/site';
@@ -14,12 +14,19 @@ import { SafeImage } from '../ui/Display';
 export function Countdown({ target, compact = false }: { target: string; compact?: boolean }) {
   const left = useCountdown(target);
   if (!left) return <p className="font-display font-semibold text-gold">Starting soon</p>;
-  const parts = [
-    ['Days', left.days],
-    ['Hrs', left.hours],
-    ['Min', left.minutes],
-    ['Sec', left.seconds],
-  ] as const;
+  const parts: ReadonlyArray<readonly [string, number]> =
+    compact && left.days === 0
+      ? [
+          ['Hrs', left.hours],
+          ['Min', left.minutes],
+          ['Sec', left.seconds],
+        ]
+      : [
+          ['Days', left.days],
+          ['Hrs', left.hours],
+          ['Min', left.minutes],
+          ['Sec', left.seconds],
+        ];
   return (
     <div className="flex gap-2" role="timer" aria-label={`Starts in ${left.days} days, ${left.hours} hours, ${left.minutes} minutes`}>
       {parts.map(([label, value]) => (
@@ -105,7 +112,7 @@ type LiveState =
  */
 export function resolveLiveState(
   streams: Stream[],
-  videos: Video[],
+  _videos: Video[],
   profile: Profile,
   yt: Record<string, YouTubeVideoInfo> | null,
 ): LiveState {
@@ -124,10 +131,25 @@ export function resolveLiveState(
     .filter((s) => s.status === 'scheduled' && isFuture(s.scheduled_at))
     .sort((a, b) => (a.scheduled_at! > b.scheduled_at! ? 1 : -1))[0];
   if (upcoming) return { kind: 'upcoming', stream: upcoming };
-  const previous = visible
-    .filter((s) => s.status === 'completed')
-    .sort((a, b) => ((a.scheduled_at ?? '') < (b.scheduled_at ?? '') ? 1 : -1))[0];
-  return { kind: 'offline', stream: previous ?? null, video: videos[0] ?? null };
+
+  // Automatic daily 10:00 PM IST stream fallback
+  const dailyScheduled: Stream = {
+    id: 'daily-stream-10pm',
+    title: 'Daily BGMI Rank Push & Custom Rooms — 10:00 PM IST',
+    description: 'Official daily livestream session with KhushiYT. Join custom rooms and squad rush every night at 10:00 PM IST.',
+    youtube_video_id: null,
+    stream_url: profile.youtube_url ? `${profile.youtube_url}/live` : 'https://www.youtube.com/@khusiytlive/live',
+    thumbnail_url: '/images/creator/pubg-stream-thumbnail-hd.webp',
+    scheduled_at: getNextDailyStreamTime(),
+    timezone: 'Asia/Kolkata',
+    status: 'scheduled',
+    duration_label: null,
+    is_published: true,
+    is_featured: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+  return { kind: 'upcoming', stream: dailyScheduled };
 }
 
 interface RealtimeLiveStatus {
@@ -140,15 +162,7 @@ interface RealtimeLiveStatus {
 
 export function useLiveState(streams: Stream[], videos: Video[], profile: Profile): LiveState {
   const [yt, setYt] = useState<Record<string, YouTubeVideoInfo> | null>(null);
-  const [realtimeLive, setRealtimeLive] = useState<RealtimeLiveStatus | null>(() => {
-    // Optimistic initial check: confirmed live stream on YouTube
-    return {
-      isLive: true,
-      videoId: 'WWeleSTclPg',
-      title: 'BGMI OCEAN ODYSSEY IS BACK🐟| RANK PUSH🔥',
-      streamUrl: 'https://www.youtube.com/watch?v=WWeleSTclPg',
-    };
-  });
+  const [realtimeLive, setRealtimeLive] = useState<RealtimeLiveStatus | null>(null);
 
   useEffect(() => {
     let alive = true;
