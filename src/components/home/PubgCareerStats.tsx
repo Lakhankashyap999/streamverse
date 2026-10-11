@@ -337,24 +337,19 @@ export function PubgCareerStats() {
 
       {/* ────────────────── OFFICIAL BGMI IN-GAME STATS DASHBOARD ────────────────── */}
       <Reveal>
-        <div className="relative mb-12 overflow-hidden rounded-2xl border border-line bg-[#101422] shadow-2xl">
+        <div className="relative mb-12 rounded-2xl border border-line bg-[#101422] shadow-2xl">
           {/* Header Bar with Interactive Season Selector & Tactical Filters */}
-          <div className="flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-2.5 border-b border-line/80 bg-[#161c30]/95 px-3 sm:px-6 py-3">
-            <div className="flex items-center justify-between xs:justify-start gap-2">
-              <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-4 border-b border-line/80 bg-[#161c30]/95 px-3.5 sm:px-6 py-3 rounded-t-2xl">
+            {/* Left Group: DATA · STATISTICS & Season Selector (Authentic In-Game Layout) */}
+            <div className="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3.5 flex-wrap">
+              <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <span className="size-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-wider text-white">
+                <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-wider text-white whitespace-nowrap">
                   DATA <span className="text-slate-400">·</span> STATISTICS
                 </span>
               </div>
-              <span className="rounded bg-red-600/20 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold text-red-400 border border-red-500/30 shrink-0">
-                UID: 5112658248
-              </span>
-            </div>
 
-            {/* Tactical Interactive Dropdown Selectors */}
-            <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-[10px] sm:text-[11px] relative justify-between xs:justify-end">
-              {/* Season Selection Dropdown */}
+              {/* Season Selection Dropdown - Aligned with left-0 so it NEVER clips */}
               <div className="relative">
                 <button
                   type="button"
@@ -362,7 +357,7 @@ export function PubgCareerStats() {
                   className="flex items-center gap-1.5 rounded-lg bg-[#212946] hover:bg-[#2b3558] px-2.5 py-1.5 sm:px-3 text-white font-bold border border-line shadow transition cursor-pointer"
                   aria-expanded={isDropdownOpen}
                 >
-                  <span className="text-amber-300 font-bold text-xs truncate max-w-[110px] xs:max-w-none">{activeSeason.name}</span>
+                  <span className="text-amber-300 font-bold text-xs truncate max-w-[120px] sm:max-w-none">{activeSeason.name}</span>
                   <ChevronDown className={`size-3.5 text-slate-300 shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
@@ -379,7 +374,7 @@ export function PubgCareerStats() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -4, scale: 0.98 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1.5 w-52 sm:w-56 rounded-xl border border-line/80 bg-[#13172b]/98 p-1.5 shadow-2xl z-50 backdrop-blur-xl"
+                        className="absolute left-0 top-full mt-1.5 w-56 sm:w-60 rounded-xl border border-line/80 bg-[#13172b]/98 p-1.5 shadow-2xl z-50 backdrop-blur-xl"
                       >
                         <div className="px-2 py-1 text-[10px] uppercase font-bold text-slate-400 border-b border-line/50 mb-1 flex items-center justify-between">
                           <span>Select Season</span>
@@ -412,12 +407,22 @@ export function PubgCareerStats() {
                 </AnimatePresence>
               </div>
 
-              {/* Mode Badges */}
-              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2 py-1.5 sm:px-2.5 text-slate-200 border border-line/60 shrink-0">
+              {/* Mobile UID Display */}
+              <span className="sm:hidden rounded bg-red-600/20 px-2 py-0.5 text-[9px] font-mono font-bold text-red-400 border border-red-500/30 shrink-0">
+                UID: 5112658248
+              </span>
+            </div>
+
+            {/* Right Group: Tactical Filters & Desktop UID */}
+            <div className="flex items-center gap-1.5 sm:gap-2.5 font-mono text-[10px] sm:text-[11px] relative justify-between sm:justify-end">
+              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2.5 py-1.5 text-slate-200 border border-line/60 shrink-0">
                 RANKED
               </span>
-              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2 py-1.5 sm:px-2.5 text-slate-200 border border-line/60 shrink-0">
+              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2.5 py-1.5 text-slate-200 border border-line/60 shrink-0">
                 TPP Squad
+              </span>
+              <span className="hidden sm:inline-flex rounded bg-red-600/20 px-2.5 py-1 text-[10px] font-mono font-bold text-red-400 border border-red-500/30 shrink-0">
+                UID: 5112658248
               </span>
             </div>
           </div>
