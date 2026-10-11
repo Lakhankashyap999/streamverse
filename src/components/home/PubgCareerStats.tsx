@@ -12,6 +12,7 @@ import {
   Crown,
   Check,
   Heart,
+  Copy,
 } from 'lucide-react';
 import { SectionHeading, Reveal } from '../ui/Display';
 
@@ -292,17 +293,26 @@ export function PubgCareerStats() {
   const [selectedSeasonId, setSelectedSeasonId] = useState<string>('current');
   const [chartType, setChartType] = useState<'radar' | 'curve'>('radar');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [copiedUid, setCopiedUid] = useState(false);
+
+  const handleCopyUid = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('5112658248');
+      setCopiedUid(true);
+      setTimeout(() => setCopiedUid(false), 2000);
+    }
+  };
 
   const activeSeason = SEASONS.find((s) => s.id === selectedSeasonId) ?? SEASONS[0];
 
-  // Dynamic Pentagon Polygon Points Calculation from Active Season
-  const cx = 130;
+  // Dynamic Pentagon Polygon Points Calculation from Active Season (Wide ViewBox to avoid mobile clipping)
+  const cx = 140;
   const cy = 115;
-  const r0 = (activeSeason.radar.winRatio / 100) * 75;
-  const r1 = (activeSeason.radar.feedback / 100) * 75;
-  const r2 = (activeSeason.radar.support / 100) * 75;
-  const r3 = (activeSeason.radar.survived / 100) * 75;
-  const r4 = (activeSeason.radar.combat / 100) * 75;
+  const r0 = (activeSeason.radar.winRatio / 100) * 70;
+  const r1 = (activeSeason.radar.feedback / 100) * 70;
+  const r2 = (activeSeason.radar.support / 100) * 70;
+  const r3 = (activeSeason.radar.survived / 100) * 70;
+  const r4 = (activeSeason.radar.combat / 100) * 70;
 
   const pt0 = `${cx},${(cy - r0).toFixed(2)}`;
   const pt1 = `${(cx + r1 * 0.951).toFixed(2)},${(cy - r1 * 0.309).toFixed(2)}`;
@@ -329,71 +339,84 @@ export function PubgCareerStats() {
       <Reveal>
         <div className="relative mb-12 overflow-hidden rounded-2xl border border-line bg-[#101422] shadow-2xl">
           {/* Header Bar with Interactive Season Selector & Tactical Filters */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line/80 bg-[#161c30]/95 px-4 py-3 sm:px-6">
-            <div className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-wider text-white">
-                DATA <span className="text-slate-400">·</span> STATISTICS
-              </span>
-              <span className="hidden sm:inline-block rounded bg-red-600/20 px-2 py-0.5 text-[10px] font-mono font-bold text-red-400 border border-red-500/30">
+          <div className="flex flex-col xs:flex-row items-stretch xs:items-center justify-between gap-2.5 border-b border-line/80 bg-[#161c30]/95 px-3 sm:px-6 py-3">
+            <div className="flex items-center justify-between xs:justify-start gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="size-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-wider text-white">
+                  DATA <span className="text-slate-400">·</span> STATISTICS
+                </span>
+              </div>
+              <span className="rounded bg-red-600/20 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold text-red-400 border border-red-500/30 shrink-0">
                 UID: 5112658248
               </span>
             </div>
 
             {/* Tactical Interactive Dropdown Selectors */}
-            <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] relative">
+            <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-[10px] sm:text-[11px] relative justify-between xs:justify-end">
               {/* Season Selection Dropdown */}
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setIsDropdownOpen((o) => !o)}
-                  className="flex items-center gap-1.5 rounded bg-[#212946] hover:bg-[#2b3558] px-3 py-1.5 text-white font-bold border border-line shadow transition cursor-pointer"
+                  className="flex items-center gap-1.5 rounded-lg bg-[#212946] hover:bg-[#2b3558] px-2.5 py-1.5 sm:px-3 text-white font-bold border border-line shadow transition cursor-pointer"
                   aria-expanded={isDropdownOpen}
                 >
-                  <span className="text-amber-300 font-bold">{activeSeason.name}</span>
-                  <ChevronDown className={`size-3.5 text-slate-300 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  <span className="text-amber-300 font-bold text-xs truncate max-w-[110px] xs:max-w-none">{activeSeason.name}</span>
+                  <ChevronDown className={`size-3.5 text-slate-300 shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 <AnimatePresence>
                   {isDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -4, scale: 0.98 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -4, scale: 0.98 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute right-0 top-full mt-1.5 w-48 rounded-xl border border-line bg-[#13172b] p-1.5 shadow-2xl z-50 backdrop-blur-xl"
-                    >
-                      <div className="px-2 py-1 text-[10px] uppercase font-bold text-slate-400 border-b border-line/50 mb-1">
-                        Select Season
-                      </div>
-                      {SEASONS.map((s) => (
-                        <button
-                          key={s.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedSeasonId(s.id);
-                            setIsDropdownOpen(false);
-                          }}
-                          className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-left text-xs font-mono transition cursor-pointer ${
-                            selectedSeasonId === s.id
-                              ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30'
-                              : 'text-slate-200 hover:bg-white/5 hover:text-white'
-                          }`}
-                        >
-                          <span>{s.name}</span>
-                          {selectedSeasonId === s.id && <Check className="size-3.5 text-amber-300" />}
-                        </button>
-                      ))}
-                    </motion.div>
+                    <>
+                      {/* Backdrop to close on click outside on mobile/desktop */}
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setIsDropdownOpen(false)}
+                      />
+                      <motion.div
+                        initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1.5 w-52 sm:w-56 rounded-xl border border-line/80 bg-[#13172b]/98 p-1.5 shadow-2xl z-50 backdrop-blur-xl"
+                      >
+                        <div className="px-2 py-1 text-[10px] uppercase font-bold text-slate-400 border-b border-line/50 mb-1 flex items-center justify-between">
+                          <span>Select Season</span>
+                          <span className="text-[9px] text-amber-400 font-normal">6 Records</span>
+                        </div>
+                        {SEASONS.map((s) => (
+                          <button
+                            key={s.id}
+                            type="button"
+                            onClick={() => {
+                              setSelectedSeasonId(s.id);
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-left text-xs font-mono transition cursor-pointer ${
+                              selectedSeasonId === s.id
+                                ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30'
+                                : 'text-slate-200 hover:bg-white/5 hover:text-white'
+                            }`}
+                          >
+                            <div className="flex flex-col min-w-0 pr-2">
+                              <span className="truncate font-bold">{s.name}</span>
+                              <span className="text-[10px] text-slate-400 truncate">{s.tierBadge}</span>
+                            </div>
+                            {selectedSeasonId === s.id && <Check className="size-3.5 text-amber-300 shrink-0" />}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
                   )}
                 </AnimatePresence>
               </div>
 
               {/* Mode Badges */}
-              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2.5 py-1.5 text-slate-200 border border-line/60">
+              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2 py-1.5 sm:px-2.5 text-slate-200 border border-line/60 shrink-0">
                 RANKED
               </span>
-              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2.5 py-1.5 text-slate-200 border border-line/60">
+              <span className="flex items-center gap-1 rounded bg-[#212946]/80 px-2 py-1.5 sm:px-2.5 text-slate-200 border border-line/60 shrink-0">
                 TPP Squad
               </span>
             </div>
@@ -402,24 +425,27 @@ export function PubgCareerStats() {
           {/* Main Telemetry Container (Split: Radar / Curve on Left, Full Table on Right) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-line/60">
             {/* Left Column: SSS / Dominator Grade & Chart (Radar vs Curve) */}
-            <div className="lg:col-span-4 p-5 sm:p-6 flex flex-col items-center justify-between bg-[#121629]/60">
+            <div className="lg:col-span-4 p-4 sm:p-6 flex flex-col items-center justify-between bg-[#121629]/60 min-w-0">
               {/* Dynamic Tier Badge */}
-              <div className="text-center w-full">
-                <div className="inline-block relative">
-                  <h3 className="font-display font-black text-4xl sm:text-5xl tracking-tighter text-transparent bg-clip-text bg-[linear-gradient(180deg,#fff8db_0%,#fbbf24_45%,#d97706_85%,#92400e_100%)] drop-shadow-[0_4px_16px_rgba(251,191,36,0.4)]">
+              <div className="text-center w-full px-2">
+                <div className="inline-flex flex-col items-center max-w-full">
+                  <h3 className="font-display font-black text-2xl xs:text-3xl sm:text-4xl md:text-5xl tracking-tight text-transparent bg-clip-text bg-[linear-gradient(180deg,#fff8db_0%,#fbbf24_45%,#d97706_85%,#92400e_100%)] drop-shadow-[0_4px_16px_rgba(251,191,36,0.4)] text-center max-w-full break-words leading-tight">
                     {activeSeason.tierBadge}
                   </h3>
-                  <div className="text-xs font-mono text-slate-200 font-bold tracking-wider mt-0.5">
-                    Rating: <span className="text-amber-300 font-bold text-sm">{activeSeason.tierScore}</span>
+                  <div className="text-xs font-mono text-slate-200 font-bold tracking-wider mt-1 flex items-center justify-center gap-1.5">
+                    <span>Rating:</span>
+                    <span className="text-amber-300 font-black text-sm sm:text-base">{activeSeason.tierScore}</span>
                   </div>
-                  <p className="text-[10px] font-mono text-slate-400 mt-0.5">{activeSeason.tierLabel}</p>
+                  <p className="text-[10px] sm:text-xs font-mono text-slate-400 mt-0.5 text-center px-1">
+                    {activeSeason.tierLabel}
+                  </p>
                 </div>
               </div>
 
               {/* Interactive Graphic: Pentagon Radar Chart OR Ace Dominator Progression Curve */}
-              <div className="relative my-3 w-full max-w-[280px] aspect-[260/220] flex items-center justify-center">
+              <div className="relative my-3 w-full max-w-[280px] aspect-[280/220] flex items-center justify-center">
                 {chartType === 'radar' ? (
-                  <svg viewBox="0 0 260 220" className="size-full overflow-visible" role="img" aria-label="BGMI 5-Axis Combat Telemetry Radar">
+                  <svg viewBox="0 0 280 220" className="size-full overflow-visible" role="img" aria-label="BGMI 5-Axis Combat Telemetry Radar">
                     <defs>
                       <linearGradient id="radar-fill" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="0%" stopColor="#4f75d9" stopOpacity="0.75" />
@@ -432,11 +458,11 @@ export function PubgCareerStats() {
                       <polygon
                         key={idx}
                         points={`
-                          ${130},${115 - 75 * scale}
-                          ${130 + 75 * scale * 0.951},${115 - 75 * scale * 0.309}
-                          ${130 + 75 * scale * 0.588},${115 + 75 * scale * 0.809}
-                          ${130 - 75 * scale * 0.588},${115 + 75 * scale * 0.809}
-                          ${130 - 75 * scale * 0.951},${115 - 75 * scale * 0.309}
+                          ${140},${115 - 70 * scale}
+                          ${140 + 70 * scale * 0.951},${115 - 70 * scale * 0.309}
+                          ${140 + 70 * scale * 0.588},${115 + 70 * scale * 0.809}
+                          ${140 - 70 * scale * 0.588},${115 + 70 * scale * 0.809}
+                          ${140 - 70 * scale * 0.951},${115 - 70 * scale * 0.309}
                         `}
                         fill="none"
                         stroke="#283556"
@@ -447,13 +473,13 @@ export function PubgCareerStats() {
 
                     {/* Center Spoke Lines */}
                     {[
-                      [130, 115 - 75],
-                      [130 + 75 * 0.951, 115 - 75 * 0.309],
-                      [130 + 75 * 0.588, 115 + 75 * 0.809],
-                      [130 - 75 * 0.588, 115 + 75 * 0.809],
-                      [130 - 75 * 0.951, 115 - 75 * 0.309],
+                      [140, 115 - 70],
+                      [140 + 70 * 0.951, 115 - 70 * 0.309],
+                      [140 + 70 * 0.588, 115 + 70 * 0.809],
+                      [140 - 70 * 0.588, 115 + 70 * 0.809],
+                      [140 - 70 * 0.951, 115 - 70 * 0.309],
                     ].map(([x, y], i) => (
-                      <line key={i} x1="130" y1="115" x2={x} y2={y} stroke="#283556" strokeWidth="1" />
+                      <line key={i} x1="140" y1="115" x2={x} y2={y} stroke="#283556" strokeWidth="1" />
                     ))}
 
                     {/* Dynamic Radar Polygon based on Selected Season */}
@@ -478,38 +504,38 @@ export function PubgCareerStats() {
                     ))}
 
                     {/* Data Labels Matching In-Game UI */}
-                    <text x="130" y="24" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="140" y="24" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       Win Ratio
                     </text>
-                    <text x="130" y="36" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="140" y="36" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       {activeSeason.radar.winRatio.toFixed(1)}
                     </text>
 
-                    <text x="212" y="90" textAnchor="start" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="216" y="90" textAnchor="start" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       Feedback
                     </text>
-                    <text x="212" y="102" textAnchor="start" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="216" y="102" textAnchor="start" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       {activeSeason.radar.feedback.toFixed(1)}
                     </text>
 
-                    <text x="188" y="196" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="195" y="196" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       Support
                     </text>
-                    <text x="188" y="208" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="195" y="208" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       {activeSeason.radar.support.toFixed(1)}
                     </text>
 
-                    <text x="72" y="196" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="85" y="196" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       Survived
                     </text>
-                    <text x="72" y="208" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="85" y="208" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       {activeSeason.radar.survived.toFixed(1)}
                     </text>
 
-                    <text x="48" y="90" textAnchor="end" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="64" y="90" textAnchor="end" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       Combat
                     </text>
-                    <text x="48" y="102" textAnchor="end" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
+                    <text x="64" y="102" textAnchor="end" fill="#fbbf24" fontSize="10" fontWeight="bold" fontFamily="monospace">
                       {activeSeason.radar.combat.toFixed(1)}
                     </text>
                   </svg>
@@ -615,36 +641,45 @@ export function PubgCareerStats() {
             </div>
 
             {/* Right Column: 5 Top Overview Columns + 4 Performance Matrix Rows (Always White & Vivid on PC) */}
-            <div className="lg:col-span-8 flex flex-col justify-between">
+            <div className="lg:col-span-8 flex flex-col justify-between min-w-0">
               {/* Top Overview Black Strip (5 Columns) */}
-              <div className="grid grid-cols-5 divide-x divide-line/60 bg-[#0d101c] py-4 px-2 sm:px-4 text-center border-b border-line/60">
-                <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Matches Played</p>
-                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-white mt-0.5">
+              <div className="grid grid-cols-5 divide-x divide-line/60 bg-[#0d101c] py-3.5 sm:py-4 px-1 sm:px-4 text-center border-b border-line/60">
+                <div className="px-0.5 sm:px-2 min-w-0">
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">
+                    <span className="sm:hidden">Matches</span>
+                    <span className="hidden sm:inline">Matches Played</span>
+                  </p>
+                  <p className="font-mono text-xs xs:text-sm sm:text-2xl md:text-3xl font-black text-white mt-0.5 truncate">
                     {activeSeason.overview.matches}
                   </p>
                 </div>
-                <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Wins</p>
-                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-emerald-400 mt-0.5">
+                <div className="px-0.5 sm:px-2 min-w-0">
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">Wins</p>
+                  <p className="font-mono text-xs xs:text-sm sm:text-2xl md:text-3xl font-black text-emerald-400 mt-0.5 truncate">
                     {activeSeason.overview.wins}
                   </p>
                 </div>
-                <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Top 10</p>
-                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-cyan-400 mt-0.5">
+                <div className="px-0.5 sm:px-2 min-w-0">
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">Top 10</p>
+                  <p className="font-mono text-xs xs:text-sm sm:text-2xl md:text-3xl font-black text-cyan-400 mt-0.5 truncate">
                     {activeSeason.overview.top10}
                   </p>
                 </div>
-                <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">Eliminations</p>
-                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-rose-400 mt-0.5">
+                <div className="px-0.5 sm:px-2 min-w-0">
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">
+                    <span className="sm:hidden">Kills</span>
+                    <span className="hidden sm:inline">Eliminations</span>
+                  </p>
+                  <p className="font-mono text-xs xs:text-sm sm:text-2xl md:text-3xl font-black text-rose-400 mt-0.5 truncate">
                     {activeSeason.overview.eliminations}
                   </p>
                 </div>
-                <div className="px-1 sm:px-2">
-                  <p className="font-mono text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold">F/D Ratio</p>
-                  <p className="font-mono text-sm sm:text-2xl md:text-3xl font-black text-amber-300 mt-0.5">
+                <div className="px-0.5 sm:px-2 min-w-0">
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">
+                    <span className="sm:hidden">F/D</span>
+                    <span className="hidden sm:inline">F/D Ratio</span>
+                  </p>
+                  <p className="font-mono text-xs xs:text-sm sm:text-2xl md:text-3xl font-black text-amber-300 mt-0.5 truncate">
                     {activeSeason.overview.fdRatio.toFixed(2)}
                   </p>
                 </div>
@@ -653,85 +688,85 @@ export function PubgCareerStats() {
               {/* 4 Performance Rows Matching In-Game UI (Explicit Crisp Colors on PC and Mobile) */}
               <div className="divide-y divide-line/40 font-mono">
                 {/* Row 1: Chicken Dinner / Win Stats */}
-                <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 hover:bg-white/[0.02] transition">
-                  <div className="size-9 sm:size-11 shrink-0 rounded-xl bg-amber-400/10 border border-amber-400/20 grid place-items-center text-amber-300">
-                    <Trophy className="size-5 sm:size-6" />
+                <div className="flex items-center gap-2.5 sm:gap-4 p-3 sm:p-5 hover:bg-white/[0.02] transition">
+                  <div className="size-8 sm:size-11 shrink-0 rounded-xl bg-amber-400/10 border border-amber-400/20 grid place-items-center text-amber-300">
+                    <Trophy className="size-4 sm:size-6" />
                   </div>
-                  <div className="grid grid-cols-3 gap-2 flex-1 text-center">
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Win Ratio</p>
-                      <p className="text-xs sm:text-lg font-black text-emerald-400 mt-0.5">{activeSeason.details.winRatioPct}</p>
+                  <div className="grid grid-cols-3 gap-1 sm:gap-2 flex-1 text-center min-w-0">
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Win Ratio</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-emerald-400 mt-0.5 truncate">{activeSeason.details.winRatioPct}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Top 10 Rate</p>
-                      <p className="text-xs sm:text-lg font-black text-cyan-400 mt-0.5">{activeSeason.details.top10RatePct}</p>
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Top 10 Rate</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-cyan-400 mt-0.5 truncate">{activeSeason.details.top10RatePct}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Accuracy</p>
-                      <p className="text-xs sm:text-lg font-black text-amber-300 mt-0.5">{activeSeason.details.accuracyPct}</p>
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Accuracy</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-amber-300 mt-0.5 truncate">{activeSeason.details.accuracyPct}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Row 2: Reticle / Precision Stats */}
-                <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 hover:bg-white/[0.02] transition">
-                  <div className="size-9 sm:size-11 shrink-0 rounded-xl bg-rose-400/10 border border-rose-400/20 grid place-items-center text-rose-300">
-                    <Crosshair className="size-5 sm:size-6" />
+                <div className="flex items-center gap-2.5 sm:gap-4 p-3 sm:p-5 hover:bg-white/[0.02] transition">
+                  <div className="size-8 sm:size-11 shrink-0 rounded-xl bg-rose-400/10 border border-rose-400/20 grid place-items-center text-rose-300">
+                    <Crosshair className="size-4 sm:size-6" />
                   </div>
-                  <div className="grid grid-cols-3 gap-2 flex-1 text-center">
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Headshot Rate</p>
-                      <p className="text-xs sm:text-lg font-black text-rose-400 mt-0.5">{activeSeason.details.headshotRatePct}</p>
+                  <div className="grid grid-cols-3 gap-1 sm:gap-2 flex-1 text-center min-w-0">
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Headshot Rate</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-rose-400 mt-0.5 truncate">{activeSeason.details.headshotRatePct}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Headshots</p>
-                      <p className="text-xs sm:text-lg font-black text-pink-300 mt-0.5">{activeSeason.details.headshots}</p>
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Headshots</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-pink-300 mt-0.5 truncate">{activeSeason.details.headshots}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">AVG Damage</p>
-                      <p className="text-xs sm:text-lg font-black text-amber-300 mt-0.5">{activeSeason.details.avgDamage}</p>
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">AVG Damage</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-amber-300 mt-0.5 truncate">{activeSeason.details.avgDamage}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Row 3: Ammo / Damage Stats */}
-                <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 hover:bg-white/[0.02] transition">
-                  <div className="size-9 sm:size-11 shrink-0 rounded-xl bg-fuchsia-400/10 border border-fuchsia-400/20 grid place-items-center text-fuchsia-300">
-                    <Zap className="size-5 sm:size-6" />
+                <div className="flex items-center gap-2.5 sm:gap-4 p-3 sm:p-5 hover:bg-white/[0.02] transition">
+                  <div className="size-8 sm:size-11 shrink-0 rounded-xl bg-fuchsia-400/10 border border-fuchsia-400/20 grid place-items-center text-fuchsia-300">
+                    <Zap className="size-4 sm:size-6" />
                   </div>
-                  <div className="grid grid-cols-3 gap-2 flex-1 text-center">
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Total Damage</p>
-                      <p className="text-xs sm:text-lg font-black text-fuchsia-300 mt-0.5">{activeSeason.details.totalDamage}</p>
+                  <div className="grid grid-cols-3 gap-1 sm:gap-2 flex-1 text-center min-w-0">
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Total Damage</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-fuchsia-300 mt-0.5 truncate">{activeSeason.details.totalDamage}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Most Eliminations</p>
-                      <p className="text-xs sm:text-lg font-black text-rose-400 mt-0.5">{activeSeason.details.mostEliminations}</p>
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Most Kills</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-rose-400 mt-0.5 truncate">{activeSeason.details.mostEliminations}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Highest Damage</p>
-                      <p className="text-xs sm:text-lg font-black text-amber-300 mt-0.5">{activeSeason.details.highestDamage}</p>
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Highest Dmg</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-amber-300 mt-0.5 truncate">{activeSeason.details.highestDamage}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Row 4: Teamplay / Movement Stats */}
-                <div className="flex items-center gap-3 sm:gap-4 p-3.5 sm:p-5 hover:bg-white/[0.02] transition">
-                  <div className="size-9 sm:size-11 shrink-0 rounded-xl bg-cyan-400/10 border border-cyan-400/20 grid place-items-center text-cyan-300">
-                    <Shield className="size-5 sm:size-6" />
+                <div className="flex items-center gap-2.5 sm:gap-4 p-3 sm:p-5 hover:bg-white/[0.02] transition">
+                  <div className="size-8 sm:size-11 shrink-0 rounded-xl bg-cyan-400/10 border border-cyan-400/20 grid place-items-center text-cyan-300">
+                    <Shield className="size-4 sm:size-6" />
                   </div>
-                  <div className="grid grid-cols-3 gap-2 flex-1 text-center">
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Total Assists</p>
-                      <p className="text-xs sm:text-lg font-black text-cyan-400 mt-0.5">{activeSeason.details.totalAssists}</p>
+                  <div className="grid grid-cols-3 gap-1 sm:gap-2 flex-1 text-center min-w-0">
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Total Assists</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-cyan-400 mt-0.5 truncate">{activeSeason.details.totalAssists}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Avg. Assists</p>
-                      <p className="text-xs sm:text-lg font-black text-sky-300 mt-0.5">{activeSeason.details.avgAssists}</p>
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Avg Assists</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-sky-300 mt-0.5 truncate">{activeSeason.details.avgAssists}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] sm:text-xs text-slate-300 uppercase font-bold">Longest Traveled</p>
-                      <p className="text-xs sm:text-lg font-black text-teal-300 mt-0.5">{activeSeason.details.longestTraveled}</p>
+                    <div className="min-w-0">
+                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Distance</p>
+                      <p className="text-[11px] xs:text-xs sm:text-lg font-black text-teal-300 mt-0.5 truncate">{activeSeason.details.longestTraveled}</p>
                     </div>
                   </div>
                 </div>
@@ -758,60 +793,80 @@ export function PubgCareerStats() {
 
       {/* ────────────────── OFFICIAL BASIC INFO & PROFILE SHOWCASE BAR ────────────────── */}
       <Reveal delay={0.1}>
-        <div className="mb-12 rounded-2xl border border-line bg-[#11162a]/90 p-5 sm:p-7 shadow-xl backdrop-blur-md">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-line/60">
+        <div className="mb-12 rounded-2xl border border-line bg-[#11162a]/95 p-4 sm:p-7 shadow-xl backdrop-blur-md overflow-hidden">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6">
             {/* Player Identity Block */}
-            <div className="flex items-center gap-4">
-              <div className="relative size-16 sm:size-20 shrink-0 rounded-2xl border-2 border-amber-400/80 bg-gradient-to-br from-amber-400/20 to-pink-500/20 p-1 shadow-lg shadow-amber-500/20">
+            <div className="flex items-start sm:items-center gap-3.5 sm:gap-4 min-w-0">
+              {/* Profile Avatar with Lv.91 Badge */}
+              <div className="relative size-14 sm:size-20 shrink-0 rounded-2xl border-2 border-amber-400/80 bg-gradient-to-br from-amber-400/20 to-pink-500/20 p-0.5 sm:p-1 shadow-lg shadow-amber-500/20">
                 <img
                   src="/images/creator/khushi-avatar-gamer.webp"
                   alt="FRAGxKhusiYT Avatar"
                   className="size-full object-cover rounded-xl"
+                  loading="lazy"
                 />
-                <span className="absolute -bottom-2 -right-2 rounded-md bg-amber-400 px-1.5 py-0.5 font-mono text-[10px] font-black text-slate-950 shadow">
+                <span className="absolute -bottom-1.5 -right-1.5 sm:-bottom-2 sm:-right-2 rounded-md bg-amber-400 px-1.5 py-0.5 font-mono text-[9px] sm:text-[10px] font-black text-slate-950 shadow">
                   Lv.91
                 </span>
               </div>
-              <div>
+
+              {/* Player Details */}
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-gaming text-xl sm:text-2xl font-bold text-white tracking-wide">
+                  <h3 className="font-gaming text-lg xs:text-xl sm:text-2xl font-bold text-white tracking-wide truncate">
                     ♀ FRAGxKhusiYT
                   </h3>
-                  <span className="rounded bg-red-600/20 border border-red-500/40 px-2 py-0.5 font-mono text-[10px] font-bold text-red-300">
+                  <span className="rounded bg-red-600/20 border border-red-500/40 px-2 py-0.5 font-mono text-[9px] sm:text-[10px] font-bold text-red-300 shrink-0">
                     FRAGOFFICIALS Leader
                   </span>
                 </div>
-                <p className="font-mono text-xs text-slate-300 mt-1 flex items-center gap-2">
-                  <span>UID: <strong className="text-amber-300">5112658248</strong></span>
-                  <span className="text-white/40">·</span>
-                  <span>Region: <strong className="text-white">India 🇮🇳</strong></span>
-                </p>
-                <div className="flex items-center gap-2 mt-2 font-mono text-[11px]">
-                  <span className="text-pink-300 bg-pink-500/10 border border-pink-500/30 px-2 py-0.5 rounded-full flex items-center gap-1 font-bold">
-                    <Heart className="size-3 fill-pink-400 text-pink-400" />
-                    Partner: TOM and FRAGxKhu...
+
+                <div className="font-mono text-xs text-slate-300 mt-1.5 flex items-center gap-2 flex-wrap">
+                  <div className="flex items-center gap-1.5 bg-[#1a213a] px-2 py-0.5 rounded border border-line/60">
+                    <span className="text-slate-400 text-[11px]">UID:</span>
+                    <strong className="text-amber-300 text-[11px] sm:text-xs">5112658248</strong>
+                    <button
+                      type="button"
+                      onClick={handleCopyUid}
+                      title="Copy UID"
+                      className="ml-1 text-slate-400 hover:text-white transition cursor-pointer flex items-center gap-0.5"
+                    >
+                      {copiedUid ? (
+                        <span className="text-[10px] text-emerald-400 font-bold">✓ Copied</span>
+                      ) : (
+                        <Copy className="size-3 text-slate-400 hover:text-amber-300" />
+                      )}
+                    </button>
+                  </div>
+                  <span className="text-slate-400 text-[11px]">Region: <strong className="text-white">India 🇮🇳</strong></span>
+                </div>
+
+                <div className="flex items-center gap-2 mt-2 font-mono text-[10px] sm:text-[11px] max-w-full">
+                  <span className="text-pink-300 bg-pink-500/10 border border-pink-500/30 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5 font-bold truncate max-w-full">
+                    <Heart className="size-3 fill-pink-400 text-pink-400 shrink-0" />
+                    <span className="truncate">Partner: TOM and FRAGxKhusi</span>
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Quick Profile Milestones */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center font-mono">
-              <div className="rounded-xl border border-line bg-card/60 p-3">
-                <span className="text-[10px] uppercase text-slate-400 font-bold block">Master Collector</span>
-                <span className="text-sm sm:text-base font-black text-amber-300 mt-0.5 block">Level 100</span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 text-center font-mono w-full lg:w-auto">
+              <div className="rounded-xl border border-line bg-card/60 p-2.5 sm:p-3 min-w-0">
+                <span className="text-[9px] sm:text-[10px] uppercase text-slate-400 font-bold block truncate">Master Collector</span>
+                <span className="text-xs sm:text-base font-black text-amber-300 mt-0.5 block truncate">Level 100</span>
               </div>
-              <div className="rounded-xl border border-line bg-card/60 p-3">
-                <span className="text-[10px] uppercase text-slate-400 font-bold block">Lifetime Matches</span>
-                <span className="text-sm sm:text-base font-black text-white mt-0.5 block">21,728</span>
+              <div className="rounded-xl border border-line bg-card/60 p-2.5 sm:p-3 min-w-0">
+                <span className="text-[9px] sm:text-[10px] uppercase text-slate-400 font-bold block truncate">Lifetime Matches</span>
+                <span className="text-xs sm:text-base font-black text-white mt-0.5 block truncate">21,728</span>
               </div>
-              <div className="rounded-xl border border-line bg-card/60 p-3">
-                <span className="text-[10px] uppercase text-slate-400 font-bold block">Achievement Points</span>
-                <span className="text-sm sm:text-base font-black text-cyan-300 mt-0.5 block">⭐ 8,820</span>
+              <div className="rounded-xl border border-line bg-card/60 p-2.5 sm:p-3 min-w-0">
+                <span className="text-[9px] sm:text-[10px] uppercase text-slate-400 font-bold block truncate">Achievement Points</span>
+                <span className="text-xs sm:text-base font-black text-cyan-300 mt-0.5 block truncate">⭐ 8,820</span>
               </div>
-              <div className="rounded-xl border border-line bg-card/60 p-3">
-                <span className="text-[10px] uppercase text-slate-400 font-bold block">Played For</span>
-                <span className="text-sm sm:text-base font-black text-emerald-300 mt-0.5 block">8 Years</span>
+              <div className="rounded-xl border border-line bg-card/60 p-2.5 sm:p-3 min-w-0">
+                <span className="text-[9px] sm:text-[10px] uppercase text-slate-400 font-bold block truncate">Played For</span>
+                <span className="text-xs sm:text-base font-black text-emerald-300 mt-0.5 block truncate">8 Years</span>
               </div>
             </div>
           </div>
@@ -820,8 +875,8 @@ export function PubgCareerStats() {
 
       {/* ────────────────── OFFICIAL HONOR & 79 TITLES SHOWCASE (media_1791724431585_fb07fbcb.jpg) ────────────────── */}
       <Reveal delay={0.15}>
-        <div className="mb-12 rounded-2xl border border-line bg-[#101424] p-5 sm:p-8 shadow-2xl relative overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-line/60">
+        <div className="mb-12 rounded-2xl border border-line bg-[#101424] p-4 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 pb-4 border-b border-line/60">
             <div>
               <p className="font-mono text-xs uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
                 <Award className="size-4" /> HONOR · ACHIEVEMENTS
@@ -839,13 +894,13 @@ export function PubgCareerStats() {
           </div>
 
           {/* 10 Verified Titles Grid matching In-game Screenshot */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5 font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 sm:gap-3.5 font-mono">
             {VERIFIED_TITLES.map((t) => {
               const isRed = t.tier === 'red';
               return (
                 <div
                   key={t.name}
-                  className={`group relative overflow-hidden rounded-xl border p-3 transition flex flex-col justify-between ${
+                  className={`group relative overflow-hidden rounded-xl border p-2.5 sm:p-3 transition flex flex-col justify-between ${
                     isRed
                       ? 'border-red-500/30 bg-gradient-to-b from-red-950/30 to-[#12162a] hover:border-red-500/60'
                       : 'border-purple-500/30 bg-gradient-to-b from-purple-950/30 to-[#12162a] hover:border-purple-500/60'
