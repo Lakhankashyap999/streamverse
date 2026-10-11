@@ -202,19 +202,6 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
                 <path d="M32 2v12M32 50v12M2 32h12M50 32h12" stroke="currentColor" strokeWidth="1.5" />
                 <circle cx="32" cy="32" r="2.5" fill="#fbbf24" />
               </svg>
-
-              {/* Dynamic Kill Feed Banner - Positioned at top just like authentic PUBG gameplay */}
-              <div className="absolute inset-x-2 sm:inset-x-4 top-12 sm:top-14 glass rounded-xl p-2 sm:p-2.5 border border-blush/30 shadow-lg flex items-center justify-between gap-2 overflow-hidden z-10">
-                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
-                  <span className="shrink-0 size-2 rounded-full bg-red-500 animate-ping" />
-                  <span className="font-mono text-[11px] sm:text-xs font-bold text-ink truncate">
-                    <span className="text-gold">KhushiYT</span> eliminated <span className="text-rose-400">Enemy</span> with <span className="text-amber-300">M416 [Headshot]</span>
-                  </span>
-                </div>
-                <span className="shrink-0 font-mono text-[9px] sm:text-[10px] text-mute uppercase tracking-widest hidden md:inline">
-                  LIVE KILL FEED
-                </span>
-              </div>
             </div>
           </div>
 

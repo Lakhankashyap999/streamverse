@@ -1,5 +1,5 @@
 import type { CommunityPost, Highlight, Poll, Stream, Suggestion, Video } from '../types';
-import { getNextDailyStreamTime } from '../utils/date';
+import { getDailyStreamTime } from '../utils/date';
 
 /**
  * DEMO DATA — shown only when Supabase is not configured.
@@ -13,13 +13,6 @@ import { getNextDailyStreamTime } from '../utils/date';
 const H = 36e5;
 const now = Date.now();
 const iso = (ms: number) => new Date(ms).toISOString();
-
-/** Next occurrence of a given IST hour, `days` ahead. */
-function istSlot(days: number, hourIst: number): string {
-  const d = new Date(now + days * 864e5);
-  // IST is UTC+05:30
-  return iso(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), hourIst, 0) - 5.5 * H);
-}
 
 const TITLE = 'TOP 100 RankPush With Rush Gameplay 🔴 | BGMI';
 const durations = ['6:04:53', '7:06:50', '6:33:30', '7:52:09', '7:44:39'];
@@ -51,7 +44,7 @@ export const demoStreams: Stream[] = [
     youtube_video_id: null,
     stream_url: 'https://www.youtube.com/@khusiytlive/live',
     thumbnail_url: '/images/creator/pubg-stream-thumbnail-hd.webp',
-    scheduled_at: getNextDailyStreamTime(),
+    scheduled_at: getDailyStreamTime(0),
     timezone: 'Asia/Kolkata',
     status: 'scheduled',
     duration_label: null,
@@ -61,12 +54,12 @@ export const demoStreams: Stream[] = [
   {
     ...base,
     id: 'demo-stream-next-2',
-    title: 'Squad Rush Night with the KhushiYT Family',
-    description: 'Sample upcoming stream. Replace or delete from the dashboard.',
+    title: 'Squad Rush & Custom Rooms Night — 10 PM IST',
+    description: 'High-kill squad rush matches, viewer custom rooms, and Conqueror rank push.',
     youtube_video_id: null,
     stream_url: 'https://www.youtube.com/@khusiytlive/live',
     thumbnail_url: '/images/creator/stream-thumb-4.webp',
-    scheduled_at: istSlot(3, 20),
+    scheduled_at: getDailyStreamTime(1),
     timezone: 'Asia/Kolkata',
     status: 'scheduled',
     duration_label: null,

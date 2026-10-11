@@ -7,10 +7,12 @@ import {
   demoSuggestions,
   demoVideos,
 } from '../data/demoData';
+import type { Stream } from '../types';
+import { getDailyStreamTime } from '../utils/date';
 
 /** localStorage-backed store used only in DEMO MODE (no Supabase configured). */
 
-const PREFIX = 'sv-demo-v1:';
+const PREFIX = 'sv-demo-v2:';
 
 const seeds = {
   profiles: () => [DEFAULT_PROFILE],
@@ -49,6 +51,13 @@ export const demoStore = {
       }
     }
     const value = (Array.isArray(rows) ? rows : seeds[table]()) as T[];
+    if (table === 'streams') {
+      const streams = value as unknown as Stream[];
+      const scheduledSampleStreams = streams.filter((s) => s.is_sample && s.status === 'scheduled');
+      scheduledSampleStreams.forEach((s, idx) => {
+        s.scheduled_at = getDailyStreamTime(idx);
+      });
+    }
     memory.set(table, value);
     return value;
   },
