@@ -8,6 +8,7 @@ import { youtubeService } from '../../services/youtubeService';
 import { youtubeLiveUrl, youtubeStreamsUrl, youtubeSubscribeUrl } from '../../config/site';
 import { cn } from '../../utils/misc';
 import { Badge, LiveBadge, SampleBadge } from '../ui/Card';
+import { WaveSubscribeText } from '../layout/Navbar';
 import { ExternalButton } from '../ui/Button';
 import { SafeImage } from '../ui/Display';
 
@@ -288,7 +289,9 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 px-4 py-2.5 text-sm font-bold text-white shadow-[0_0_18px_rgba(239,68,68,0.45)] transition hover:scale-105 active:scale-95 cursor-pointer"
                 >
-                  <span>🔔</span> Subscribe (27.6K)
+                  <span>🔔</span>
+                  <WaveSubscribeText />
+                  <span className="text-[11px] bg-black/30 px-1.5 py-0.5 rounded-full font-mono text-amber-200">27.6K</span>
                 </a>
               </div>
             </>
@@ -308,7 +311,9 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 px-4 py-2.5 text-sm font-bold text-white shadow-[0_0_18px_rgba(239,68,68,0.45)] transition hover:scale-105 active:scale-95 cursor-pointer"
                 >
-                  <span>🔔</span> Subscribe for Stream Alerts
+                  <span>🔔</span>
+                  <WaveSubscribeText />
+                  <span className="text-xs text-amber-200">Alerts</span>
                 </a>
                 <ExternalButton
                   href={googleCalendarUrl(state.stream.title, state.stream.scheduled_at!, 4, youtubeLiveUrl(profile) ?? '')}
@@ -327,9 +332,11 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
           {state.kind === 'offline' && (
             <>
               <p className="text-mute">
-                {state.stream
-                  ? `Previous stream · ${relativeTime(state.stream.scheduled_at)}`
-                  : 'No stream scheduled right now — catch up on the latest videos.'}
+                <time dateTime={state.stream?.scheduled_at ?? undefined}>
+                  {state.stream
+                    ? `Previous stream · ${relativeTime(state.stream.scheduled_at)}`
+                    : 'No stream scheduled right now — catch up on the latest videos.'}
+                </time>
               </p>
               <div className="flex flex-wrap gap-3">
                 <a
@@ -338,7 +345,9 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 px-4 py-2.5 text-sm font-bold text-white shadow-[0_0_18px_rgba(239,68,68,0.45)] transition hover:scale-105 active:scale-95 cursor-pointer"
                 >
-                  <span>🔔</span> Subscribe on YouTube
+                  <span>🔔</span>
+                  <WaveSubscribeText />
+                  <span className="text-[11px] bg-black/30 px-1.5 py-0.5 rounded-full font-mono text-amber-200">27.6K</span>
                 </a>
                 <ExternalButton href={youtubeStreamsUrl(profile)} hosts={['youtube.com']} icon={<Tv className="size-4" aria-hidden />}>
                   Watch previous streams

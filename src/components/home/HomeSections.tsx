@@ -11,6 +11,7 @@ import { CompassStrip, ZoneRing } from '../ui/Hud';
 import { EmptyState, ErrorState, LoadingState } from '../ui/States';
 import { useToast } from '../ui/Toast';
 import { getSocialLinks, SocialIconRow } from '../layout/SocialLinks';
+import { WaveSubscribeText } from '../layout/Navbar';
 import { LiveStreamCard, StreamCard, useLiveState, Countdown } from '../streams/StreamCard';
 import { VideoGrid } from '../videos/VideoGrid';
 import { highlightToMedia, videoToMedia } from '../videos/mappers';
@@ -115,10 +116,14 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white font-bold px-5 py-3 text-sm sm:text-base shadow-[0_0_25px_rgba(239,68,68,0.5)] transition hover:scale-105 active:scale-95 cursor-pointer w-full sm:w-auto border border-red-400/40"
               aria-label="Subscribe to KhushiYT on YouTube"
             >
-              <svg className="size-5 fill-current shrink-0" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-              <span>Subscribe</span>
+              <motion.span
+                animate={{ rotate: [0, -14, 14, -8, 8, 0] }}
+                transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }}
+                className="text-base"
+              >
+                🔔
+              </motion.span>
+              <WaveSubscribeText />
               <span className="rounded-full bg-black/30 px-2 py-0.5 text-xs font-mono font-bold text-amber-300">27.6K</span>
             </a>
             <ButtonLink to="/highlights" variant="secondary" size="lg" iconRight={<ArrowRight className="size-5" aria-hidden />} className="w-full sm:w-auto justify-center">

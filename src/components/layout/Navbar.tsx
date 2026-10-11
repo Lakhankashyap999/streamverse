@@ -18,16 +18,53 @@ export const NAV_ITEMS = [
   { to: '/contact', label: 'Contact' },
 ];
 
+const WAVE_LETTERS = ['S', 'u', 'b', 's', 'c', 'r', 'i', 'b', 'e'];
+
+export function WaveSubscribeText({ uppercase = false }: { uppercase?: boolean }) {
+  const letters = uppercase
+    ? ['S', 'U', 'B', 'S', 'C', 'R', 'I', 'B', 'E']
+    : WAVE_LETTERS;
+
+  return (
+    <span className="inline-flex items-center tracking-wider font-extrabold select-none py-0.5" aria-label="Subscribe">
+      {letters.map((char, idx) => (
+        <motion.span
+          key={idx}
+          className="inline-block"
+          animate={{
+            y: [0, -3.5, 0],
+            color: ['#ffffff', '#fde047', '#ffffff'],
+            textShadow: [
+              '0 0 0px rgba(253,224,71,0)',
+              '0 0 8px rgba(253,224,71,0.9)',
+              '0 0 0px rgba(253,224,71,0)',
+            ],
+          }}
+          transition={{
+            duration: 1.2,
+            repeat: Infinity,
+            repeatDelay: 0.8,
+            delay: idx * 0.08,
+            ease: [0.45, 0, 0.55, 1],
+          }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 export function Logo({ compact = false }: { compact?: boolean }) {
   const { profile } = useProfile();
   return (
-    <Link to="/" className="group flex items-center gap-2 rounded-lg shrink-0 min-w-0" aria-label={`${profile.gaming_name} — home`}>
-      <img src="/icons/logo.svg" alt="" width={32} height={32} className="size-8 sm:size-9 transition-transform group-hover:rotate-6 shrink-0" />
+    <Link to="/" className="group flex items-center gap-1.5 sm:gap-2 rounded-lg shrink-0 min-w-0" aria-label={`${profile.gaming_name} — home`}>
+      <img src="/icons/logo.svg" alt="" width={32} height={32} className="size-7 sm:size-9 transition-transform group-hover:rotate-6 shrink-0" />
       {!compact && (
-        <span className="font-display text-base sm:text-lg font-bold leading-none tracking-wide flex items-center gap-1 whitespace-nowrap shrink-0">
+        <span className="font-display text-sm sm:text-lg font-bold leading-none tracking-wide flex items-center gap-1 whitespace-nowrap shrink-0">
           <span className="text-gradient-gold">{profile.gaming_name.slice(0, -2) || profile.gaming_name}</span>
           <span className="text-gradient">{profile.gaming_name.length > 2 ? profile.gaming_name.slice(-2) : ''}</span>
-          <span className="text-xs text-pink-400 select-none">🌸</span>
+          <span className="text-[11px] sm:text-xs text-pink-400 select-none">🌸</span>
         </span>
       )}
     </Link>
@@ -153,17 +190,25 @@ export function Navbar() {
           ))}
         </ul>
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          {/* Official YouTube Subscribe Button */}
+          {/* Official YouTube Subscribe Button with Smooth Wave Animation */}
           <a
             href={youtubeSubscribeUrl(profile)}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-2.5 py-1 text-xs font-bold transition shadow-[0_0_12px_rgba(239,68,68,0.45)] cursor-pointer sm:px-3 sm:py-1.5 hover:scale-105 active:scale-95"
+            className="group relative flex items-center gap-1 sm:gap-1.5 rounded-full bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white px-2 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-bold transition shadow-[0_0_14px_rgba(239,68,68,0.5)] cursor-pointer hover:scale-105 active:scale-95 border border-red-400/40 shrink-0"
             aria-label="Subscribe to KhushiYT on YouTube"
           >
-            <span className="text-xs group-hover:rotate-12 transition-transform">🔔</span>
-            <span className="font-bold text-xs uppercase tracking-wider">Subscribe</span>
-            <span className="hidden sm:inline text-[10px] bg-black/25 px-1.5 py-0.2 rounded-full font-mono font-black text-amber-200">27.6K</span>
+            <motion.span
+              animate={{ rotate: [0, -14, 14, -8, 8, 0] }}
+              transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }}
+              className="text-xs shrink-0 inline-block"
+            >
+              🔔
+            </motion.span>
+            <WaveSubscribeText />
+            <span className="hidden md:inline text-[9px] bg-black/35 px-1.5 py-0.5 rounded-full font-mono font-bold text-amber-200 ml-0.5">
+              27.6K
+            </span>
           </a>
 
           {isLive ? (
@@ -171,14 +216,14 @@ export function Navbar() {
               href={liveUrl ?? undefined}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-600/20 px-2.5 py-1 text-xs font-mono font-bold text-red-300 transition hover:bg-red-600/30 sm:px-3 sm:py-1.5 shadow-[0_0_12px_rgba(239,68,68,0.3)]"
+              className="flex items-center gap-1 sm:gap-1.5 rounded-full border border-red-500/50 bg-red-600/20 px-2 py-0.5 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-mono font-bold text-red-300 transition hover:bg-red-600/30 shadow-[0_0_12px_rgba(239,68,68,0.3)] shrink-0"
               aria-label="KhushiYT is streaming live now on YouTube"
             >
               <span className="relative flex size-2 shrink-0">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-red-500 opacity-75" />
                 <span className="relative inline-flex size-2 rounded-full bg-red-500" />
               </span>
-              <span className="font-mono text-xs font-bold text-red-400">LIVE</span>
+              <span className="font-mono text-[10px] sm:text-xs font-bold text-red-400">LIVE</span>
               <span className="hidden md:inline font-mono text-[11px] text-red-300/80">NOW</span>
             </a>
           ) : (
@@ -186,18 +231,18 @@ export function Navbar() {
               href={profile.youtube_url ?? 'https://www.youtube.com/@khusiytlive'}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-full border border-line bg-card/80 px-2.5 py-1 text-xs font-mono text-slate-300 transition hover:text-white hover:border-slate-500/50 sm:px-3 sm:py-1.5"
+              className="hidden xs:flex items-center gap-1.5 rounded-full border border-line bg-card/80 px-2 py-0.5 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-mono text-slate-300 transition hover:text-white hover:border-slate-500/50 shrink-0"
               aria-label="KhushiYT is currently offline. Visit YouTube channel"
               title="Currently offline · Streams every night at 10 PM IST"
             >
-              <span className="size-2 rounded-full bg-slate-500 shrink-0" />
-              <span className="font-mono text-[11px] font-semibold text-slate-300">OFFLINE</span>
+              <span className="size-1.5 rounded-full bg-slate-500 shrink-0" />
+              <span className="font-mono text-[10px] sm:text-[11px] font-semibold text-slate-400">OFFLINE</span>
             </a>
           )}
           <button
             ref={menuBtn}
             type="button"
-            className="glass grid size-9 sm:size-10 place-items-center rounded-xl lg:hidden"
+            className="glass grid size-8 sm:size-10 place-items-center rounded-xl lg:hidden shrink-0"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? 'Close menu' : 'Open menu'}
@@ -247,15 +292,22 @@ export function Navbar() {
                   </motion.li>
                 ))}
               </ul>
-              {/* Mobile Drawer Subscribe Button */}
+              {/* Mobile Drawer Subscribe Button with Wave Effect */}
               <a
                 href={youtubeSubscribeUrl(profile)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white py-3.5 px-4 font-bold text-base shadow-[0_0_20px_rgba(239,68,68,0.45)] transition active:scale-95"
               >
-                <span className="text-lg">🔔</span>
-                <span>Subscribe on YouTube (27.6K)</span>
+                <motion.span
+                  animate={{ rotate: [0, -14, 14, -8, 8, 0] }}
+                  transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }}
+                  className="text-lg"
+                >
+                  🔔
+                </motion.span>
+                <WaveSubscribeText />
+                <span className="text-xs bg-black/30 px-2 py-0.5 rounded-full font-mono text-amber-200">27.6K</span>
               </a>
               <ExternalButton
                 href={isLive ? liveUrl : (profile.youtube_url ?? liveUrl)}
