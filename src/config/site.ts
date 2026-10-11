@@ -57,3 +57,4 @@ export const SITE = {
 
 export const youtubeLiveUrl = (p: Profile) => (p.youtube_url ? `${p.youtube_url.replace(/\/$/, '')}/live` : null);
 export const youtubeStreamsUrl = (p: Profile) => (p.youtube_url ? `${p.youtube_url.replace(/\/$/, '')}/streams` : null);
+export const youtubeSubscribeUrl = (p?: Profile | null) => `${(p?.youtube_url ?? 'https://www.youtube.com/@khusiytlive').replace(/\/$/, '')}?sub_confirmation=1`;

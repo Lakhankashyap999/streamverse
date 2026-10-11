@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Copy, Crosshair, Flame, Gamepad2, Heart, MapPin, Play, Sparkles, Trophy, Zap } from 'lucide-react';
 import type { CommunityPost, Highlight, Poll, Profile, Stream, Video } from '../../types';
-import { SITE, youtubeLiveUrl } from '../../config/site';
+import { SITE, youtubeLiveUrl, youtubeSubscribeUrl } from '../../config/site';
 import { cn } from '../../utils/misc';
 import { getNextDailyStreamTime } from '../../utils/date';
 import { ButtonLink, ExternalButton } from '../ui/Button';
@@ -104,10 +104,23 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             {SITE.communityName} ❤️
           </motion.p>
 
-          <motion.div {...item(4)} className="mt-5 sm:mt-8 flex flex-col gap-3 sm:flex-row w-full sm:w-auto">
+          <motion.div {...item(4)} className="mt-5 sm:mt-8 flex flex-col sm:flex-row gap-3 w-full sm:w-auto flex-wrap">
             <ExternalButton href={youtubeLiveUrl(profile)} hosts={['youtube.com']} size="lg" icon={<Play className="size-5 fill-current" aria-hidden />} className="w-full sm:w-auto justify-center">
               Watch My Stream
             </ExternalButton>
+            <a
+              href={youtubeSubscribeUrl(profile)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white font-bold px-5 py-3 text-sm sm:text-base shadow-[0_0_25px_rgba(239,68,68,0.5)] transition hover:scale-105 active:scale-95 cursor-pointer w-full sm:w-auto border border-red-400/40"
+              aria-label="Subscribe to KhushiYT on YouTube"
+            >
+              <svg className="size-5 fill-current shrink-0" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              <span>Subscribe</span>
+              <span className="rounded-full bg-black/30 px-2 py-0.5 text-xs font-mono font-bold text-amber-300">27.6K</span>
+            </a>
             <ButtonLink to="/highlights" variant="secondary" size="lg" iconRight={<ArrowRight className="size-5" aria-hidden />} className="w-full sm:w-auto justify-center">
               Explore Highlights
             </ButtonLink>

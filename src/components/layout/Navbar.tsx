@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Menu, Radio, X } from 'lucide-react';
 import { useProfile } from '../../context/ProfileContext';
-import { youtubeLiveUrl } from '../../config/site';
+import { youtubeLiveUrl, youtubeSubscribeUrl } from '../../config/site';
 import { useScrollLock } from '../../hooks';
 import { cn } from '../../utils/misc';
 import { ExternalButton } from '../ui/Button';
@@ -152,7 +152,20 @@ export function Navbar() {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          {/* Official YouTube Subscribe Button */}
+          <a
+            href={youtubeSubscribeUrl(profile)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-2.5 py-1 text-xs font-bold transition shadow-[0_0_12px_rgba(239,68,68,0.45)] cursor-pointer sm:px-3 sm:py-1.5 hover:scale-105 active:scale-95"
+            aria-label="Subscribe to KhushiYT on YouTube"
+          >
+            <span className="text-xs group-hover:rotate-12 transition-transform">🔔</span>
+            <span className="font-bold text-xs uppercase tracking-wider">Subscribe</span>
+            <span className="hidden sm:inline text-[10px] bg-black/25 px-1.5 py-0.2 rounded-full font-mono font-black text-amber-200">27.6K</span>
+          </a>
+
           {isLive ? (
             <a
               href={liveUrl ?? undefined}
@@ -234,6 +247,16 @@ export function Navbar() {
                   </motion.li>
                 ))}
               </ul>
+              {/* Mobile Drawer Subscribe Button */}
+              <a
+                href={youtubeSubscribeUrl(profile)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white py-3.5 px-4 font-bold text-base shadow-[0_0_20px_rgba(239,68,68,0.45)] transition active:scale-95"
+              >
+                <span className="text-lg">🔔</span>
+                <span>Subscribe on YouTube (27.6K)</span>
+              </a>
               <ExternalButton
                 href={isLive ? liveUrl : (profile.youtube_url ?? liveUrl)}
                 hosts={['youtube.com']}

@@ -5,7 +5,7 @@ import { useCountdown } from '../../hooks';
 import { formatDateTime, formatInZone, getNextDailyStreamTime, googleCalendarUrl, isFuture, relativeTime } from '../../utils/date';
 import { isValidVideoId, ytThumb, ytWatchUrl } from '../../utils/youtube';
 import { youtubeService } from '../../services/youtubeService';
-import { youtubeLiveUrl, youtubeStreamsUrl } from '../../config/site';
+import { youtubeLiveUrl, youtubeStreamsUrl, youtubeSubscribeUrl } from '../../config/site';
 import { cn } from '../../utils/misc';
 import { Badge, LiveBadge, SampleBadge } from '../ui/Card';
 import { ExternalButton } from '../ui/Button';
@@ -273,14 +273,24 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
               <p className="text-mute">
                 {state.verified ? 'Confirmed live on YouTube right now.' : 'Marked live by the creator. Jump in and say hi in chat!'}
               </p>
-              <ExternalButton
-                href={state.stream ? streamWatchUrl(state.stream, profile) : youtubeLiveUrl(profile)}
-                hosts={['youtube.com', 'youtu.be']}
-                size="lg"
-                icon={<Tv className="size-5" aria-hidden />}
-              >
-                Watch on YouTube
-              </ExternalButton>
+              <div className="flex flex-wrap gap-3">
+                <ExternalButton
+                  href={state.stream ? streamWatchUrl(state.stream, profile) : youtubeLiveUrl(profile)}
+                  hosts={['youtube.com', 'youtu.be']}
+                  size="lg"
+                  icon={<Tv className="size-5" aria-hidden />}
+                >
+                  Watch on YouTube
+                </ExternalButton>
+                <a
+                  href={youtubeSubscribeUrl(profile)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 px-4 py-2.5 text-sm font-bold text-white shadow-[0_0_18px_rgba(239,68,68,0.45)] transition hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  <span>🔔</span> Subscribe (27.6K)
+                </a>
+              </div>
             </>
           )}
 
@@ -292,6 +302,14 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
               </p>
               <Countdown target={state.stream.scheduled_at!} />
               <div className="flex flex-wrap gap-3">
+                <a
+                  href={youtubeSubscribeUrl(profile)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 px-4 py-2.5 text-sm font-bold text-white shadow-[0_0_18px_rgba(239,68,68,0.45)] transition hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  <span>🔔</span> Subscribe for Stream Alerts
+                </a>
                 <ExternalButton
                   href={googleCalendarUrl(state.stream.title, state.stream.scheduled_at!, 4, youtubeLiveUrl(profile) ?? '')}
                   hosts={['calendar.google.com']}
@@ -314,6 +332,14 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
                   : 'No stream scheduled right now — catch up on the latest videos.'}
               </p>
               <div className="flex flex-wrap gap-3">
+                <a
+                  href={youtubeSubscribeUrl(profile)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 px-4 py-2.5 text-sm font-bold text-white shadow-[0_0_18px_rgba(239,68,68,0.45)] transition hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  <span>🔔</span> Subscribe on YouTube
+                </a>
                 <ExternalButton href={youtubeStreamsUrl(profile)} hosts={['youtube.com']} icon={<Tv className="size-4" aria-hidden />}>
                   Watch previous streams
                 </ExternalButton>
