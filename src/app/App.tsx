@@ -9,26 +9,22 @@ import { PubgLoader } from '../components/ui/PubgLoader';
 import { router } from './router';
 
 export function App() {
-  const [showSplash, setShowSplash] = useState(() => {
-    // If the user already experienced the intro in this session, skip the delay
-    return !sessionStorage.getItem('sv_intro_seen');
-  });
+  // Always show loader on page load and refresh as requested
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     if (!showSplash) return;
 
-    // Show the shooting soldier loader on entrance for 1.5 seconds on first visit
+    // Fallback safety timeout to ensure site displays smoothly
     const timer = setTimeout(() => {
       setShowSplash(false);
-      sessionStorage.setItem('sv_intro_seen', '1');
-    }, 1500);
+    }, 2200);
 
     return () => clearTimeout(timer);
   }, [showSplash]);
 
   const handleComplete = () => {
     setShowSplash(false);
-    sessionStorage.setItem('sv_intro_seen', '1');
   };
 
   return (
@@ -41,8 +37,8 @@ export function App() {
               <motion.div
                 key="splash"
                 initial={{ opacity: 1 }}
-                exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.35, ease: 'easeOut' } }}
-                className="fixed inset-0 z-[999] bg-[#090b16]"
+                exit={{ opacity: 0, scale: 0.99, transition: { duration: 0.35, ease: 'easeOut' } }}
+                className="fixed inset-0 z-[9999] bg-[#060814] w-screen h-[100dvh] overflow-hidden"
               >
                 <PubgLoader fullscreen onComplete={handleComplete} />
               </motion.div>

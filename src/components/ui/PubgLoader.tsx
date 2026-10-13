@@ -1,260 +1,246 @@
 import { useEffect, useState } from 'react';
 import { cn } from '../../utils/misc';
 
-/**
- * Original SVG artwork: a stylised female squad player (level-3 style helmet,
- * vest, backpack) firing a rifle at a steel target. Pure CSS animation —
- * recoil, muzzle flash, tracers, ejected shells, smoke and target hits.
- * Under prefers-reduced-motion it renders as a static pose.
- */
-export function SoldierFiring({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 400 200" className={cn('w-full', className)} role="img" aria-label="Animated soldier firing a rifle">
-      <defs>
-        <linearGradient id="sv-accent" x1="0" x2="1">
-          <stop offset="0" stopColor="#f472b6" />
-          <stop offset="1" stopColor="#8b5cf6" />
-        </linearGradient>
-        <linearGradient id="sv-tracer" x1="0" x2="1">
-          <stop offset="0" stopColor="#fbbf24" stopOpacity="0" />
-          <stop offset="1" stopColor="#fde68a" />
-        </linearGradient>
-        <linearGradient id="sv-ground" x1="0" x2="1">
-          <stop offset="0" stopColor="#8b5cf6" stopOpacity="0" />
-          <stop offset=".5" stopColor="#c026d3" stopOpacity=".7" />
-          <stop offset="1" stopColor="#8b5cf6" stopOpacity="0" />
-        </linearGradient>
-        <radialGradient id="sv-glow">
-          <stop offset="0" stopColor="#fbbf24" stopOpacity=".55" />
-          <stop offset="1" stopColor="#fbbf24" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-
-      {/* ground */}
-      <rect x="10" y="189" width="380" height="2" fill="url(#sv-ground)" />
-      <g fill="#2b3156">
-        <path d="M30 189 l3 -7 l2 7z M150 189 l2 -6 l3 6z M260 189 l3 -8 l2 8z M300 189 l2 -5 l2 5z" />
-      </g>
-
-      {/* target */}
-      <g className="sv-target">
-        <rect x="350" y="108" width="4" height="82" fill="#2b3156" />
-        <rect x="336" y="186" width="32" height="4" rx="2" fill="#2b3156" />
-        <circle cx="352" cy="92" r="20" fill="#1b2140" stroke="#8b5cf6" strokeWidth="2.5" />
-        <circle cx="352" cy="92" r="12" fill="none" stroke="#c026d3" strokeWidth="2" />
-        <circle cx="352" cy="92" r="4" fill="#f472b6" />
-      </g>
-      <g className="sv-hit" stroke="#fde68a" strokeWidth="2" strokeLinecap="round">
-        <path d="M340 92 h-8 M352 80 v-8 M343 83 l-6 -6 M343 101 l-6 6 M352 104 v8" />
-        <circle cx="348" cy="92" r="9" fill="url(#sv-glow)" stroke="none" />
-      </g>
-
-      {/* soldier body */}
-      <g className="sv-breathe">
-        {/* legs */}
-        <path d="M84 126 L74 156 L70 184" stroke="#262c4d" strokeWidth="13" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        <path d="M97 126 L113 155 L119 184" stroke="#2f365c" strokeWidth="13" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        <rect x="60" y="182" width="20" height="8" rx="3" fill="#11131f" />
-        <rect x="112" y="182" width="20" height="8" rx="3" fill="#11131f" />
-        {/* backpack */}
-        <rect x="62" y="82" width="16" height="38" rx="5" fill="#4a3a28" />
-        <rect x="64" y="90" width="12" height="4" rx="1" fill="#5b4832" />
-        {/* torso + vest */}
-        <path d="M76 80 Q73 104 80 130 L103 130 Q107 104 102 80 Z" fill="#2f365c" />
-        <rect x="78" y="86" width="25" height="32" rx="5" fill="#3d4330" />
-        <rect x="81" y="104" width="8" height="10" rx="2" fill="#4b5238" />
-        <rect x="92" y="104" width="8" height="10" rx="2" fill="#4b5238" />
-        <rect x="78" y="118" width="25" height="4" rx="1" fill="url(#sv-accent)" />
-        {/* hair (ponytail) */}
-        <path d="M86 64 Q74 72 79 88" stroke="#1a1020" strokeWidth="6" strokeLinecap="round" fill="none" />
-        {/* head */}
-        <rect x="92" y="70" width="8" height="10" rx="3" fill="#e9b996" />
-        <circle cx="97" cy="64" r="10" fill="#f1c6a8" />
-        {/* level-3 style helmet */}
-        <path d="M84 67 Q83 47 97.5 46 Q112 47 111 62 L111 66 L106 66 L105.5 59.5 L89 59.5 L89 69 Z" fill="#4d5530" />
-        <path d="M89 56.5 h16" stroke="#2d3320" strokeWidth="3" strokeLinecap="round" />
-        <circle cx="88" cy="64" r="3.4" fill="#1b1f33" stroke="#c026d3" strokeWidth="1" />
-        <path d="M89 66 Q96 74 103 71" stroke="#1b1f33" strokeWidth="1.4" fill="none" />
-      </g>
-
-      {/* rifle + arms (recoil group) */}
-      <g className="sv-recoil">
-        <path d="M100 83 L112 100 L121 94" stroke="#2f365c" strokeWidth="7.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        <path d="M90 82 L105 79.5 L107 92 L93 96 Z" fill="#1b1f33" />
-        <rect x="104" y="78" width="64" height="12" rx="2" fill="#232842" />
-        <rect x="108" y="82" width="44" height="2" fill="url(#sv-accent)" />
-        <rect x="168" y="80" width="27" height="8" rx="1.5" fill="#2d334f" />
-        <rect x="194" y="82.5" width="12" height="3" fill="#11131f" />
-        <path d="M132 90 L142 90 L147 109 L137 111 Z" fill="#1b1f33" />
-        <path d="M117 90 L126 90 L122 103 L114 102 Z" fill="#1b1f33" />
-        <rect x="124" y="70" width="27" height="7" rx="3" fill="#11131f" />
-        <circle cx="151" cy="73.5" r="2.4" fill="#f472b6" />
-        <path d="M101 82 L140 99 L176 88" stroke="#3a4170" strokeWidth="7.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        <circle cx="121" cy="94" r="4" fill="#f1c6a8" />
-        <circle cx="176" cy="88" r="4" fill="#f1c6a8" />
-        {/* muzzle flash */}
-        <g className="sv-flash">
-          <path d="M206 86 L221 75 L217 83.5 L236 86 L217 88.5 L221 97 Z" fill="#fbbf24" />
-          <path d="M206 86 L216 80 L214 85 L224 86 L214 87 L216 92 Z" fill="#fff7d6" />
-          <circle cx="210" cy="86" r="14" fill="url(#sv-glow)" />
-        </g>
-      </g>
-
-      {/* tracers */}
-      <g>
-        <rect className="sv-bullet" x="208" y="85" width="16" height="2" rx="1" fill="url(#sv-tracer)" />
-        <rect className="sv-bullet" x="208" y="85" width="16" height="2" rx="1" fill="url(#sv-tracer)" />
-        <rect className="sv-bullet" x="208" y="85" width="16" height="2" rx="1" fill="url(#sv-tracer)" />
-      </g>
-      {/* ejected shells */}
-      <g>
-        <rect className="sv-shell" x="136" y="74" width="2.6" height="6" rx="1" fill="#fbbf24" />
-        <rect className="sv-shell" x="136" y="74" width="2.6" height="6" rx="1" fill="#fbbf24" />
-        <rect className="sv-shell" x="136" y="74" width="2.6" height="6" rx="1" fill="#fbbf24" />
-      </g>
-      {/* smoke */}
-      <g fill="#cbd5e1">
-        <circle className="sv-smoke" cx="212" cy="82" r="4" />
-        <circle className="sv-smoke" cx="212" cy="82" r="4" />
-        <circle className="sv-smoke" cx="212" cy="82" r="4" />
-      </g>
-    </svg>
-  );
+export interface PubgLoaderProps {
+  fullscreen?: boolean;
+  onComplete?: () => void;
+  className?: string;
+  durationMs?: number;
 }
 
-const TIPS = [
-  'Landing in the hot drop… Pochinki secure.',
-  'Looting the airdrop… Groza & Level-3 Helmet equipped.',
-  'Checking the safe zone… Zone 3 shrinking.',
-  'Squad ready — loading the KhushiYT Family hub…',
-];
+const CIRCUMFERENCE = 125.66; // 2 * Math.PI * 20
 
-/** Full-screen splash (first visit) or compact inline loader (route changes). */
+/**
+ * Minimal, ultra-smooth KhushiYT Profile Loader
+ * Responsive across Mobile View, Tablet, and Desktop Webview.
+ * Features:
+ * - Brand cyberpunk dark navy atmosphere with breathing pink & cyan ambient glows
+ * - Glowing avatar with rotating dual-layer neon border ring and online status
+ * - Signature "KhushiYT 🌸" typography
+ * - Compact circular progress bar (Sakura Pink ➔ Gold ➔ Cyan gradient) with live % count
+ * - "Profile is loading..." animated label with staggered pulsating dots
+ */
 export function PubgLoader({
   fullscreen = false,
   onComplete,
-}: {
-  fullscreen?: boolean;
-  onComplete?: () => void;
-}) {
-  const [tipIndex, setTipIndex] = useState(0);
-  const [ammoCount, setAmmoCount] = useState(30);
-  const [tipFade, setTipFade] = useState(true);
+  className,
+  durationMs = 1800,
+}: PubgLoaderProps) {
+  const [progress, setProgress] = useState(fullscreen ? 0 : 75);
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
-    // Smooth, leisurely tip progression without frantic re-renders
-    const tipTimer = setInterval(() => {
-      setTipFade(false);
-      setTimeout(() => {
-        setTipIndex((prev) => (prev + 1) % TIPS.length);
-        setTipFade(true);
-      }, 200);
-    }, 1800);
+    if (!fullscreen) return;
 
-    // Optimized ammo countdown ticking every 350ms instead of 100ms
-    const ammoTimer = setInterval(() => {
-      setAmmoCount((prev) => (prev > 5 ? prev - 3 : 30));
-    }, 350);
+    let startTime = performance.now();
+    let animFrame: number;
+
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const current = Math.min(100, (elapsed / durationMs) * 100);
+      setProgress(current);
+
+      if (current < 100) {
+        animFrame = requestAnimationFrame(tick);
+      } else {
+        // Short smooth grace period at 100% before transition
+        setTimeout(() => {
+          onComplete?.();
+        }, 220);
+      }
+    };
+
+    animFrame = requestAnimationFrame(tick);
 
     return () => {
-      clearInterval(tipTimer);
-      clearInterval(ammoTimer);
+      cancelAnimationFrame(animFrame);
     };
-  }, []);
+  }, [fullscreen, durationMs, onComplete]);
+
+  const strokeDashoffset = CIRCUMFERENCE - (progress / 100) * CIRCUMFERENCE;
 
   return (
     <div
       role="status"
       aria-live="polite"
       className={cn(
-        'flex flex-col items-center justify-center gap-4 sm:gap-6 px-4 text-center select-none overflow-x-hidden',
+        'relative flex flex-col items-center justify-center select-none text-center overflow-hidden',
         fullscreen
-          ? 'fixed inset-0 z-[999] bg-[#090b16] transition-opacity duration-500'
-          : 'min-h-[50vh] py-12',
+          ? 'fixed inset-0 z-[9999] bg-[#060814] w-screen h-[100dvh] px-4 touch-none overscroll-none'
+          : 'py-12 px-4 w-full',
+        className,
       )}
     >
       {fullscreen && (
         <>
-          <div className="pointer-events-none absolute inset-0 bg-grid opacity-60" aria-hidden />
+          {/* Subtle Ambient Background Theme Grid & Glows */}
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 size-[30rem] sm:size-[38rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-ultra/20"
-            style={{ boxShadow: 'inset 0 0 100px rgb(139 92 246 / 0.2), 0 0 80px rgb(192 38 211 / 0.15)' }}
+            className="pointer-events-none fixed inset-0 opacity-40"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(244, 114, 182, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+            }}
             aria-hidden
           />
-          {/* Tactical HUD Header - Fully mobile friendly */}
-          <div className="absolute top-4 sm:top-6 inset-x-3 sm:inset-x-8 flex items-center justify-between font-mono text-xs text-mute/80 z-20">
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <span className="size-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-              <span className="font-display tracking-wider sm:tracking-widest text-gold font-bold text-[11px] sm:text-xs truncate">
-                BGMI PROTOCOL
-              </span>
-              <span className="hidden md:inline border border-line px-2 py-0.5 rounded text-[10px] text-mute whitespace-nowrap">
-                ASIA SERVER · 20ms
+          <div
+            className="pointer-events-none fixed top-1/4 left-1/6 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-pink-500/10 blur-3xl animate-pulse"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none fixed bottom-1/4 right-1/6 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-sky-500/10 blur-3xl"
+            style={{ animation: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite 1s' }}
+            aria-hidden
+          />
+
+          {/* Top subtle HUD telemetry with safe-area spacing for mobile notch */}
+          <div className="absolute top-3 sm:top-6 inset-x-3 sm:inset-x-8 flex items-center justify-between font-mono text-xs z-20">
+            <div className="flex items-center gap-2 text-slate-400">
+              <span className="size-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse shrink-0" />
+              <span className="font-display font-bold text-[10px] sm:text-xs tracking-wider text-slate-300 truncate">
+                KHUSHIYT SYSTEM
               </span>
             </div>
             {onComplete && (
               <button
                 type="button"
                 onClick={onComplete}
-                className="clip-angle-sm shrink-0 flex items-center gap-1.5 border border-gold/40 bg-gold/10 px-3 sm:px-4 py-1.5 font-display text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gold hover:bg-gold hover:text-base transition cursor-pointer"
+                className="flex items-center gap-1 border border-white/10 bg-white/5 active:scale-95 hover:bg-white/10 hover:border-pink-500/40 px-2.5 sm:px-3 py-1 rounded-md text-[10px] sm:text-[11px] font-medium text-slate-400 hover:text-white transition cursor-pointer backdrop-blur-md shrink-0"
               >
-                Skip Intro ➔
+                Skip ➔
               </button>
             )}
           </div>
         </>
       )}
 
-      {/* Soldier Shooting Art - Scaled nicely across mobile and desktop */}
-      <div className={cn(
-        'relative drop-shadow-[0_0_35px_rgba(192,38,211,0.35)] will-change-transform',
-        fullscreen ? 'w-full max-w-[320px] sm:max-w-md md:max-w-xl' : 'w-full max-w-xs sm:max-w-sm'
-      )}>
-        <SoldierFiring />
-      </div>
-
-      {/* Tactical Ammo & Status Bar - Never clips text */}
-      <div className="relative w-full max-w-[290px] sm:max-w-xs px-2">
-        <div className="mb-2 flex items-center justify-between font-display text-[0.65rem] sm:text-[0.7rem] font-semibold uppercase tracking-[0.15em] sm:tracking-[0.3em]">
-          <span className="text-gold flex items-center gap-1.5">
-            <span className="size-1.5 rounded-full bg-amber-400 animate-ping" />
-            Firing Simulation
-          </span>
-          <span className="text-pink-400 font-mono font-bold">{ammoCount} / 30 AMMO</span>
+      {/* 🌸 Clean Minimal Profile Card (Perfect for Mobile & Web) 🌸 */}
+      <div className="relative z-10 flex flex-col items-center gap-3 sm:gap-4 max-w-xs w-full px-2 animate-in fade-in duration-500">
+        {/* 1. Avatar with dual-layer neon glow ring */}
+        <div className="relative size-20 sm:size-24 shrink-0 flex items-center justify-center">
+          {/* Rotating outer blur gradient ring */}
+          <div
+            className="absolute -inset-1 rounded-full blur-[6px] opacity-75"
+            style={{
+              background: 'conic-gradient(from 0deg, #f472b6, #fbbf24, #38bdf8, #f472b6)',
+              animation: 'spin 6s linear infinite',
+            }}
+          />
+          {/* Crisp border ring */}
+          <div
+            className="absolute inset-0 rounded-full p-[2px]"
+            style={{
+              background: 'linear-gradient(135deg, #f472b6, #fbbf24)',
+              animation: 'spin 8s linear infinite reverse',
+            }}
+          />
+          {/* Avatar image with fallback */}
+          <img
+            src={imgError ? '/icons/logo.svg' : '/images/creator/khushi-avatar-gamer.webp'}
+            alt="KhushiYT"
+            onError={() => setImgError(true)}
+            className="relative size-[74px] sm:size-[90px] rounded-full object-cover bg-[#0d1124] border-2 border-[#060814] shadow-2xl z-10 shrink-0"
+          />
+          {/* Online green pulse indicator */}
+          <span
+            className="absolute bottom-1 right-1 size-3.5 sm:size-4 rounded-full bg-emerald-500 border-2 border-[#060814] shadow-[0_0_8px_#22c55e] z-20 shrink-0"
+            title="Online"
+          />
         </div>
-        <div className="flex h-2 sm:h-2.5 gap-1" aria-hidden>
-          {Array.from({ length: 10 }).map((_, i) => (
-            <span key={i} className="relative flex-1 overflow-hidden rounded-sm bg-white/10">
-              <span
-                className="sv-ammo absolute inset-0 bg-[linear-gradient(90deg,#fbbf24,#f472b6)]"
-                style={{ animationDelay: `${i * -0.18}s` }}
-              />
+
+        {/* 2. Brand Identity */}
+        <div className="flex flex-col items-center gap-1 w-full">
+          <h2 className="font-esports text-2xl sm:text-3xl font-extrabold tracking-wider flex items-center justify-center gap-1.5 flex-nowrap">
+            <span className="bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">
+              Khushi
             </span>
-          ))}
+            <span className="bg-gradient-to-r from-pink-400 via-fuchsia-400 to-pink-500 bg-clip-text text-transparent drop-shadow-sm">
+              YT
+            </span>
+            <span className="text-xl sm:text-2xl filter drop-shadow-[0_0_8px_rgba(244,114,182,0.6)] shrink-0">
+              🌸
+            </span>
+          </h2>
+          <div className="flex items-center justify-center gap-2 font-gaming text-[11px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">
+            <span>BGMI CONQUEROR</span>
+            <span className="text-pink-400">•</span>
+            <span>LIVE STREAMER</span>
+          </div>
         </div>
 
-        {/* Tip Container: Flexbox with generous height prevents cutoff on mobile wrap */}
-        <div className="mt-3 min-h-[3.25rem] sm:min-h-[2.5rem] flex items-center justify-center text-center">
-          <p className={cn(
-            'text-xs sm:text-sm text-mute font-medium leading-relaxed max-w-xs transition-opacity duration-200',
-            tipFade ? 'opacity-100' : 'opacity-0'
-          )}>
-            {TIPS[tipIndex]}
-          </p>
-        </div>
-      </div>
+        {/* 3. Chota sa Gol Progress Bar */}
+        <div className="mt-1 sm:mt-2 flex flex-col items-center gap-2 sm:gap-2.5 w-full">
+          <div className="relative size-12 sm:size-14 shrink-0 flex items-center justify-center">
+            <svg className="size-full -rotate-90" viewBox="0 0 48 48">
+              <defs>
+                <linearGradient id="khushiProgressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f472b6" />
+                  <stop offset="50%" stopColor="#fbbf24" />
+                  <stop offset="100%" stopColor="#38bdf8" />
+                </linearGradient>
+              </defs>
+              {/* Background track circle */}
+              <circle
+                cx="24"
+                cy="24"
+                r="20"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.08)"
+                strokeWidth="3.5"
+              />
+              {/* Glowing progress stroke */}
+              <circle
+                cx="24"
+                cy="24"
+                r="20"
+                fill="none"
+                stroke="url(#khushiProgressGrad)"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                strokeDasharray={CIRCUMFERENCE}
+                strokeDashoffset={fullscreen ? strokeDashoffset : 30}
+                className={cn(
+                  'transition-all duration-100 ease-linear',
+                  !fullscreen && 'animate-[spin_1.2s_linear_infinite]',
+                )}
+                style={{
+                  filter: 'drop-shadow(0 0 6px rgba(244, 114, 182, 0.75))',
+                }}
+              />
+            </svg>
+            {/* Center percentage value */}
+            <span className="absolute font-esports text-[10px] sm:text-[11px] font-extrabold text-amber-300 drop-shadow-[0_0_6px_rgba(251,191,36,0.6)]">
+              {fullscreen ? `${Math.round(progress)}%` : '•••'}
+            </span>
+          </div>
 
-      {fullscreen && (
-        <div className="relative mt-1 sm:mt-2 flex flex-col items-center gap-1">
-          <p className="font-display text-xl sm:text-2xl font-black tracking-widest">
-            <span className="text-gradient-gold">KHUSHI</span>
-            <span className="text-gradient ml-1">YT</span>
-          </p>
-          <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.25em] uppercase text-mute/70">
-            OFFICIAL BATTLEGROUNDS HUB
+          {/* 4. "Profile is loading..." Text */}
+          <div className="flex items-center justify-center gap-0.5 font-gaming text-sm sm:text-base font-bold tracking-widest text-slate-200 uppercase">
+            <span>Profile is </span>
+            <span className="text-pink-400 font-extrabold ml-1">loading</span>
+            <span className="text-amber-400 animate-[pulse_1.4s_infinite]">.</span>
+            <span
+              className="text-amber-400 animate-[pulse_1.4s_infinite]"
+              style={{ animationDelay: '0.2s' }}
+            >
+              .
+            </span>
+            <span
+              className="text-amber-400 animate-[pulse_1.4s_infinite]"
+              style={{ animationDelay: '0.4s' }}
+            >
+              .
+            </span>
+          </div>
+
+          {/* Telemetry Footer */}
+          <span className="font-mono text-[9px] sm:text-[10px] text-slate-500 tracking-wider">
+            SYNCING ASIA SERVER · 20ms PING
           </span>
         </div>
-      )}
+      </div>
     </div>
   );
 }
+
+export default PubgLoader;

@@ -39,6 +39,16 @@ export default async function handler(req, res) {
       title: isLive ? (title || 'BGMI Rank Push Livestream 🔴 | KhushiYT') : null,
       streamUrl: videoId ? `https://www.youtube.com/watch?v=${videoId}` : 'https://www.youtube.com/@khusiytlive/live',
       channelUrl: 'https://www.youtube.com/@khusiytlive',
+      debug: {
+        isOffline,
+        isUpcoming,
+        hasLiveNow,
+        hasLivePlayer,
+        hasLiveStreamOffline: html.includes('LIVE_STREAM_OFFLINE'),
+        htmlLength: html.length,
+        vidMatch: vidMatch ? vidMatch[1] : null,
+        title: title || null,
+      },
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {
