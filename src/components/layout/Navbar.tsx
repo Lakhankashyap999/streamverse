@@ -154,10 +154,17 @@ export function Navbar() {
         });
     };
     checkStatus();
-    const interval = setInterval(checkStatus, 30000);
+    const interval = setInterval(checkStatus, 15000);
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        checkStatus();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
     return () => {
       alive = false;
       clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, [profile.live_status_mode]);
 

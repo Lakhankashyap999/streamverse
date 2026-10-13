@@ -197,7 +197,7 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               {/* PUBG HUD Coordinates & Reticle */}
               <div className="absolute left-3 top-3 sm:left-4 sm:top-4 flex items-center gap-1.5 sm:gap-2 font-mono text-[0.62rem] sm:text-[0.68rem] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-gold/90 bg-base/70 backdrop-blur-sm px-2 sm:px-2.5 py-1 rounded border border-gold/20">
                 <Crosshair className="size-2.5 sm:size-3 text-gold animate-spin" style={{ animationDuration: '10s' }} />
-                <span>POCHINKI ZONE</span>
+                <span>OCEAN ODYSSEY ZONE</span>
               </div>
 
               {/* Live Match Telemetry Chip */}

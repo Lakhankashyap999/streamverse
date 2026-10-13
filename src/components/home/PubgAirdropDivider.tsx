@@ -45,7 +45,7 @@ export function PubgAirdropDivider() {
               <span>SUPPLY AIRDROP INCOMING</span>
             </div>
             <span className="font-gaming text-xs sm:text-sm font-bold text-white tracking-wide">
-              LEVEL 3 GEAR <span className="text-amber-400 font-mono">·</span> POCHINKI DROP
+              LEVEL 3 GEAR <span className="text-amber-400 font-mono">·</span> OCEAN ODYSSEY (SCHOOL APARTMENTS)
             </span>
           </div>
         </div>

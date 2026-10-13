@@ -17,7 +17,7 @@ const iso = (ms: number) => new Date(ms).toISOString();
 const videoDetails = [
   {
     title: 'TOP 100 Conqueror Rank Push Marathon 🔴 | BGMI',
-    description: 'Pochinki night battles, M416 Glacier headshots, and marathon Conqueror rank push session.',
+    description: 'Ocean Odyssey battles, School Apartments rush, M416 Glacier headshots, and marathon Conqueror rank push session.',
     thumb: '/images/creator/stream-thumb-1.jpg',
     duration: '6:04:53',
   },

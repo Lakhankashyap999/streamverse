@@ -181,10 +181,17 @@ export function useLiveState(streams: Stream[], videos: Video[], profile: Profil
       }
     }
     checkLive();
-    const interval = setInterval(checkLive, 30000);
+    const interval = setInterval(checkLive, 15000);
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        checkLive();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
     return () => {
       alive = false;
       clearInterval(interval);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, []);
 
