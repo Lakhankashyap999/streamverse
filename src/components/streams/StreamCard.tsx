@@ -72,12 +72,12 @@ export function StreamCard({ stream, profile }: { stream: Stream; profile: Profi
         </div>
       </div>
       <div className="flex flex-col gap-3 p-5">
-        <h3 className="text-lg font-semibold leading-snug">{stream.title}</h3>
-        <p className="text-sm text-mute">
-          <time dateTime={stream.scheduled_at ?? undefined} className="font-medium text-ink">
+        <h3 className="text-lg font-semibold leading-snug text-white" style={{ color: '#ffffff' }}>{stream.title}</h3>
+        <p className="text-sm text-white" style={{ color: '#ffffff' }}>
+          <time dateTime={stream.scheduled_at ?? undefined} className="font-medium text-white" style={{ color: '#ffffff' }}>
             {formatDateTime(stream.scheduled_at)}
           </time>
-          {creatorTime && <span className="block text-xs">Creator time: {creatorTime}</span>}
+          {creatorTime && <span className="block text-xs text-white" style={{ color: '#ffffff' }}>Creator time: {creatorTime}</span>}
         </p>
         {stream.scheduled_at && isFuture(stream.scheduled_at) && <Countdown target={stream.scheduled_at} compact />}
         <div className="mt-auto flex flex-wrap gap-2 pt-2">
@@ -275,11 +275,11 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
             <Radio className="size-3.5" aria-hidden />
             {state.kind === 'live' ? 'Broadcast in progress' : state.kind === 'upcoming' ? 'Next drop' : 'Currently offline'}
           </p>
-          <h3 className="text-2xl font-bold leading-tight sm:text-3xl">{title}</h3>
+          <h3 className="text-2xl font-bold leading-tight sm:text-3xl text-white" style={{ color: '#ffffff' }}>{title}</h3>
 
           {state.kind === 'live' && (
             <>
-              <p className="text-mute">
+              <p className="text-white" style={{ color: '#ffffff' }}>
                 {state.verified ? 'Confirmed live on YouTube right now.' : 'Marked live by the creator. Jump in and say hi in chat!'}
               </p>
               <div className="flex flex-wrap gap-3">
@@ -307,9 +307,9 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
 
           {state.kind === 'upcoming' && (
             <>
-              <p className="text-mute">
-                <time dateTime={state.stream.scheduled_at ?? undefined}>{formatDateTime(state.stream.scheduled_at)}</time>
-                <span className="block text-xs">Shown in your local time.</span>
+              <p className="text-white" style={{ color: '#ffffff' }}>
+                <time dateTime={state.stream.scheduled_at ?? undefined} className="text-white" style={{ color: '#ffffff' }}>{formatDateTime(state.stream.scheduled_at)}</time>
+                <span className="block text-xs text-white" style={{ color: '#ffffff' }}>Shown in your local time.</span>
               </p>
               <Countdown target={state.stream.scheduled_at!} />
               <div className="flex flex-wrap gap-3">
@@ -339,8 +339,8 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
 
           {state.kind === 'offline' && (
             <>
-              <p className="text-mute">
-                <time dateTime={state.stream?.scheduled_at ?? undefined}>
+              <p className="text-white" style={{ color: '#ffffff' }}>
+                <time dateTime={state.stream?.scheduled_at ?? undefined} className="text-white" style={{ color: '#ffffff' }}>
                   {state.stream
                     ? `Previous stream · ${relativeTime(state.stream.scheduled_at)}`
                     : 'No stream scheduled right now — catch up on the latest videos.'}

@@ -75,33 +75,55 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
         {/* left - Creator Intro at Top on Mobile and Desktop */}
         <div className="order-1 lg:order-1">
           <motion.div {...item(0)} className="w-full">
-            <div className="glass inline-flex flex-wrap items-center gap-1.5 sm:gap-2 rounded-full px-3 py-1 sm:px-4 sm:py-1.5 font-display text-[0.62rem] sm:text-[0.7rem] font-semibold uppercase tracking-[0.08em] sm:tracking-[0.22em] text-mute max-w-full">
+            <div
+              className="glass inline-flex flex-wrap items-center gap-1.5 sm:gap-2 rounded-full px-3 py-1 sm:px-4 sm:py-1.5 font-display text-[0.62rem] sm:text-[0.7rem] font-semibold uppercase tracking-[0.08em] sm:tracking-[0.22em] text-white max-w-full"
+              style={{ color: '#ffffff' }}
+            >
               <span className="text-pink-400 select-none text-[0.8rem]" aria-hidden>🌸</span>
-              <span className="whitespace-nowrap">Gaming</span>
+              <span className="whitespace-nowrap text-white" style={{ color: '#ffffff' }}>Gaming</span>
               <span className="text-blush select-none">•</span>
-              <span className="whitespace-nowrap">Entertainment</span>
+              <span className="whitespace-nowrap text-white" style={{ color: '#ffffff' }}>Entertainment</span>
               <span className="text-blush select-none">•</span>
-              <span className="whitespace-nowrap">Community</span>
+              <span className="whitespace-nowrap text-white" style={{ color: '#ffffff' }}>Community</span>
               <span className="text-pink-400 select-none text-[0.8rem]" aria-hidden>🌸</span>
             </div>
           </motion.div>
 
-          <motion.h1 {...item(1)} id="hero-title" className="mt-3 sm:mt-6 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] break-words">
+          <motion.h1
+            {...item(1)}
+            id="hero-title"
+            className="mt-3 sm:mt-6 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] break-words text-white"
+            style={{ color: '#ffffff' }}
+          >
             Welcome to
             <span className="mt-1 block font-script text-[1.15em] italic leading-[1.1] text-gradient pb-1 pr-2 inline-block max-w-full">
               My World
             </span>
           </motion.h1>
 
-          <motion.p {...item(2)} className="mt-3 sm:mt-5 font-display text-base sm:text-xl md:text-2xl font-semibold break-words">
+          <motion.p
+            {...item(2)}
+            className="mt-3 sm:mt-5 font-display text-base sm:text-xl md:text-2xl font-semibold break-words text-white"
+            style={{ color: '#ffffff' }}
+          >
             I'm <span className="text-gradient-gold inline-block">{profile.gaming_name}</span>
-            {profile.tagline && <span className="text-mute block sm:inline"> — {profile.tagline}</span>}
+            {profile.tagline && (
+              <span className="text-white block sm:inline font-normal" style={{ color: '#ffffff' }}>
+                {' '}— {profile.tagline}
+              </span>
+            )}
           </motion.p>
 
-          <motion.p {...item(3)} className="mt-2.5 sm:mt-4 w-full max-w-xl text-xs sm:text-base md:text-lg leading-relaxed text-mute break-words">
+          <motion.p
+            {...item(3)}
+            className="mt-2.5 sm:mt-4 w-full max-w-xl text-xs sm:text-base md:text-lg leading-relaxed text-white break-words"
+            style={{ color: '#ffffff' }}
+          >
             Marathon <span className="font-semibold text-gold">TOP 100 rank pushes</span>,{' '}
-            <span className="font-semibold text-blush">rush gameplay</span>, clutch{' '}
-            <span className="font-semibold text-violet-300">squad fights</span> and non-stop fun with the{' '}
+            <span className="font-semibold text-blush">rush gameplay</span>,{' '}
+            <span className="text-white" style={{ color: '#ffffff' }}>clutch</span>{' '}
+            <span className="font-semibold text-violet-300">squad fights</span>{' '}
+            <span className="text-white" style={{ color: '#ffffff' }}>and non-stop fun with the</span>{' '}
             {SITE.communityName} ❤️
           </motion.p>
 
@@ -353,7 +375,7 @@ export function CreatorIntro({ profile }: { profile: Profile }) {
                 height={96}
               />
               <h3 className="mt-3 text-2xl font-bold">{profile.gaming_name}</h3>
-              <p className="text-mute">
+              <p className="text-white" style={{ color: '#ffffff' }}>
                 {profile.handle} {profile.country && <span className="inline-flex items-center gap-1">· <MapPin className="size-3.5" aria-hidden /> {profile.country}</span>}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -375,7 +397,7 @@ export function CreatorIntro({ profile }: { profile: Profile }) {
 
         <Reveal delay={0.1}>
           <div className="flex h-full flex-col gap-6">
-            <p className="text-lg leading-relaxed text-ink/90">{profile.bio}</p>
+            <p className="text-lg leading-relaxed text-white" style={{ color: '#ffffff' }}>{profile.bio}</p>
             {profile.favourite_modes.length > 0 && (
               <div>
                 <h3 className="hud-label mb-3">Favourite modes</h3>
@@ -405,7 +427,7 @@ export function CreatorIntro({ profile }: { profile: Profile }) {
 
                     return (
                       <div key={label} className="panel p-4">
-                        <dt className="text-xs text-mute font-medium">{label}</dt>
+                        <dt className="text-xs text-white font-medium" style={{ color: '#ffffff' }}>{label}</dt>
                         <dd className={cn('mt-1 font-display text-2xl font-bold', ['text-gradient-gold', 'text-gradient', 'text-gradient-zone', 'text-gradient'][i])}>
                           {matchK ? (
                             <AnimatedCounter
@@ -431,7 +453,7 @@ export function CreatorIntro({ profile }: { profile: Profile }) {
                     );
                   })}
                 </dl>
-                <p className="mt-2 text-xs text-mute">
+                <p className="mt-2 text-xs text-white" style={{ color: '#ffffff' }}>
                   Public channel snapshot entered manually{stats?.as_of ? ` (as of ${stats.as_of})` : ''} — not live analytics.
                 </p>
               </div>
@@ -686,10 +708,10 @@ export function SocialSection({ profile }: { profile: Profile }) {
                   <Icon className="size-7" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block font-display text-lg font-bold">{label}</span>
-                  <span className="block truncate text-sm text-mute">{blurb}</span>
+                  <span className="block font-display text-lg font-bold text-white">{label}</span>
+                  <span className="block truncate text-sm text-white" style={{ color: '#ffffff' }}>{blurb}</span>
                 </span>
-                <ArrowRight className="size-5 text-mute transition group-hover:translate-x-1 group-hover:text-ink" aria-hidden />
+                <ArrowRight className="size-5 text-white transition group-hover:translate-x-1 group-hover:text-gold" aria-hidden />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             </Reveal>
@@ -703,13 +725,13 @@ export function SocialSection({ profile }: { profile: Profile }) {
                   <Heart className="size-7" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block font-display text-lg font-bold">Support (UPI)</span>
+                  <span className="block font-display text-lg font-bold text-white">Support (UPI)</span>
                   <span className="block truncate font-mono text-sm text-gold">{profile.upi_id}</span>
                 </span>
                 <button
                   type="button"
                   onClick={() => copy(profile.upi_id!, 'UPI ID')}
-                  className="glass grid size-11 place-items-center rounded-xl text-mute hover:text-ink"
+                  className="glass grid size-11 place-items-center rounded-xl text-white hover:text-gold"
                   aria-label="Copy UPI ID"
                 >
                   <Copy className="size-5" />

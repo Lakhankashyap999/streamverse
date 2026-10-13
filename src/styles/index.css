@@ -57,6 +57,7 @@
   }
   body {
     @apply bg-base text-ink font-sans antialiased;
+    color: #ffffff !important;
     min-height: 100dvh;
     overflow-x: hidden;
     max-width: 100vw;
@@ -70,12 +71,20 @@
     overflow-x: hidden;
     max-width: 100%;
     width: 100%;
+    color: #ffffff;
   }
   h1, h2, h3, h4 {
     @apply font-display tracking-tight text-ink;
+    color: #ffffff;
     text-wrap: balance;
   }
-  p { text-wrap: pretty; }
+  p {
+    color: #ffffff;
+    text-wrap: pretty;
+  }
+  .text-mute {
+    color: #ffffff !important;
+  }
   ::selection { background: rgb(192 38 211 / 0.45); color: #fff; }
   :focus-visible {
     outline: 2px solid var(--color-blush);
