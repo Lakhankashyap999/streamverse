@@ -345,7 +345,7 @@ export function PubgCareerStats() {
               <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                 <span className="size-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
                 <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-wider text-white whitespace-nowrap">
-                  DATA <span className="text-slate-400">·</span> STATISTICS
+                  DATA <span className="text-white/60">·</span> STATISTICS
                 </span>
               </div>
 
@@ -358,7 +358,7 @@ export function PubgCareerStats() {
                   aria-expanded={isDropdownOpen}
                 >
                   <span className="text-amber-300 font-bold text-xs truncate max-w-[120px] sm:max-w-none">{activeSeason.name}</span>
-                  <ChevronDown className={`size-3.5 text-slate-300 shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`size-3.5 text-white shrink-0 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 <AnimatePresence>
@@ -376,7 +376,7 @@ export function PubgCareerStats() {
                         transition={{ duration: 0.15 }}
                         className="absolute left-0 top-full mt-1.5 w-56 sm:w-60 rounded-xl border border-line/80 bg-[#13172b]/98 p-1.5 shadow-2xl z-50 backdrop-blur-xl"
                       >
-                        <div className="px-2 py-1 text-[10px] uppercase font-bold text-slate-400 border-b border-line/50 mb-1 flex items-center justify-between">
+                        <div className="px-2 py-1 text-[10px] uppercase font-bold text-slate-200 border-b border-line/50 mb-1 flex items-center justify-between">
                           <span>Select Season</span>
                           <span className="text-[9px] text-amber-400 font-normal">6 Records</span>
                         </div>
@@ -391,12 +391,12 @@ export function PubgCareerStats() {
                             className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-left text-xs font-mono transition cursor-pointer ${
                               selectedSeasonId === s.id
                                 ? 'bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30'
-                                : 'text-slate-200 hover:bg-white/5 hover:text-white'
+                                : 'text-slate-100 hover:bg-white/5 hover:text-white'
                             }`}
                           >
                             <div className="flex flex-col min-w-0 pr-2">
                               <span className="truncate font-bold">{s.name}</span>
-                              <span className="text-[10px] text-slate-400 truncate">{s.tierBadge}</span>
+                              <span className="text-[10px] text-slate-200 truncate">{s.tierBadge}</span>
                             </div>
                             {selectedSeasonId === s.id && <Check className="size-3.5 text-amber-300 shrink-0" />}
                           </button>
@@ -437,11 +437,11 @@ export function PubgCareerStats() {
                   <h3 className="font-display font-black text-2xl xs:text-3xl sm:text-4xl md:text-5xl tracking-tight text-transparent bg-clip-text bg-[linear-gradient(180deg,#fff8db_0%,#fbbf24_45%,#d97706_85%,#92400e_100%)] drop-shadow-[0_4px_16px_rgba(251,191,36,0.4)] text-center max-w-full break-words leading-tight">
                     {activeSeason.tierBadge}
                   </h3>
-                  <div className="text-xs font-mono text-slate-200 font-bold tracking-wider mt-1 flex items-center justify-center gap-1.5">
+                  <div className="text-xs font-mono text-slate-100 font-bold tracking-wider mt-1 flex items-center justify-center gap-1.5">
                     <span>Rating:</span>
                     <span className="text-amber-300 font-black text-sm sm:text-base">{activeSeason.tierScore}</span>
                   </div>
-                  <p className="text-[10px] sm:text-xs font-mono text-slate-400 mt-0.5 text-center px-1">
+                  <p className="text-[10px] sm:text-xs font-mono text-slate-100 font-medium mt-0.5 text-center px-1">
                     {activeSeason.tierLabel}
                   </p>
                 </div>
@@ -650,7 +650,7 @@ export function PubgCareerStats() {
               {/* Top Overview Black Strip (5 Columns) */}
               <div className="grid grid-cols-5 divide-x divide-line/60 bg-[#0d101c] py-3.5 sm:py-4 px-1 sm:px-4 text-center border-b border-line/60">
                 <div className="px-0.5 sm:px-2 min-w-0">
-                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-100 uppercase tracking-wider font-bold truncate">
                     <span className="sm:hidden">Matches</span>
                     <span className="hidden sm:inline">Matches Played</span>
                   </p>
@@ -659,19 +659,19 @@ export function PubgCareerStats() {
                   </p>
                 </div>
                 <div className="px-0.5 sm:px-2 min-w-0">
-                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">Wins</p>
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-100 uppercase tracking-wider font-bold truncate">Wins</p>
                   <p className="font-mono text-xs xs:text-sm sm:text-2xl md:text-3xl font-black text-emerald-400 mt-0.5 truncate">
                     {activeSeason.overview.wins}
                   </p>
                 </div>
                 <div className="px-0.5 sm:px-2 min-w-0">
-                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">Top 10</p>
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-100 uppercase tracking-wider font-bold truncate">Top 10</p>
                   <p className="font-mono text-xs xs:text-sm sm:text-2xl md:text-3xl font-black text-cyan-400 mt-0.5 truncate">
                     {activeSeason.overview.top10}
                   </p>
                 </div>
                 <div className="px-0.5 sm:px-2 min-w-0">
-                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-100 uppercase tracking-wider font-bold truncate">
                     <span className="sm:hidden">Kills</span>
                     <span className="hidden sm:inline">Eliminations</span>
                   </p>
@@ -680,7 +680,7 @@ export function PubgCareerStats() {
                   </p>
                 </div>
                 <div className="px-0.5 sm:px-2 min-w-0">
-                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-300 uppercase tracking-wider font-semibold truncate">
+                  <p className="font-mono text-[8px] xs:text-[9px] sm:text-[11px] text-slate-100 uppercase tracking-wider font-bold truncate">
                     <span className="sm:hidden">F/D</span>
                     <span className="hidden sm:inline">F/D Ratio</span>
                   </p>
@@ -699,15 +699,15 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-1 sm:gap-2 flex-1 text-center min-w-0">
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Win Ratio</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Win Ratio</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-emerald-400 mt-0.5 truncate">{activeSeason.details.winRatioPct}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Top 10 Rate</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Top 10 Rate</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-cyan-400 mt-0.5 truncate">{activeSeason.details.top10RatePct}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Accuracy</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Accuracy</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-amber-300 mt-0.5 truncate">{activeSeason.details.accuracyPct}</p>
                     </div>
                   </div>
@@ -720,15 +720,15 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-1 sm:gap-2 flex-1 text-center min-w-0">
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Headshot Rate</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Headshot Rate</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-rose-400 mt-0.5 truncate">{activeSeason.details.headshotRatePct}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Headshots</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Headshots</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-pink-300 mt-0.5 truncate">{activeSeason.details.headshots}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">AVG Damage</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">AVG Damage</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-amber-300 mt-0.5 truncate">{activeSeason.details.avgDamage}</p>
                     </div>
                   </div>
@@ -741,15 +741,15 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-1 sm:gap-2 flex-1 text-center min-w-0">
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Total Damage</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Total Damage</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-fuchsia-300 mt-0.5 truncate">{activeSeason.details.totalDamage}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Most Kills</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Most Kills</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-rose-400 mt-0.5 truncate">{activeSeason.details.mostEliminations}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Highest Dmg</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Highest Dmg</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-amber-300 mt-0.5 truncate">{activeSeason.details.highestDamage}</p>
                     </div>
                   </div>
@@ -762,15 +762,15 @@ export function PubgCareerStats() {
                   </div>
                   <div className="grid grid-cols-3 gap-1 sm:gap-2 flex-1 text-center min-w-0">
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Total Assists</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Total Assists</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-cyan-400 mt-0.5 truncate">{activeSeason.details.totalAssists}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Avg Assists</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Avg Assists</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-sky-300 mt-0.5 truncate">{activeSeason.details.avgAssists}</p>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] sm:text-xs text-slate-300 uppercase font-bold truncate">Distance</p>
+                      <p className="text-[9px] sm:text-xs text-slate-100 uppercase font-bold truncate">Distance</p>
                       <p className="text-[11px] xs:text-xs sm:text-lg font-black text-teal-300 mt-0.5 truncate">{activeSeason.details.longestTraveled}</p>
                     </div>
                   </div>
@@ -779,7 +779,7 @@ export function PubgCareerStats() {
 
               {/* Bottom In-Game Actions */}
               <div className="flex items-center justify-between border-t border-line/60 bg-[#0e1220] px-4 py-3 sm:px-6 font-mono text-xs">
-                <div className="flex items-center gap-4 text-slate-300">
+                <div className="flex items-center gap-4 text-slate-100 font-medium">
                   <span className="flex items-center gap-1.5 hover:text-white cursor-pointer transition">
                     <Shield className="size-3.5 text-rose-400" /> Report
                   </span>
@@ -787,7 +787,7 @@ export function PubgCareerStats() {
                     <Activity className="size-3.5 text-cyan-400" /> Compare
                   </span>
                 </div>
-                <span className="text-[11px] text-slate-300 font-bold hidden sm:inline">
+                <span className="text-[11px] text-slate-100 font-bold hidden sm:inline">
                   Asia Server · Squad TPP · {activeSeason.name}
                 </span>
               </div>
@@ -826,24 +826,24 @@ export function PubgCareerStats() {
                   </span>
                 </div>
 
-                <div className="font-mono text-xs text-slate-300 mt-1.5 flex items-center gap-2 flex-wrap">
+                <div className="font-mono text-xs text-slate-100 mt-1.5 flex items-center gap-2 flex-wrap">
                   <div className="flex items-center gap-1.5 bg-[#1a213a] px-2 py-0.5 rounded border border-line/60">
-                    <span className="text-slate-400 text-[11px]">UID:</span>
+                    <span className="text-slate-200 text-[11px] font-semibold">UID:</span>
                     <strong className="text-amber-300 text-[11px] sm:text-xs">5112658248</strong>
                     <button
                       type="button"
                       onClick={handleCopyUid}
                       title="Copy UID"
-                      className="ml-1 text-slate-400 hover:text-white transition cursor-pointer flex items-center gap-0.5"
+                      className="ml-1 text-slate-200 hover:text-white transition cursor-pointer flex items-center gap-0.5"
                     >
                       {copiedUid ? (
                         <span className="text-[10px] text-emerald-400 font-bold">✓ Copied</span>
                       ) : (
-                        <Copy className="size-3 text-slate-400 hover:text-amber-300" />
+                        <Copy className="size-3 text-slate-300 hover:text-amber-300" />
                       )}
                     </button>
                   </div>
-                  <span className="text-slate-400 text-[11px]">Region: <strong className="text-white">India 🇮🇳</strong></span>
+                  <span className="text-slate-200 text-[11px]">Region: <strong className="text-white">India 🇮🇳</strong></span>
                 </div>
 
                 <div className="flex items-center gap-2 mt-2 font-mono text-[10px] sm:text-[11px] max-w-full">
@@ -858,19 +858,19 @@ export function PubgCareerStats() {
             {/* Quick Profile Milestones */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 text-center font-mono w-full lg:w-auto">
               <div className="rounded-xl border border-line bg-card/60 p-2.5 sm:p-3 min-w-0">
-                <span className="text-[9px] sm:text-[10px] uppercase text-slate-400 font-bold block truncate">Master Collector</span>
+                <span className="text-[9px] sm:text-[10px] uppercase text-slate-200 font-bold block truncate">Master Collector</span>
                 <span className="text-xs sm:text-base font-black text-amber-300 mt-0.5 block truncate">Level 100</span>
               </div>
               <div className="rounded-xl border border-line bg-card/60 p-2.5 sm:p-3 min-w-0">
-                <span className="text-[9px] sm:text-[10px] uppercase text-slate-400 font-bold block truncate">Lifetime Matches</span>
+                <span className="text-[9px] sm:text-[10px] uppercase text-slate-200 font-bold block truncate">Lifetime Matches</span>
                 <span className="text-xs sm:text-base font-black text-white mt-0.5 block truncate">21,728</span>
               </div>
               <div className="rounded-xl border border-line bg-card/60 p-2.5 sm:p-3 min-w-0">
-                <span className="text-[9px] sm:text-[10px] uppercase text-slate-400 font-bold block truncate">Achievement Points</span>
+                <span className="text-[9px] sm:text-[10px] uppercase text-slate-200 font-bold block truncate">Achievement Points</span>
                 <span className="text-xs sm:text-base font-black text-cyan-300 mt-0.5 block truncate">⭐ 8,820</span>
               </div>
               <div className="rounded-xl border border-line bg-card/60 p-2.5 sm:p-3 min-w-0">
-                <span className="text-[9px] sm:text-[10px] uppercase text-slate-400 font-bold block truncate">Played For</span>
+                <span className="text-[9px] sm:text-[10px] uppercase text-slate-200 font-bold block truncate">Played For</span>
                 <span className="text-xs sm:text-base font-black text-emerald-300 mt-0.5 block truncate">8 Years</span>
               </div>
             </div>
@@ -930,7 +930,7 @@ export function PubgCareerStats() {
                   <h4 className="font-gaming text-sm font-bold text-white tracking-wide truncate group-hover:text-amber-300 transition">
                     {t.name}
                   </h4>
-                  <p className="text-[10px] text-slate-300 mt-1 line-clamp-2 leading-tight">
+                  <p className="text-[10px] text-slate-100 mt-1 line-clamp-2 leading-tight">
                     {t.desc}
                   </p>
                 </div>
@@ -951,17 +951,17 @@ export function PubgCareerStats() {
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-fuchsia-300 uppercase tracking-widest block font-bold">PRIMARY AR</span>
               <p className="font-display font-bold text-base text-white mt-0.5">M416 Glacier (Max Level)</p>
-              <p className="text-xs text-slate-300 mt-1 font-mono">5.56mm · 6x to 3x Pull · Compensator · Ext. Quickdraw Mag</p>
+              <p className="text-xs text-slate-100 mt-1 font-mono font-medium">5.56mm · 6x to 3x Pull · Compensator · Ext. Quickdraw Mag</p>
             </div>
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-amber-300 uppercase tracking-widest block font-bold">SECONDARY SNIPER</span>
               <p className="font-display font-bold text-base text-white mt-0.5">AWM Monster One-Shot</p>
-              <p className="text-xs text-slate-300 mt-1 font-mono">.300 Magnum · 8x Scope · Cheek Pad · Suppressor</p>
+              <p className="text-xs text-slate-100 mt-1 font-mono font-medium">.300 Magnum · 8x Scope · Cheek Pad · Suppressor</p>
             </div>
             <div className="rounded-xl border border-line/60 bg-surface/60 p-4">
               <span className="font-mono text-[10px] text-cyan-300 uppercase tracking-widest block font-bold">CLOSE COMBAT / CQB</span>
               <p className="font-display font-bold text-base text-white mt-0.5">UMP45 / DBS Rush</p>
-              <p className="text-xs text-slate-300 mt-1 font-mono">Laser Sight · Red Dot · Extreme Hipfire Accuracy</p>
+              <p className="text-xs text-slate-100 mt-1 font-mono font-medium">Laser Sight · Red Dot · Extreme Hipfire Accuracy</p>
             </div>
           </div>
         </div>

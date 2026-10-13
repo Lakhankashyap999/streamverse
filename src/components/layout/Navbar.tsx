@@ -71,8 +71,8 @@ export function Logo({
                   <span>LIVE NOW</span>
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 font-semibold text-slate-400">
-                  <span className="size-1.5 rounded-full bg-slate-500 shrink-0" />
+                <span className="inline-flex items-center gap-1 font-semibold text-slate-200">
+                  <span className="size-1.5 rounded-full bg-slate-400 shrink-0" />
                   <span>OFFLINE</span>
                 </span>
               )}

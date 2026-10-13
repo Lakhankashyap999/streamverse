@@ -140,7 +140,7 @@ export function resolveLiveState(
     description: 'Official daily livestream session with KhushiYT. Join custom rooms and squad rush every night at 10:00 PM IST.',
     youtube_video_id: null,
     stream_url: profile.youtube_url ? `${profile.youtube_url}/live` : 'https://www.youtube.com/@khusiytlive/live',
-    thumbnail_url: '/images/creator/pubg-stream-thumbnail-hd.webp',
+    thumbnail_url: '/images/creator/upcoming-stream-hd.webp?v=3',
     scheduled_at: getNextDailyStreamTime(),
     timezone: 'Asia/Kolkata',
     status: 'scheduled',
@@ -217,7 +217,7 @@ export function useLiveState(streams: Stream[], videos: Video[], profile: Profil
       description: 'Live broadcast streaming now on YouTube',
       youtube_video_id: vid,
       stream_url: realtimeLive.streamUrl || (vid ? ytWatchUrl(vid) : 'https://www.youtube.com/@khusiytlive/live'),
-      thumbnail_url: vid ? ytThumb(vid) : '/images/creator/pubg-stream-thumbnail-hd.webp',
+      thumbnail_url: vid ? ytThumb(vid) : '/images/creator/upcoming-stream-hd.webp?v=3',
       scheduled_at: new Date().toISOString(),
       timezone: 'Asia/Kolkata',
       status: 'live',
@@ -237,7 +237,7 @@ export function useLiveState(streams: Stream[], videos: Video[], profile: Profil
 export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]; videos: Video[]; profile: Profile }) {
   const state = useLiveState(streams, videos, profile);
 
-  let thumb: string | null = '/images/creator/pubg-stream-thumbnail-hd.webp';
+  let thumb: string | null = '/images/creator/upcoming-stream-hd.webp?v=3';
   let title = `${profile.gaming_name} on YouTube`;
   let sample = false;
   if (state.kind !== 'offline' && state.stream) {

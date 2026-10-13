@@ -161,7 +161,7 @@ export function PubgLoader({
               🌸
             </span>
           </h2>
-          <div className="flex items-center justify-center gap-2 font-gaming text-[11px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">
+          <div className="flex items-center justify-center gap-2 font-gaming text-[11px] sm:text-xs font-bold tracking-[0.2em] text-slate-200 uppercase">
             <span>BGMI CONQUEROR</span>
             <span className="text-pink-400">•</span>
             <span>LIVE STREAMER</span>
@@ -234,7 +234,7 @@ export function PubgLoader({
           </div>
 
           {/* Telemetry Footer */}
-          <span className="font-mono text-[9px] sm:text-[10px] text-slate-500 tracking-wider">
+          <span className="font-mono text-[9px] sm:text-[10px] text-slate-300 tracking-wider font-semibold">
             SYNCING ASIA SERVER · 20ms PING
           </span>
         </div>

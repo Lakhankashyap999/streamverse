@@ -61,7 +61,7 @@ export function SectionHeading({
         <h2 id={id} className="mt-2.5 text-2xl font-bold leading-tight sm:text-4xl">
           {title} {highlight && <span className="text-gradient">{highlight}</span>}
         </h2>
-        {description && <p className="mt-2 text-xs text-slate-300 sm:text-base leading-relaxed">{description}</p>}
+        {description && <p className="mt-2 text-sm sm:text-base leading-relaxed text-white font-medium">{description}</p>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>
