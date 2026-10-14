@@ -185,32 +185,47 @@ export function Navbar() {
       </a>
       <nav className="container-x flex h-16 items-center justify-between gap-4 lg:h-18" aria-label="Main">
         <Logo showStatus isLive={isLive} />
-        <ul className="hidden items-center gap-1 lg:flex">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.to}>
+        <ul className="hidden items-center gap-1 lg:flex" role="menubar">
+          {NAV_ITEMS.map((item, idx) => (
+            <li key={item.to} className="flex items-center">
               <NavLink
                 to={item.to}
                 end={item.to === '/'}
                 className={({ isActive }) =>
                   cn(
-                    'relative rounded-lg px-3.5 py-2 text-[0.95rem] font-medium transition-colors',
-                    isActive ? 'text-ink' : 'text-mute hover:text-ink',
+                    'relative px-3 py-1.5 font-display text-[0.85rem] lg:text-[0.90rem] font-bold tracking-[0.16em] uppercase transition-all duration-200 flex items-center gap-1.5',
+                    isActive
+                      ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.75)]'
+                      : 'text-slate-300/80 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]',
                   )
                 }
               >
                 {({ isActive }) => (
                   <>
-                    {item.label}
+                    {isActive && (
+                      <span
+                        className="text-[#fbbf24] text-xs drop-shadow-[0_0_8px_rgba(251,191,36,0.9)] animate-pulse select-none inline-flex items-center"
+                        aria-hidden="true"
+                      >
+                        ✦
+                      </span>
+                    )}
+                    <span>{item.label}</span>
                     {isActive && (
                       <motion.span
                         layoutId="nav-active"
-                        className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-[linear-gradient(90deg,#fbbf24,#f472b6,#8b5cf6)]"
-                        transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 32 }}
+                        className="absolute inset-x-2 -bottom-1 h-[2.5px] rounded-full bg-gradient-to-r from-[#ff007f] via-[#ec4899] to-[#fbbf24] shadow-[0_0_12px_rgba(255,0,127,0.95),0_0_24px_rgba(251,191,36,0.7)]"
+                        transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 450, damping: 32 }}
                       />
                     )}
                   </>
                 )}
               </NavLink>
+              {idx < NAV_ITEMS.length - 1 && (
+                <span className="text-slate-600/70 select-none text-[8px] mx-1" aria-hidden="true">
+                  •
+                </span>
+              )}
             </li>
           ))}
         </ul>
@@ -235,84 +250,156 @@ export function Navbar() {
           <button
             ref={menuBtn}
             type="button"
-            className="glass grid size-8 sm:size-10 place-items-center rounded-xl lg:hidden shrink-0"
+            className="glass grid size-9 sm:size-10 place-items-center rounded-xl lg:hidden shrink-0 text-slate-200 hover:text-white"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? 'Close menu' : 'Open menu'}
             onClick={() => setOpen((o) => !o)}
           >
-            {open ? <X className="size-4 sm:size-5" /> : <Menu className="size-4 sm:size-5" />}
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
         </div>
       </nav>
 
+      {/* Mobile Navigation: Sleek Side Drawer */}
       <AnimatePresence>
         {open && (
-          <motion.div
-            id="mobile-nav"
-            ref={drawer}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Site navigation"
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -12 }}
-            transition={{ duration: 0.2 }}
-            className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-base/95 backdrop-blur-xl lg:hidden"
-          >
-            <div className="container-x flex flex-col gap-6 py-6">
-              <ul className="flex flex-col gap-1">
-                {NAV_ITEMS.map((item, i) => (
-                  <motion.li
-                    key={item.to}
-                    initial={reduce ? false : { opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.04 }}
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm lg:hidden"
+              aria-hidden="true"
+            />
+
+            {/* Side Drawer Panel */}
+            <motion.div
+              id="mobile-nav"
+              ref={drawer}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site navigation"
+              initial={reduce ? { opacity: 0 } : { x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={reduce ? { opacity: 0 } : { x: '100%' }}
+              transition={{ type: 'spring', stiffness: 350, damping: 32 }}
+              className="fixed top-0 right-0 bottom-0 z-50 w-[84vw] max-w-[340px] bg-[#090b16]/98 border-l border-white/10 backdrop-blur-2xl shadow-[-12px_0_35px_rgba(0,0,0,0.85)] flex flex-col justify-between overflow-y-auto p-5 sm:p-6 lg:hidden"
+            >
+              <div className="flex flex-col gap-5">
+                {/* Drawer Header */}
+                <div className="flex items-center justify-between pb-3.5 border-b border-white/10">
+                  <Logo showStatus isLive={isLive} />
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    className="glass grid size-9 place-items-center rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+                    aria-label="Close menu"
                   >
-                    <NavLink
-                      to={item.to}
-                      end={item.to === '/'}
-                      className={({ isActive }) =>
-                        cn(
-                          'flex items-center justify-between rounded-xl px-4 py-3.5 font-display text-xl font-semibold',
-                          isActive ? 'bg-neon/15 text-ink' : 'text-mute hover:bg-white/5 hover:text-ink',
-                        )
-                      }
+                    <X className="size-5" />
+                  </button>
+                </div>
+
+                {/* Navigation Section Title */}
+                <div className="flex items-center justify-between px-1">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-slate-400 font-semibold">
+                    // Navigation
+                  </span>
+                  <span className="text-[10px] text-pink-400 font-mono tracking-wider font-bold">
+                    OPTION 5 HUD
+                  </span>
+                </div>
+
+                {/* Option 5 Mobile Nav Items */}
+                <ul className="flex flex-col gap-2">
+                  {NAV_ITEMS.map((item, i) => (
+                    <motion.li
+                      key={item.to}
+                      initial={reduce ? false : { opacity: 0, x: 15 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.04 }}
                     >
-                      {item.label}
-                      <span className="font-display text-xs text-gold/70">0{i + 1}</span>
-                    </NavLink>
-                  </motion.li>
-                ))}
-              </ul>
-              {/* Mobile Drawer Subscribe Button with Wave Effect */}
-              <a
-                href={youtubeSubscribeUrl(profile)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white py-3.5 px-4 font-bold text-base shadow-[0_0_20px_rgba(239,68,68,0.45)] transition active:scale-95"
-              >
-                <motion.span
-                  animate={{ rotate: [0, -14, 14, -8, 8, 0] }}
-                  transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }}
-                  className="text-lg"
+                      <NavLink
+                        to={item.to}
+                        end={item.to === '/'}
+                        onClick={() => setOpen(false)}
+                        className={({ isActive }) =>
+                          cn(
+                            'relative flex items-center justify-between rounded-xl px-4 py-3 font-display text-[0.95rem] font-bold tracking-[0.14em] uppercase transition-all duration-200 overflow-hidden',
+                            isActive
+                              ? 'bg-gradient-to-r from-pink-500/15 via-amber-500/10 to-transparent border border-pink-500/40 text-white shadow-[0_0_15px_rgba(236,72,153,0.25)]'
+                              : 'text-slate-300/85 hover:text-white hover:bg-white/5 border border-transparent',
+                          )
+                        }
+                      >
+                        {({ isActive }) => (
+                          <>
+                            {isActive && (
+                              <span className="absolute left-0 inset-y-1.5 w-1 rounded-r-full bg-gradient-to-b from-[#ff007f] via-[#ec4899] to-[#fbbf24] shadow-[0_0_10px_rgba(255,0,127,0.9)]" />
+                            )}
+                            <div className="flex items-center gap-2.5">
+                              {isActive ? (
+                                <span className="text-[#fbbf24] text-xs drop-shadow-[0_0_8px_rgba(251,191,36,0.9)] animate-pulse select-none">
+                                  ✦
+                                </span>
+                              ) : (
+                                <span className="text-slate-600 text-[10px] select-none">•</span>
+                              )}
+                              <span className={isActive ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.7)]' : ''}>
+                                {item.label}
+                              </span>
+                            </div>
+                            <span
+                              className={cn(
+                                'font-mono text-xs font-bold',
+                                isActive ? 'text-amber-400' : 'text-slate-500',
+                              )}
+                            >
+                              0{i + 1}
+                            </span>
+                          </>
+                        )}
+                      </NavLink>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Drawer Footer Actions */}
+              <div className="flex flex-col gap-3 pt-5 border-t border-white/10 mt-4">
+                <a
+                  href={youtubeSubscribeUrl(profile)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 via-rose-600 to-red-600 hover:from-red-500 hover:to-rose-500 text-white py-3 px-4 font-bold text-sm shadow-[0_0_20px_rgba(239,68,68,0.45)] transition active:scale-95"
                 >
-                  🔔
-                </motion.span>
-                <WaveSubscribeText />
-                <span className="text-xs bg-black/30 px-2 py-0.5 rounded-full font-mono text-amber-200">27.6K</span>
-              </a>
-              <ExternalButton
-                href={isLive ? liveUrl : (profile.youtube_url ?? liveUrl)}
-                hosts={['youtube.com']}
-                size="lg"
-                icon={<Radio className="size-5" aria-hidden />}
-              >
-                {isLive ? 'Watch Live on YouTube' : 'Visit YouTube Channel'}
-              </ExternalButton>
-              <SocialIconRow profile={profile} />
-            </div>
-          </motion.div>
+                  <span className="bell-shake text-sm select-none" aria-hidden="true">
+                    🔔
+                  </span>
+                  <WaveSubscribeText />
+                  <span className="text-[10px] bg-black/30 px-2 py-0.5 rounded-full font-mono text-amber-200">
+                    27.6K
+                  </span>
+                </a>
+
+                <ExternalButton
+                  href={isLive ? liveUrl : (profile.youtube_url ?? liveUrl)}
+                  hosts={['youtube.com']}
+                  size="md"
+                  icon={<Radio className="size-4" aria-hidden />}
+                >
+                  {isLive ? 'Watch Live on YouTube' : 'Visit YouTube Channel'}
+                </ExternalButton>
+
+                <div className="pt-1 flex justify-center">
+                  <SocialIconRow profile={profile} />
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>
