@@ -6,7 +6,7 @@ import { Menu, Radio, X } from 'lucide-react';
 import { useProfile } from '../../context/ProfileContext';
 import { youtubeLiveUrl, youtubeSubscribeUrl } from '../../config/site';
 import { useScrollLock } from '../../hooks';
-import { cn } from '../../utils/misc';
+import { cn, isScheduledLiveTime } from '../../utils/misc';
 import { ExternalButton } from '../ui/Button';
 import { SocialIconRow } from './SocialLinks';
 
@@ -130,7 +130,11 @@ export function Navbar() {
     return () => document.removeEventListener('keydown', onKey);
   }, [open]);
 
-  const [isLive, setIsLive] = useState(profile.live_status_mode === 'live');
+  const [isLive, setIsLive] = useState(() => {
+    if (profile.live_status_mode === 'live') return true;
+    if (profile.live_status_mode === 'offline') return false;
+    return isScheduledLiveTime();
+  });
 
   useEffect(() => {
     if (profile.live_status_mode === 'live') {
@@ -143,19 +147,25 @@ export function Navbar() {
     }
     let alive = true;
     const checkStatus = () => {
+      // Evaluate IST 10 PM to 5 AM schedule in real time
+      const isScheduled = isScheduledLiveTime();
+
       fetch(`/api/live-status?t=${Date.now()}`)
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
-          if (alive && data) {
-            setIsLive(Boolean(data.isLive));
+          if (alive) {
+            // Live if confirmed by YouTube OR within 10 PM to 5 AM IST livestream window
+            const status = Boolean(data?.isLive || isScheduled);
+            setIsLive(status);
           }
         })
         .catch(() => {
-          if (alive) setIsLive(false);
+          if (alive) setIsLive(isScheduled);
         });
     };
     checkStatus();
-    const interval = setInterval(checkStatus, 15000);
+    // 10s interval: immediately flips to LIVE at 10:00 PM and OFFLINE at 5:00 AM IST without refreshing!
+    const interval = setInterval(checkStatus, 10000);
     const onVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         checkStatus();

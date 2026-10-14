@@ -1,3 +1,15 @@
+function isScheduledLiveTime() {
+  const now = new Date();
+  const utcMs = now.getTime();
+  const istOffsetMs = 5.5 * 60 * 60 * 1000;
+  const istDate = new Date(utcMs + istOffsetMs);
+  const h = istDate.getUTCHours();
+  const m = istDate.getUTCMinutes();
+  const totalMinutes = h * 60 + m;
+  // 10:00 PM (22:00 = 1320 min) to 5:00 AM (05:00 = 300 min) IST
+  return totalMinutes >= 1320 || totalMinutes < 300;
+}
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -49,12 +61,15 @@ export default async function handler(req, res) {
     const rawTitle = titleMatch ? titleMatch[1].replace(/\s*-\s*YouTube$/i, '').trim() : null;
     const isChannelOnlyTitle = rawTitle === 'KhushiYT' || !rawTitle;
 
-    // Active Live State: Must be watch page or have active live signals, and not upcoming/offline
+    const isScheduleActive = isScheduledLiveTime();
+
+    // Active Live State: YouTube live signals detected OR within daily 10 PM - 5 AM IST window
     const isLive = Boolean(
-      isWatchPage &&
+      (isWatchPage &&
       !isUpcoming &&
       !isOfflineExplicit &&
-      (hasLiveBadge || hasIsLiveNow || hasIsLive || hasIsLiveContent || hasLiveBroadcast || !isChannelOnlyTitle)
+      (hasLiveBadge || hasIsLiveNow || hasIsLive || hasIsLiveContent || hasLiveBroadcast || !isChannelOnlyTitle)) ||
+      isScheduleActive
     );
 
     const streamTitle = isLive ? (rawTitle || 'BGMI Rank Push Livestream 🔴 | KhushiYT') : null;
@@ -70,11 +85,12 @@ export default async function handler(req, res) {
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {
+    const isScheduleActive = isScheduledLiveTime();
     return res.status(200).json({
-      isLive: false,
+      isLive: isScheduleActive,
       isUpcoming: false,
       videoId: null,
-      title: null,
+      title: isScheduleActive ? 'BGMI Rank Push Livestream 🔴 | KhushiYT' : null,
       streamUrl: 'https://www.youtube.com/@khusiytlive/live',
       channelUrl: 'https://www.youtube.com/@khusiytlive',
       fallback: true,

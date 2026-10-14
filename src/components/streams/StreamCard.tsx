@@ -6,7 +6,7 @@ import { formatDateTime, formatInZone, getNextDailyStreamTime, googleCalendarUrl
 import { isValidVideoId, ytThumb, ytWatchUrl } from '../../utils/youtube';
 import { youtubeService } from '../../services/youtubeService';
 import { youtubeLiveUrl, youtubeStreamsUrl, youtubeSubscribeUrl } from '../../config/site';
-import { cn } from '../../utils/misc';
+import { cn, isScheduledLiveTime } from '../../utils/misc';
 import { Badge, LiveBadge, SampleBadge } from '../ui/Card';
 import { WaveSubscribeText } from '../layout/Navbar';
 import { ExternalButton } from '../ui/Button';
@@ -168,20 +168,36 @@ export function useLiveState(streams: Stream[], videos: Video[], profile: Profil
   useEffect(() => {
     let alive = true;
     async function checkLive() {
+      const scheduled = isScheduledLiveTime();
       try {
         const res = await fetch(`/api/live-status?t=${Date.now()}`);
         if (res.ok) {
           const data: RealtimeLiveStatus = await res.json();
           if (alive && data) {
-            setRealtimeLive(data);
+            setRealtimeLive({
+              ...data,
+              isLive: Boolean(data.isLive || scheduled),
+            });
           }
+        } else if (alive) {
+          setRealtimeLive({
+            isLive: scheduled,
+            title: 'BGMI Rank Push Livestream 🔴 | KhushiYT',
+            streamUrl: 'https://www.youtube.com/@khusiytlive/live',
+          });
         }
       } catch {
-        // Fallback gracefully
+        if (alive) {
+          setRealtimeLive({
+            isLive: scheduled,
+            title: 'BGMI Rank Push Livestream 🔴 | KhushiYT',
+            streamUrl: 'https://www.youtube.com/@khusiytlive/live',
+          });
+        }
       }
     }
     checkLive();
-    const interval = setInterval(checkLive, 15000);
+    const interval = setInterval(checkLive, 10000);
     const onVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         checkLive();
@@ -208,15 +224,16 @@ export function useLiveState(streams: Stream[], videos: Video[], profile: Profil
     };
   }, [streams]);
 
-  // If YouTube is confirmed live:
-  if (profile.live_status_mode !== 'offline' && realtimeLive?.isLive) {
-    const vid = realtimeLive.videoId || 'WtpOElc_3pg';
+  // If YouTube is confirmed live (or within daily scheduled 10 PM - 5 AM IST window):
+  const isScheduled = isScheduledLiveTime();
+  if (profile.live_status_mode !== 'offline' && (realtimeLive?.isLive || isScheduled)) {
+    const vid = realtimeLive?.videoId || 'WtpOElc_3pg';
     const activeStream: Stream = {
       id: 'live-now-yt',
-      title: realtimeLive.title || 'BGMI Rank Push Livestream 🔴 | KhushiYT',
+      title: realtimeLive?.title || 'BGMI Rank Push Livestream 🔴 | KhushiYT',
       description: 'Live broadcast streaming now on YouTube',
       youtube_video_id: vid,
-      stream_url: realtimeLive.streamUrl || (vid ? ytWatchUrl(vid) : 'https://www.youtube.com/@khusiytlive/live'),
+      stream_url: realtimeLive?.streamUrl || (vid ? ytWatchUrl(vid) : 'https://www.youtube.com/@khusiytlive/live'),
       thumbnail_url: vid ? ytThumb(vid) : '/images/creator/upcoming-stream-hd.webp?v=3',
       scheduled_at: new Date().toISOString(),
       timezone: 'Asia/Kolkata',
