@@ -58,14 +58,64 @@ export function usePageMeta(title: string, description?: string) {
   }, [title, description]);
 }
 
-/** Locks body scroll while `locked` is true (drawers, modals). */
+// Shared across all callers so nested locks (e.g. drawer + modal) don't fight each other.
+let scrollLockCount = 0;
+let savedScrollY = 0;
+let savedPath = '';
+let savedStyles: { htmlOverflow: string; body: Partial<CSSStyleDeclaration> } | null = null;
+
+/**
+ * Locks body scroll while `locked` is true (drawers, modals).
+ * `overflow: hidden` alone is ignored by iOS Safari and many Android browsers for
+ * touch scrolling, so the body is pinned with `position: fixed` at the current
+ * offset and restored to the exact same spot on unlock.
+ */
 export function useScrollLock(locked: boolean) {
   useEffect(() => {
     if (!locked) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const html = document.documentElement;
+    const body = document.body;
+
+    if (scrollLockCount === 0) {
+      savedScrollY = window.scrollY;
+      savedPath = window.location.pathname;
+      const scrollbarWidth = window.innerWidth - html.clientWidth;
+      savedStyles = {
+        htmlOverflow: html.style.overflow,
+        body: {
+          overflow: body.style.overflow,
+          position: body.style.position,
+          top: body.style.top,
+          left: body.style.left,
+          right: body.style.right,
+          width: body.style.width,
+          paddingRight: body.style.paddingRight,
+        },
+      };
+      html.style.overflow = 'hidden';
+      body.style.overflow = 'hidden';
+      body.style.position = 'fixed';
+      body.style.top = `-${savedScrollY}px`;
+      body.style.left = '0';
+      body.style.right = '0';
+      body.style.width = '100%';
+      if (scrollbarWidth > 0) body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    scrollLockCount += 1;
+
     return () => {
-      document.body.style.overflow = prev;
+      scrollLockCount -= 1;
+      if (scrollLockCount > 0 || !savedStyles) return;
+      html.style.overflow = savedStyles.htmlOverflow;
+      Object.assign(body.style, savedStyles.body);
+      savedStyles = null;
+      // If the user navigated to another page from inside the overlay, start that page at the top.
+      const target = window.location.pathname === savedPath ? savedScrollY : 0;
+      // Bypass the global `scroll-behavior: smooth` so the restore is instant (no visible jump).
+      const prevBehavior = html.style.scrollBehavior;
+      html.style.scrollBehavior = 'auto';
+      window.scrollTo(0, target);
+      html.style.scrollBehavior = prevBehavior;
     };
   }, [locked]);
 }

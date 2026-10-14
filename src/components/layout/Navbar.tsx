@@ -277,7 +277,7 @@ export function Navbar() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
                   onClick={() => setOpen(false)}
-                  className="fixed inset-0 z-[9998] bg-black/80 backdrop-blur-sm"
+                  className="fixed inset-0 z-[9998] bg-black/80 backdrop-blur-sm touch-none"
                   aria-hidden="true"
                 />
 
@@ -292,7 +292,7 @@ export function Navbar() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={reduce ? { opacity: 0 } : { x: '100%' }}
                   transition={{ type: 'spring', stiffness: 350, damping: 32 }}
-                  className="fixed top-0 right-0 bottom-0 z-[9999] w-[85vw] max-w-[340px] bg-[#090b16] border-l border-white/10 shadow-[-16px_0_40px_rgba(0,0,0,0.9)] flex flex-col justify-between overflow-y-auto p-5 sm:p-6"
+                  className="fixed top-0 right-0 bottom-0 z-[9999] w-[85vw] max-w-[340px] bg-[#090b16] border-l border-white/10 shadow-[-16px_0_40px_rgba(0,0,0,0.9)] flex flex-col justify-between overflow-y-auto overscroll-contain p-5 sm:p-6"
                 >
                   <div className="flex flex-col gap-5">
                     {/* Drawer Header */}
