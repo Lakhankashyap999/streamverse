@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Googlebot & Googlebot-Image favicon crawling
+User-agent: Googlebot
+Allow: /favicon.ico
+Allow: /icons/
+
+User-agent: Googlebot-Image
+Allow: /favicon.ico
+Allow: /icons/
