@@ -185,7 +185,7 @@ export function Navbar() {
         >
           Skip to content
         </a>
-        <nav className="container-x flex h-14 sm:h-16 items-center justify-between gap-4 lg:h-18" aria-label="Main">
+        <nav className="container-x flex h-16 items-center justify-between gap-4 lg:h-18" aria-label="Main">
           <Logo showStatus isLive={isLive} />
           <ul className="hidden items-center gap-1 lg:flex" role="menubar">
             {NAV_ITEMS.map((item, idx) => (
@@ -262,54 +262,6 @@ export function Navbar() {
             </button>
           </div>
         </nav>
-
-        {/* Mobile Horizontal Option 5 Gaming Navigation Strip (Swipeable side-to-side) */}
-        <div className="lg:hidden border-t border-white/10 bg-[#060812]/95 backdrop-blur-md overflow-x-auto no-scrollbar px-3 py-1.5 flex items-center shadow-inner">
-          <ul className="flex items-center gap-1 min-w-max mx-auto sm:mx-0" role="menubar">
-            {NAV_ITEMS.map((item, idx) => (
-              <li key={item.to} className="flex items-center">
-                <NavLink
-                  to={item.to}
-                  end={item.to === '/'}
-                  className={({ isActive }) =>
-                    cn(
-                      'relative px-2.5 py-1 font-display text-[0.78rem] sm:text-[0.82rem] font-bold tracking-[0.14em] uppercase transition-all duration-200 flex items-center gap-1 shrink-0 whitespace-nowrap',
-                      isActive
-                        ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.75)]'
-                        : 'text-slate-300/80 hover:text-white',
-                    )
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      {isActive && (
-                        <span
-                          className="text-[#fbbf24] text-[10px] drop-shadow-[0_0_8px_rgba(251,191,36,0.9)] animate-pulse select-none inline-flex items-center"
-                          aria-hidden="true"
-                        >
-                          ✦
-                        </span>
-                      )}
-                      <span>{item.label}</span>
-                      {isActive && (
-                        <motion.span
-                          layoutId="nav-active-mobile-strip"
-                          className="absolute inset-x-1.5 -bottom-0.5 h-[2px] rounded-full bg-gradient-to-r from-[#ff007f] via-[#ec4899] to-[#fbbf24] shadow-[0_0_10px_rgba(255,0,127,0.95),0_0_20px_rgba(251,191,36,0.7)]"
-                          transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 450, damping: 32 }}
-                        />
-                      )}
-                    </>
-                  )}
-                </NavLink>
-                {idx < NAV_ITEMS.length - 1 && (
-                  <span className="text-slate-600/70 select-none text-[8px] mx-0.5 shrink-0" aria-hidden="true">
-                    •
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
       </header>
 
       {/* Mobile Side Drawer (Mounted directly to body via portal for 100% reliable visibility) */}
@@ -362,7 +314,7 @@ export function Navbar() {
                         // Navigation Menu
                       </span>
                       <span className="text-[10px] text-pink-400 font-mono tracking-wider font-bold">
-                        OPTION 5 HUD
+                        KHUSHIYT
                       </span>
                     </div>
 
