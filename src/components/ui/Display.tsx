@@ -39,22 +39,30 @@ export function NeonStageLight({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'pointer-events-none select-none relative -mt-3 mb-5 sm:-mt-5 sm:mb-7 flex flex-col items-center justify-center w-full overflow-hidden',
+        'pointer-events-none select-none relative -mt-3 mb-6 sm:-mt-5 sm:mb-8 flex flex-col items-center justify-center w-full',
         className,
       )}
       aria-hidden="true"
     >
-      {/* Delicate Downward Stage Light Wash (Soft, airy, low-opacity ambient cone) */}
-      <div className="absolute -top-5 h-36 sm:h-48 w-full max-w-4xl bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgba(236,72,153,0.11),rgba(139,92,246,0.05)_45%,transparent_75%)] blur-2xl" />
+      {/* Rich Volumetric Downward Stage Light Wash (Dual-color Pink-to-Purple Atmospheric Mist) */}
+      <div
+        className="absolute -top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-full max-w-4xl h-56 sm:h-72 pointer-events-none -z-10"
+        style={{
+          background: `
+            radial-gradient(ellipse 55% 85% at 28% 0%, rgba(236, 72, 153, 0.38) 0%, rgba(236, 72, 153, 0.16) 45%, transparent 75%),
+            radial-gradient(ellipse 55% 85% at 72% 0%, rgba(139, 92, 246, 0.35) 0%, rgba(139, 92, 246, 0.14) 45%, transparent 75%)
+          `,
+          filter: 'blur(30px)',
+          transform: 'translate3d(0, 0, 0)',
+        }}
+      />
 
-      {/* Sleek horizontal neon light tube */}
-      <div className="relative h-[2px] sm:h-[2.5px] w-[80%] sm:w-[65%] max-w-3xl rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_20%,#8b5cf6_80%,transparent_100%)]">
+      {/* Sleek Horizontal Neon Light Tube */}
+      <div className="relative h-[2.5px] sm:h-[3px] w-[82%] sm:w-[65%] max-w-3xl rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_20%,#8b5cf6_80%,transparent_100%)] shadow-[0_0_14px_rgba(236,72,153,0.95),0_0_28px_rgba(139,92,246,0.7)]">
         {/* Luminous inner core */}
-        <div className="absolute inset-0 rounded-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.85)_30%,rgba(255,255,255,0.85)_70%,transparent_100%)] opacity-70" />
+        <div className="absolute inset-0 rounded-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.95)_30%,rgba(255,255,255,0.95)_70%,transparent_100%)] opacity-85" />
         {/* Soft primary neon aura */}
-        <div className="absolute -inset-y-0.5 inset-x-2 rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_20%,#8b5cf6_80%,transparent_100%)] blur-[2px] opacity-80" />
-        {/* Ambient halo glow */}
-        <div className="absolute -inset-y-2 inset-x-6 rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_25%,#8b5cf6_75%,transparent_100%)] blur-[6px] opacity-45" />
+        <div className="absolute -inset-y-1 inset-x-2 rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_20%,#8b5cf6_80%,transparent_100%)] blur-[3px] opacity-90" />
       </div>
     </div>
   );
@@ -81,11 +89,11 @@ export function SectionHeading({
   showNeonLight?: boolean;
 }) {
   return (
-    <div className="relative w-full">
+    <div className="relative isolate w-full">
       {showNeonLight && <NeonStageLight />}
       <div
         className={cn(
-          'mb-8 flex flex-col gap-4 sm:mb-10',
+          'relative z-10 mb-8 flex flex-col gap-4 sm:mb-10',
           align === 'center' ? 'items-center text-center' : 'sm:flex-row sm:items-end sm:justify-between',
         )}
       >
