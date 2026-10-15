@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWinterMode } from '../../context/WinterModeContext';
 
 interface Flake {
@@ -14,8 +14,19 @@ interface Flake {
 }
 
 export function WinterSnowfall() {
-  const { isWinterMode } = useWinterMode();
+  const { isWinterMode, isFreezing } = useWinterMode();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [snowOpacity, setSnowOpacity] = useState(0);
+
+  // Fade snowfall in gently over 1.2s when winter mode turns on
+  useEffect(() => {
+    if (isWinterMode) {
+      const timer = setTimeout(() => setSnowOpacity(1), 50);
+      return () => clearTimeout(timer);
+    } else {
+      setSnowOpacity(0);
+    }
+  }, [isWinterMode]);
 
   useEffect(() => {
     if (!isWinterMode) return;
@@ -197,21 +208,25 @@ export function WinterSnowfall() {
     };
   }, [isWinterMode]);
 
-  if (!isWinterMode) return null;
+  if (!isWinterMode && snowOpacity === 0 && !isFreezing) return null;
 
   return (
     <>
-      {/* 1. Delicate & Dynamic Blizzard Snowfall Canvas (Hardware accelerated, 120FPS smooth) */}
+      {/* 1. Delicate & Dynamic Blizzard Snowfall Canvas (Hardware accelerated, 120FPS smooth, gentle fade-in) */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-[45] w-full h-full"
+        className="fixed inset-0 pointer-events-none z-[45] w-full h-full transition-opacity duration-1000 ease-out"
+        style={{ opacity: snowOpacity }}
         aria-hidden="true"
       />
 
       {/* 2. Tiny, subtle snow accumulation strictly in the extreme bottom corners */}
-      <div className="fixed bottom-0 left-0 z-[46] pointer-events-none select-none">
+      <div
+        className="fixed bottom-0 left-0 z-[46] pointer-events-none select-none transition-opacity duration-1000 ease-out"
+        style={{ opacity: snowOpacity * 0.75 }}
+      >
         <svg
-          className="w-20 sm:w-28 h-3.5 sm:h-4 opacity-75"
+          className="w-20 sm:w-28 h-3.5 sm:h-4"
           viewBox="0 0 120 20"
           fill="none"
           aria-hidden="true"
@@ -229,9 +244,12 @@ export function WinterSnowfall() {
         </svg>
       </div>
 
-      <div className="fixed bottom-0 right-0 z-[46] pointer-events-none select-none">
+      <div
+        className="fixed bottom-0 right-0 z-[46] pointer-events-none select-none transition-opacity duration-1000 ease-out"
+        style={{ opacity: snowOpacity * 0.75 }}
+      >
         <svg
-          className="w-20 sm:w-28 h-3.5 sm:h-4 -scale-x-100 opacity-75"
+          className="w-20 sm:w-28 h-3.5 sm:h-4 -scale-x-100"
           viewBox="0 0 120 20"
           fill="none"
           aria-hidden="true"
@@ -242,6 +260,38 @@ export function WinterSnowfall() {
           />
         </svg>
       </div>
+
+      {/* 3. Soft, Diffused Top-to-Bottom Frost Wave (Zero Sharp Edges, Pure Mist) */}
+      {isFreezing && (
+        <div
+          className="fixed inset-0 pointer-events-none z-[50] overflow-hidden"
+          aria-hidden="true"
+        >
+          {/* 
+            Ultra-Feathered Mist Wave:
+            - 55vh tall band
+            - Transparent on both top and bottom (zero sharp lines or corners)
+            - Soft 18% opacity, feathered with blur-2xl
+            - Slowly drifts down from top to bottom over 2.4s
+          */}
+          <div
+            className="absolute inset-x-0 w-full h-[55vh] -top-[55vh] pointer-events-none blur-2xl opacity-20"
+            style={{
+              background:
+                'linear-gradient(180deg, transparent 0%, rgba(186, 230, 253, 0.2) 25%, rgba(224, 242, 254, 0.5) 50%, rgba(186, 230, 253, 0.2) 75%, transparent 100%)',
+              animation: 'frostMistWave 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+            }}
+          />
+
+          {/* Gentle ambient cold glow */}
+          <div
+            className="absolute inset-0 bg-cyan-300/5 pointer-events-none"
+            style={{
+              animation: 'frostMistBreathe 2.2s ease-out forwards',
+            }}
+          />
+        </div>
+      )}
     </>
   );
 }

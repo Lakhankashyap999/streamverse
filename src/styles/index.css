@@ -617,3 +617,102 @@ html.winter-mode header::after {
   transform: translateZ(0);
 }
 
+/* ───────────────────────── Cinematic Progressive Freeze Transitions ───────────────────────── */
+html.winter-transitioning,
+html.winter-transitioning body,
+html.winter-transitioning header,
+html.winter-transitioning .panel,
+html.winter-transitioning .card-tactical,
+html.winter-transitioning .glass,
+html.winter-transitioning [class*="border-line"],
+html.winter-transitioning h1,
+html.winter-transitioning h2,
+html.winter-transitioning h3,
+html.winter-transitioning h4,
+html.winter-transitioning h5,
+html.winter-transitioning h6,
+html.winter-transitioning p,
+html.winter-transitioning span,
+html.winter-transitioning dd,
+html.winter-transitioning dt {
+  transition:
+    background-color 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+    color 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+    text-shadow 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 1.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* Staggered Top-to-Bottom Freeze Wave Delay (Header -> Hero -> Stats -> Body) */
+html.winter-transitioning header {
+  transition-delay: 0.05s !important;
+}
+html.winter-transitioning section:nth-of-type(1),
+html.winter-transitioning main > *:nth-child(1) {
+  transition-delay: 0.25s !important;
+}
+html.winter-transitioning section:nth-of-type(2),
+html.winter-transitioning main > *:nth-child(2) {
+  transition-delay: 0.5s !important;
+}
+html.winter-transitioning section:nth-of-type(3),
+html.winter-transitioning main > *:nth-child(3) {
+  transition-delay: 0.75s !important;
+}
+html.winter-transitioning section:nth-of-type(n+4),
+html.winter-transitioning main > *:nth-child(n+4) {
+  transition-delay: 1.0s !important;
+}
+
+/* Hanging icicles gradual growth during freeze wave */
+html.winter-transitioning .winter-icicle-container::after,
+html.winter-transitioning header::after {
+  animation: icicleGradualFreeze 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes icicleGradualFreeze {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.2);
+  }
+  45% {
+    opacity: 0.45;
+    transform: translateY(-3px) scaleY(0.6);
+  }
+  100% {
+    opacity: 0.95;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* Ultra-soft diffused mist wave (zero sharp lines or corners, gentle 20% opacity) */
+@keyframes frostMistWave {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.22;
+  }
+  80% {
+    opacity: 0.22;
+  }
+  100% {
+    transform: translateY(165vh);
+    opacity: 0;
+  }
+}
+
+@keyframes frostMistBreathe {
+  0% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.07;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
