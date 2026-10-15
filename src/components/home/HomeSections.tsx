@@ -94,37 +94,25 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           <motion.h1
             {...item(1)}
             id="hero-title"
-            className="relative mt-3 sm:mt-6 mb-2 sm:mb-3 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] break-words text-white inline-block max-w-full transition-all duration-700 select-none"
+            className="relative mt-3 sm:mt-6 mb-3 sm:mb-4 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight break-words text-white inline-block max-w-full transition-all duration-700 select-none"
             style={{ color: '#ffffff' }}
           >
-            {/* Top Organic Snow Cap in Winter Mode */}
-            {isWinterMode && (
-              <div
-                className="absolute -top-3.5 sm:-top-5 left-0 right-0 h-3.5 sm:h-5 bg-repeat-x pointer-events-none z-20"
-                style={{
-                  backgroundImage: 'url(/images/art/snow-cap-opt.png)',
-                  backgroundSize: 'auto 100%',
-                }}
-                aria-hidden="true"
-              />
-            )}
-
             <span className={cn("inline-block", isWinterMode && "winter-ice-heading")}>
-              Welcome to
+              Welcome to{" "}
             </span>
             <span
               className={cn(
-                "mt-1 block font-script text-[1.15em] italic leading-[1.1] pb-1 pr-2 inline-block max-w-full transition-all duration-700",
+                "font-script text-[1.15em] italic leading-tight inline-block max-w-full transition-all duration-700",
                 isWinterMode ? "winter-ice-heading" : "text-gradient"
               )}
             >
               My World
             </span>
 
-            {/* Bottom Hanging Crystalline Icicles in Winter Mode */}
+            {/* Bottom Hanging Crystalline Icicles attached directly to text */}
             {isWinterMode && (
               <div
-                className="absolute -bottom-3 sm:-bottom-4.5 left-0 right-0 h-3.5 sm:h-5 bg-repeat-x pointer-events-none z-20"
+                className="absolute -bottom-1 sm:-bottom-1.5 left-0 right-0 h-4 sm:h-5 bg-repeat-x pointer-events-none z-20"
                 style={{
                   backgroundImage: 'url(/images/art/hanging-icicles-opt.png)',
                   backgroundSize: 'auto 100%',
@@ -133,16 +121,6 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               />
             )}
           </motion.h1>
-
-          {/* Handcrafted natural organic ice line with delicate crystal drips */}
-          <div className="winter-ice-accent" aria-hidden="true">
-            <svg className="w-56 sm:w-72 h-2.5 overflow-visible" viewBox="0 0 240 10" fill="none">
-              <path d="M0 2 Q30 0 60 2 Q90 0 120 3 Q150 1 180 2 Q210 0 240 2" stroke="url(#iceLineGrad)" strokeWidth="1.5" strokeLinecap="round" />
-              <polygon points="30,2 33,8 36,2" fill="url(#iceDripGrad)" />
-              <polygon points="90,2 93,10 96,2" fill="url(#iceDripGrad)" />
-              <polygon points="160,2 163,8 166,2" fill="url(#iceDripGrad)" />
-            </svg>
-          </div>
 
           <motion.p
             {...item(2)}
