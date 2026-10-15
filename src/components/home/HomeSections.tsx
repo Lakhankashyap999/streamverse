@@ -91,57 +91,48 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             </div>
           </motion.div>
 
-          {isWinterMode ? (
-            <motion.div
-              key="winter-hero-title"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="relative mt-3 sm:mt-6 mb-3 sm:mb-5 inline-block max-w-full"
-            >
-              {/* Top Organic Snow Cap */}
+          <motion.h1
+            {...item(1)}
+            id="hero-title"
+            className="relative mt-3 sm:mt-6 mb-2 sm:mb-3 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] break-words text-white inline-block max-w-full transition-all duration-700 select-none"
+            style={{ color: '#ffffff' }}
+          >
+            {/* Top Organic Snow Cap in Winter Mode */}
+            {isWinterMode && (
               <div
-                className="absolute -top-3 sm:-top-4.5 left-0 right-0 h-3.5 sm:h-5 bg-repeat-x pointer-events-none z-20"
+                className="absolute -top-3.5 sm:-top-5 left-0 right-0 h-3.5 sm:h-5 bg-repeat-x pointer-events-none z-20"
                 style={{
                   backgroundImage: 'url(/images/art/snow-cap-opt.png)',
                   backgroundSize: 'auto 100%',
                 }}
                 aria-hidden="true"
               />
+            )}
 
-              {/* Main Heading in Glacial Ice Typography */}
-              <h1
-                id="hero-title"
-                className="winter-ice-heading font-gaming font-black text-2xl xs:text-3xl sm:text-5xl lg:text-6xl tracking-wide sm:tracking-wider uppercase leading-tight relative z-10 select-none drop-shadow-[0_2px_4px_rgba(2,6,23,0.95)]"
-              >
-                <span className="block sm:inline">KHUSHI YT // </span>
-                <span className="block sm:inline">SUBZERO CONQUEROR</span>
-              </h1>
+            <span className={cn("inline-block", isWinterMode && "winter-ice-heading")}>
+              Welcome to
+            </span>
+            <span
+              className={cn(
+                "mt-1 block font-script text-[1.15em] italic leading-[1.1] pb-1 pr-2 inline-block max-w-full transition-all duration-700",
+                isWinterMode ? "winter-ice-heading" : "text-gradient"
+              )}
+            >
+              My World
+            </span>
 
-              {/* Bottom Hanging Crystalline Icicles */}
+            {/* Bottom Hanging Crystalline Icicles in Winter Mode */}
+            {isWinterMode && (
               <div
-                className="absolute -bottom-3 sm:-bottom-4 left-0 right-0 h-3.5 sm:h-5 bg-repeat-x pointer-events-none z-20"
+                className="absolute -bottom-3 sm:-bottom-4.5 left-0 right-0 h-3.5 sm:h-5 bg-repeat-x pointer-events-none z-20"
                 style={{
                   backgroundImage: 'url(/images/art/hanging-icicles-opt.png)',
                   backgroundSize: 'auto 100%',
                 }}
                 aria-hidden="true"
               />
-            </motion.div>
-          ) : (
-            <motion.h1
-              key="normal-hero-title"
-              {...item(1)}
-              id="hero-title"
-              className="mt-3 sm:mt-6 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] break-words text-white transition-all duration-700"
-              style={{ color: '#ffffff' }}
-            >
-              Welcome to
-              <span className="mt-1 block font-script text-[1.15em] italic leading-[1.1] text-gradient pb-1 pr-2 inline-block max-w-full">
-                My World
-              </span>
-            </motion.h1>
-          )}
+            )}
+          </motion.h1>
 
           {/* Handcrafted natural organic ice line with delicate crystal drips */}
           <div className="winter-ice-accent" aria-hidden="true">

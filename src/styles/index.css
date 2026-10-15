@@ -479,19 +479,20 @@ html.winter-mode .neon-light-aura {
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9) !important;
+  paint-order: stroke fill;
   text-shadow: 0 0 14px rgba(56, 189, 248, 0.9), 0 3px 6px rgba(2, 6, 23, 0.95) !important;
   filter: none !important;
 }
 
-html.winter-mode h1:not(.winter-ice-heading),
-html.winter-mode h2:not(.winter-ice-heading),
-html.winter-mode h3:not(.winter-ice-heading),
-html.winter-mode h4:not(.winter-ice-heading),
-html.winter-mode h5:not(.winter-ice-heading),
-html.winter-mode h6:not(.winter-ice-heading),
-html.winter-mode .font-display:not(.winter-ice-heading),
-html.winter-mode .font-gaming:not(.winter-ice-heading),
-html.winter-mode .font-esports:not(.winter-ice-heading) {
+html.winter-mode h1:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
+html.winter-mode h2:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
+html.winter-mode h3:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
+html.winter-mode h4:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
+html.winter-mode h5:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
+html.winter-mode h6:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
+html.winter-mode .font-display:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
+html.winter-mode .font-gaming:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
+html.winter-mode .font-esports:not(.winter-ice-heading):not(:has(.winter-ice-heading)) {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   text-shadow: 0 2px 4px rgba(2, 6, 23, 0.9) !important;
