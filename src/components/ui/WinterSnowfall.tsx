@@ -68,27 +68,9 @@ export function WinterSnowfall() {
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
-    // Scroll reactivity: prevents snowfall from looking frozen or static while scrolling
-    let scrollVel = 0;
-    let lastScrollY = window.scrollY;
-    let lastScrollTime = performance.now();
-
-    const handleScroll = () => {
-      const now = performance.now();
-      const dt = Math.max(1, now - lastScrollTime);
-      const dy = window.scrollY - lastScrollY;
-      lastScrollY = window.scrollY;
-      lastScrollTime = now;
-
-      // Positive dy = user scrolling down (page moves up)
-      const impulse = (dy / dt) * 0.4;
-      scrollVel = Math.max(-6, Math.min(6, scrollVel + impulse));
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
+    // 28 particles on mobile, 48 on desktop (ultra-lightweight, 120 FPS buttery smooth)
     const isMobile = window.innerWidth < 768;
-    // 38 particles on mobile, 65 on desktop for a rich snowy atmosphere
-    const count = isMobile ? 38 : 65;
+    const count = isMobile ? 28 : 48;
     const flakes: Flake[] = [];
 
     for (let i = 0; i < count; i++) {
@@ -96,10 +78,10 @@ export function WinterSnowfall() {
       const isBackground = !isForeground && Math.random() < 0.55;
 
       const r = isForeground
-        ? Math.random() * 1.3 + 2.2 // 2.2px to 3.5px
+        ? Math.random() * 1.3 + 2.0 // 2.0px to 3.3px
         : isBackground
         ? Math.random() * 0.6 + 0.8 // 0.8px to 1.4px
-        : Math.random() * 0.8 + 1.4; // 1.4px to 2.2px
+        : Math.random() * 0.8 + 1.3; // 1.3px to 2.1px
 
       const layer: 0 | 1 = isBackground ? 0 : 1;
 
@@ -107,9 +89,9 @@ export function WinterSnowfall() {
         x: Math.random() * (width + 120) - 60,
         y: Math.random() * height,
         r,
-        speedY: isForeground ? Math.random() * 0.8 + 1.2 : Math.random() * 0.5 + 0.7,
-        speedX: Math.random() * 0.4 - 0.2,
-        windWeight: isForeground ? 1.3 : isBackground ? 0.7 : 1.0,
+        speedY: isForeground ? Math.random() * 0.7 + 1.1 : Math.random() * 0.4 + 0.65,
+        speedX: Math.random() * 0.3 - 0.15,
+        windWeight: isForeground ? 1.25 : isBackground ? 0.7 : 1.0,
         angle: Math.random() * Math.PI * 2,
         w: Math.random() * 0.02 + 0.008,
         layer,
@@ -119,13 +101,10 @@ export function WinterSnowfall() {
     let lastTime = performance.now();
 
     const render = (time: number) => {
-      // Real elapsed time calculation - never throttles during scroll
+      // Real elapsed time calculation - perfectly smooth continuous frame rate
       const elapsed = time - lastTime;
       lastTime = time;
-      const delta = Math.min(Math.max(elapsed / 16.67, 0.2), 3.5);
-
-      // Smooth decay for scroll velocity
-      scrollVel *= 0.93;
+      const delta = Math.min(Math.max(elapsed / 16.67, 0.2), 3.0);
 
       // ── Wind Gust Cycle ("Aandhi" vs "Halka" Snowfall) ──
       // Total periodic cycle ~13 seconds
@@ -137,8 +116,8 @@ export function WinterSnowfall() {
       const gust = Math.pow(rawGust, 2.8); // Natural gust surge
 
       // Horizontal wind + slight downward surge during gusts
-      const windX = 0.35 + gust * 3.6 + Math.sin(t * 1.8) * 0.25;
-      const windY = gust * 0.65;
+      const windX = 0.35 + gust * 3.4 + Math.sin(t * 1.8) * 0.25;
+      const windY = gust * 0.6;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -151,11 +130,11 @@ export function WinterSnowfall() {
         ctx.moveTo(f.x + f.r, f.y);
         ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
 
-        // Physics update
+        // Physics update (pure atmospheric physics, independent of scroll ticks)
         f.angle += f.w * delta;
         const sway = Math.sin(f.angle) * 0.35;
-        f.x += (f.speedX + sway + windX * f.windWeight + scrollVel * 0.12) * delta;
-        f.y += (f.speedY + windY + scrollVel * 0.2) * delta;
+        f.x += (f.speedX + sway + windX * f.windWeight) * delta;
+        f.y += (f.speedY + windY) * delta;
 
         // Boundary wrapping
         if (f.y > height + 15) {
@@ -181,8 +160,8 @@ export function WinterSnowfall() {
         // Physics update
         f.angle += f.w * delta;
         const sway = Math.sin(f.angle) * 0.45;
-        f.x += (f.speedX + sway + windX * f.windWeight + scrollVel * 0.16) * delta;
-        f.y += (f.speedY + windY + scrollVel * 0.28) * delta;
+        f.x += (f.speedX + sway + windX * f.windWeight) * delta;
+        f.y += (f.speedY + windY) * delta;
 
         // Boundary wrapping
         if (f.y > height + 15) {
@@ -203,7 +182,6 @@ export function WinterSnowfall() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(animId);
     };
   }, [isWinterMode]);
