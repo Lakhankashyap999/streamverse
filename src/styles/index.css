@@ -442,11 +442,72 @@
 /* ───────────────────────── Realistic Winter / Forester Mode (Look 1 - Super Smooth 120 FPS) ───────────────────────── */
 html.winter-mode body {
   background-color: #0b1e36 !important;
+  background-image: none !important;
+}
+
+/* Static glacier glow on its own fixed layer: composited once, never repainted on scroll
+   (replaces background-attachment: fixed, which repaints the whole page every scroll frame) */
+html.winter-mode::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background-image:
     radial-gradient(75rem 45rem at 50% -5%, rgba(125, 211, 252, 0.22), transparent 70%),
     radial-gradient(60rem 40rem at 5% 40%, rgba(56, 189, 248, 0.14), transparent 60%),
-    radial-gradient(60rem 40rem at 95% 70%, rgba(14, 165, 233, 0.14), transparent 60%) !important;
-  background-attachment: fixed !important;
+    radial-gradient(60rem 40rem at 95% 70%, rgba(14, 165, 233, 0.14), transparent 60%);
+  transform: translateZ(0);
+}
+
+/* Decorative infinite animations / blur that only cost frames in winter mode */
+html.winter-mode .sakura-petal,
+html.winter-mode .laser-scanner {
+  display: none !important;
+}
+html.winter-mode [class*="backdrop-blur"],
+html.winter-mode .glass {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Compositor-only snowfall (see WinterSnowfall.tsx) */
+.winter-snow-root {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+  transition: opacity 1s ease-out;
+}
+.winter-snow-gust {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  animation: winterGust 13s ease-in-out infinite;
+}
+.winter-snow-fall {
+  position: absolute;
+  left: -400px;
+  right: -400px;
+  bottom: 0;
+  background-repeat: repeat;
+  will-change: transform;
+  animation: winterFall linear infinite;
+}
+@keyframes winterFall {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, var(--tile), 0); }
+}
+/* Calm "halka" snow most of the time, with a periodic heavy "aandhi" gust */
+@keyframes winterGust {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  18% { transform: translate3d(calc(var(--gust) * 30px), 0, 0); }
+  40% { transform: translate3d(calc(var(--gust) * -10px), 0, 0); }
+  62% { transform: translate3d(0, 0, 0); }
+  74% { transform: translate3d(calc(var(--gust) * 260px), 0, 0); }
+  86% { transform: translate3d(calc(var(--gust) * 90px), 0, 0); }
 }
 
 /* Crisp Viewport Frost Border (Zero GPU compositor invalidation) */
@@ -484,15 +545,15 @@ html.winter-mode .neon-light-aura {
   filter: none !important;
 }
 
-html.winter-mode h1:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
-html.winter-mode h2:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
-html.winter-mode h3:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
-html.winter-mode h4:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
-html.winter-mode h5:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
-html.winter-mode h6:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
-html.winter-mode .font-display:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
-html.winter-mode .font-gaming:not(.winter-ice-heading):not(:has(.winter-ice-heading)),
-html.winter-mode .font-esports:not(.winter-ice-heading):not(:has(.winter-ice-heading)) {
+html.winter-mode h1:not(.winter-ice-heading),
+html.winter-mode h2:not(.winter-ice-heading),
+html.winter-mode h3:not(.winter-ice-heading),
+html.winter-mode h4:not(.winter-ice-heading),
+html.winter-mode h5:not(.winter-ice-heading),
+html.winter-mode h6:not(.winter-ice-heading),
+html.winter-mode .font-display:not(.winter-ice-heading),
+html.winter-mode .font-gaming:not(.winter-ice-heading),
+html.winter-mode .font-esports:not(.winter-ice-heading) {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   text-shadow: 0 2px 4px rgba(2, 6, 23, 0.9) !important;
@@ -598,7 +659,6 @@ html.winter-mode .winter-icicle-container::after {
   pointer-events: none;
   z-index: 25;
   opacity: 0.95;
-  transform: translateZ(0);
 }
 
 html.winter-mode .winter-icicle-container:has([class*="rounded-3xl"])::after,
@@ -627,7 +687,6 @@ html.winter-mode header::after {
   background-repeat: repeat-x;
   pointer-events: none;
   z-index: 60;
-  transform: translateZ(0);
 }
 
 /* ───────────────────────── Cinematic Progressive Freeze Transitions (GPU Composited, Zero Lag) ───────────────────────── */

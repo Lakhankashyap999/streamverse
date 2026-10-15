@@ -1,218 +1,116 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useWinterMode } from '../../context/WinterModeContext';
 
-interface Flake {
-  x: number;
-  y: number;
-  r: number;
-  speedY: number;
-  speedX: number;
-  windWeight: number;
-  angle: number;
-  w: number;
-  layer: 0 | 1;
+interface SnowLayerSpec {
+  tile: number;
+  flakes: number;
+  minR: number;
+  maxR: number;
+  alpha: number;
+  fall: number; // seconds for one full tile of fall
+  gust: number; // wind multiplier for this layer
+}
+
+/**
+ * Builds one seamless, wrap-around snow tile once (a single PNG data URL).
+ * After that the snow is animated purely with CSS transforms, which run on the
+ * compositor thread - so it keeps falling smoothly even while the page scrolls
+ * (the old canvas version ran on the main thread and froze during scroll).
+ */
+function buildTile(spec: SnowLayerSpec): string {
+  const c = document.createElement('canvas');
+  c.width = spec.tile;
+  c.height = spec.tile;
+  const ctx = c.getContext('2d');
+  if (!ctx) return '';
+  ctx.fillStyle = `rgba(240, 249, 255, ${spec.alpha})`;
+  ctx.shadowColor = 'rgba(186, 230, 253, 0.9)';
+  ctx.shadowBlur = spec.maxR * 1.6;
+  for (let i = 0; i < spec.flakes; i++) {
+    const x = Math.random() * spec.tile;
+    const y = Math.random() * spec.tile;
+    const r = spec.minR + Math.random() * (spec.maxR - spec.minR);
+    // Draw wrapped copies so flakes crossing an edge tile seamlessly
+    for (const ox of [-spec.tile, 0, spec.tile]) {
+      for (const oy of [-spec.tile, 0, spec.tile]) {
+        const px = x + ox;
+        const py = y + oy;
+        if (px < -r * 4 || px > spec.tile + r * 4 || py < -r * 4 || py > spec.tile + r * 4) continue;
+        ctx.beginPath();
+        ctx.arc(px, py, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+  return c.toDataURL('image/png');
 }
 
 export function WinterSnowfall() {
   const { isWinterMode, isFreezing } = useWinterMode();
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [snowOpacity, setSnowOpacity] = useState(0);
+  const [layers, setLayers] = useState<{ spec: SnowLayerSpec; url: string }[]>([]);
 
-  // Fade snowfall in gently over 1.2s when winter mode turns on
+  // Fade snowfall in gently over 1s when winter mode turns on
   useEffect(() => {
     if (isWinterMode) {
       const timer = setTimeout(() => setSnowOpacity(1), 50);
       return () => clearTimeout(timer);
-    } else {
-      setSnowOpacity(0);
     }
+    setSnowOpacity(0);
   }, [isWinterMode]);
 
+  // Generate the three depth layers once (cheap, ~3 tiny canvases)
   useEffect(() => {
-    if (!isWinterMode) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d', { alpha: true });
-    if (!ctx) return;
-
-    let animId: number;
-
-    // Keep DPR optimized (max 1.25) for ultra-low GPU memory bandwidth and 120 FPS buttery scrolling
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
-
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-
-    const setCanvasDimensions = () => {
-      if (!canvas) return;
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-    };
-
-    setCanvasDimensions();
-
-    // Prevent resize re-allocations during mobile scroll
-    let lastWidth = window.innerWidth;
-    const handleResize = () => {
-      if (Math.abs(window.innerWidth - lastWidth) > 30) {
-        lastWidth = window.innerWidth;
-        setCanvasDimensions();
-      }
-    };
-    window.addEventListener('resize', handleResize, { passive: true });
-
-    // 28 particles on mobile, 48 on desktop (ultra-lightweight, 120 FPS buttery smooth)
+    if (!isWinterMode || layers.length) return;
     const isMobile = window.innerWidth < 768;
-    const count = isMobile ? 28 : 48;
-    const flakes: Flake[] = [];
-
-    for (let i = 0; i < count; i++) {
-      const isForeground = Math.random() < 0.35;
-      const isBackground = !isForeground && Math.random() < 0.55;
-
-      const r = isForeground
-        ? Math.random() * 1.3 + 2.0 // 2.0px to 3.3px
-        : isBackground
-        ? Math.random() * 0.6 + 0.8 // 0.8px to 1.4px
-        : Math.random() * 0.8 + 1.3; // 1.3px to 2.1px
-
-      const layer: 0 | 1 = isBackground ? 0 : 1;
-
-      flakes.push({
-        x: Math.random() * (width + 120) - 60,
-        y: Math.random() * height,
-        r,
-        speedY: isForeground ? Math.random() * 0.7 + 1.1 : Math.random() * 0.4 + 0.65,
-        speedX: Math.random() * 0.3 - 0.15,
-        windWeight: isForeground ? 1.25 : isBackground ? 0.7 : 1.0,
-        angle: Math.random() * Math.PI * 2,
-        w: Math.random() * 0.02 + 0.008,
-        layer,
-      });
-    }
-
-    let lastTime = performance.now();
-
-    const render = (time: number) => {
-      // Real elapsed time calculation - perfectly smooth continuous frame rate
-      const elapsed = time - lastTime;
-      lastTime = time;
-      const delta = Math.min(Math.max(elapsed / 16.67, 0.2), 3.0);
-
-      // ── Wind Gust Cycle ("Aandhi" vs "Halka" Snowfall) ──
-      // Total periodic cycle ~13 seconds
-      const t = time * 0.001; // in seconds
-      const cyclePhase = (t / 13) * Math.PI * 2;
-
-      // Gust intensity (0.0 = calm/halka, 1.0 = heavy storm gust/aandhi)
-      const rawGust = Math.max(0, Math.sin(cyclePhase));
-      const gust = Math.pow(rawGust, 2.8); // Natural gust surge
-
-      // Horizontal wind + slight downward surge during gusts
-      const windX = 0.35 + gust * 3.4 + Math.sin(t * 1.8) * 0.25;
-      const windY = gust * 0.6;
-
-      ctx.clearRect(0, 0, width, height);
-
-      // ── Pass 1: Background Flurry (Soft, semi-transparent) ──
-      ctx.fillStyle = 'rgba(186, 230, 253, 0.45)';
-      ctx.beginPath();
-      for (let i = 0; i < count; i++) {
-        const f = flakes[i];
-        if (f.layer !== 0) continue;
-        ctx.moveTo(f.x + f.r, f.y);
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-
-        // Physics update (pure atmospheric physics, independent of scroll ticks)
-        f.angle += f.w * delta;
-        const sway = Math.sin(f.angle) * 0.35;
-        f.x += (f.speedX + sway + windX * f.windWeight) * delta;
-        f.y += (f.speedY + windY) * delta;
-
-        // Boundary wrapping
-        if (f.y > height + 15) {
-          f.y = -15;
-          f.x = Math.random() * (width + 60) - 30;
-        } else if (f.y < -20) {
-          f.y = height + 15;
-        }
-        if (f.x > width + 25) f.x = -25;
-        if (f.x < -25) f.x = width + 25;
-      }
-      ctx.fill();
-
-      // ── Pass 2: Midground & Foreground Snow (Crisp White with Icy Luminance) ──
-      ctx.fillStyle = 'rgba(240, 249, 255, 0.9)';
-      ctx.beginPath();
-      for (let i = 0; i < count; i++) {
-        const f = flakes[i];
-        if (f.layer !== 1) continue;
-        ctx.moveTo(f.x + f.r, f.y);
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-
-        // Physics update
-        f.angle += f.w * delta;
-        const sway = Math.sin(f.angle) * 0.45;
-        f.x += (f.speedX + sway + windX * f.windWeight) * delta;
-        f.y += (f.speedY + windY) * delta;
-
-        // Boundary wrapping
-        if (f.y > height + 15) {
-          f.y = -15;
-          f.x = Math.random() * (width + 80) - 40;
-        } else if (f.y < -20) {
-          f.y = height + 15;
-        }
-        if (f.x > width + 30) f.x = -30;
-        if (f.x < -30) f.x = width + 30;
-      }
-      ctx.fill();
-
-      animId = requestAnimationFrame(render);
-    };
-
-    animId = requestAnimationFrame(render);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animId);
-    };
-  }, [isWinterMode]);
+    const specs: SnowLayerSpec[] = [
+      // far: tiny, slow, soft
+      { tile: 480, flakes: isMobile ? 10 : 16, minR: 0.8, maxR: 1.4, alpha: 0.5, fall: 22, gust: 0.6 },
+      // mid
+      { tile: 560, flakes: isMobile ? 8 : 12, minR: 1.3, maxR: 2.1, alpha: 0.8, fall: 15, gust: 1 },
+      // near: bigger, faster, catches the gusts the most
+      { tile: 640, flakes: isMobile ? 5 : 8, minR: 2.0, maxR: 3.2, alpha: 0.95, fall: 10, gust: 1.5 },
+    ];
+    setLayers(specs.map((spec) => ({ spec, url: buildTile(spec) })));
+  }, [isWinterMode, layers.length]);
 
   if (!isWinterMode && snowOpacity === 0 && !isFreezing) return null;
 
   return (
     <>
-      {/* 1. Delicate & Dynamic Blizzard Snowfall Canvas (Hardware accelerated, 120FPS smooth, gentle fade-in) */}
-      <canvas
-        ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-[45] w-full h-full transition-opacity duration-1000 ease-out"
+      {/* 1. Compositor-only snowfall (CSS transform animation, zero main-thread work while scrolling) */}
+      <div
+        className="winter-snow-root"
         style={{ opacity: snowOpacity }}
         aria-hidden="true"
-      />
+      >
+        {layers.map(({ spec, url }, i) => (
+          <div
+            key={i}
+            className="winter-snow-gust"
+            style={{ ['--gust' as string]: spec.gust }}
+          >
+            <div
+              className="winter-snow-fall"
+              style={{
+                backgroundImage: `url(${url})`,
+                backgroundSize: `${spec.tile}px ${spec.tile}px`,
+                top: `-${spec.tile}px`,
+                ['--tile' as string]: `${spec.tile}px`,
+                animationDuration: `${spec.fall}s`,
+              }}
+            />
+          </div>
+        ))}
+      </div>
 
       {/* 2. Tiny, subtle snow accumulation strictly in the extreme bottom corners */}
       <div
         className="fixed bottom-0 left-0 z-[46] pointer-events-none select-none transition-opacity duration-1000 ease-out"
         style={{ opacity: snowOpacity * 0.75 }}
       >
-        <svg
-          className="w-20 sm:w-28 h-3.5 sm:h-4"
-          viewBox="0 0 120 20"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M0 20 L0 6 Q15 4 30 9 Q50 3 75 11 Q100 8 120 20 Z"
-            fill="url(#subtleSnowL)"
-          />
+        <svg className="w-20 sm:w-28 h-3.5 sm:h-4" viewBox="0 0 120 20" fill="none" aria-hidden="true">
+          <path d="M0 20 L0 6 Q15 4 30 9 Q50 3 75 11 Q100 8 120 20 Z" fill="url(#subtleSnowL)" />
           <defs>
             <linearGradient id="subtleSnowL" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
@@ -226,32 +124,14 @@ export function WinterSnowfall() {
         className="fixed bottom-0 right-0 z-[46] pointer-events-none select-none transition-opacity duration-1000 ease-out"
         style={{ opacity: snowOpacity * 0.75 }}
       >
-        <svg
-          className="w-20 sm:w-28 h-3.5 sm:h-4 -scale-x-100"
-          viewBox="0 0 120 20"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M0 20 L0 6 Q15 4 30 9 Q50 3 75 11 Q100 8 120 20 Z"
-            fill="url(#subtleSnowL)"
-          />
+        <svg className="w-20 sm:w-28 h-3.5 sm:h-4 -scale-x-100" viewBox="0 0 120 20" fill="none" aria-hidden="true">
+          <path d="M0 20 L0 6 Q15 4 30 9 Q50 3 75 11 Q100 8 120 20 Z" fill="url(#subtleSnowL)" />
         </svg>
       </div>
 
       {/* 3. Soft, Diffused Top-to-Bottom Frost Wave (Zero Sharp Edges, Pure Mist) */}
       {isFreezing && (
-        <div
-          className="fixed inset-0 pointer-events-none z-[50] overflow-hidden"
-          aria-hidden="true"
-        >
-          {/* 
-            Ultra-Feathered Mist Wave:
-            - 60vh tall band
-            - Transparent on both top and bottom (zero sharp lines or corners)
-            - Soft 16% opacity, hardware-accelerated without blur filter penalty
-            - Slowly drifts down from top to bottom over 3.0s
-          */}
+        <div className="fixed inset-0 pointer-events-none z-[50] overflow-hidden" aria-hidden="true">
           <div
             className="absolute inset-x-0 w-full h-[60vh] -top-[60vh] pointer-events-none opacity-15"
             style={{
@@ -261,13 +141,9 @@ export function WinterSnowfall() {
               transform: 'translateZ(0)',
             }}
           />
-
-          {/* Gentle ambient cold glow */}
           <div
             className="absolute inset-0 bg-cyan-300/5 pointer-events-none"
-            style={{
-              animation: 'frostMistBreathe 2.8s ease-out forwards',
-            }}
+            style={{ animation: 'frostMistBreathe 2.8s ease-out forwards' }}
           />
         </div>
       )}

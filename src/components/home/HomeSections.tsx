@@ -71,7 +71,7 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
         </>
       )}
 
-      <CompassStrip className="absolute inset-x-0 top-14 hidden md:block lg:top-16" />
+      <CompassStrip className="absolute inset-x-0 top-[4.5rem] z-10 hidden md:block lg:top-[5rem]" />
 
       <div className="container-x grid items-center gap-6 sm:gap-10 pt-1 sm:pt-3 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:pt-8">
         {/* left - Creator Intro at Top on Mobile and Desktop */}
@@ -197,23 +197,6 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <ZoneRing className="-inset-10 hidden animate-[zone-spin_60s_linear_infinite] sm:block" />
-
-          {/* Floating PUBG Airdrop Crate with rising Red Smoke */}
-          <div className="absolute -top-12 -right-2 z-20 hidden sm:flex flex-col items-center pointer-events-none select-none">
-            {/* Rising Red Smoke Particles */}
-            <div className="relative h-14 w-12" aria-hidden="true">
-              <span className="airdrop-smoke absolute bottom-0 left-2 size-6 rounded-full bg-red-500/80 blur-xs" />
-              <span className="airdrop-smoke absolute bottom-1 left-4 size-7 rounded-full bg-rose-600/70 blur-sm" />
-              <span className="airdrop-smoke absolute bottom-2 left-3 size-5 rounded-full bg-amber-500/60 blur-xs" />
-            </div>
-            {/* Crate Box */}
-            <div className="relative w-14 h-12 rounded-sm border-2 border-red-500/80 bg-red-700 shadow-[0_0_25px_rgba(239,68,68,0.5)]">
-              <div className="h-3.5 w-full bg-sky-600 border-b border-sky-400" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-mono text-[8px] font-black tracking-widest text-white drop-shadow">AIRDROP</span>
-              </div>
-            </div>
-          </div>
 
           {/* Main Esports Frame */}
           <div className="gradient-border hud-corners clip-angle relative overflow-hidden rounded-[4px] bg-[#12162a] shadow-[0_40px_120px_-30px_rgba(192,38,211,0.5)]">
