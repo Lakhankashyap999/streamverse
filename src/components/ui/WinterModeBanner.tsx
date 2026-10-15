@@ -2,7 +2,7 @@ import { Sparkles, Sun } from 'lucide-react';
 import { useWinterMode } from '../../context/WinterModeContext';
 
 export function WinterModeBanner() {
-  const { isWinterMode, isTransitioning, toggleWinterMode } = useWinterMode();
+  const { isWinterMode, isTransitioning, isFreezing, toggleWinterMode } = useWinterMode();
 
   return (
     <div className="relative z-30 pt-[70px] sm:pt-[78px] pb-1 sm:pb-2 px-3 sm:px-4 max-w-7xl mx-auto flex items-center justify-center">
@@ -28,7 +28,7 @@ export function WinterModeBanner() {
               <Sun className={`size-4 sm:size-5 text-amber-500 shrink-0 ${isTransitioning ? 'animate-spin' : 'animate-spin-slow'}`} />
               <span className="font-extrabold text-slate-950 drop-shadow-sm text-xs xs:text-sm sm:text-base whitespace-nowrap">
                 {isTransitioning ? (
-                  <span>Freezing Website...</span>
+                  <span>{isFreezing ? 'Freezing Website...' : 'Snowfall Starting...'}</span>
                 ) : (
                   <>
                     <span className="sm:hidden">Normal Mode</span>

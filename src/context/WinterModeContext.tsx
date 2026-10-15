@@ -41,40 +41,38 @@ export function WinterModeProvider({ children }: { children: ReactNode }) {
     const nextMode = !isWinterMode;
 
     if (nextMode) {
-      // ── TURNING WINTER MODE ON: Cinematic Progressive Freeze Wave ──
+      // ── TURNING WINTER MODE ON: "Pehle Snowfall, Fir Dheere-Dheere Sab Kuch Jamna" ──
       setIsTransitioning(true);
-      setIsFreezing(true);
 
-      // 1. Snowfall starts gently first (isWinterMode becomes true)
+      // Phase 1: Snowfall starts first peacefully (canvas mounts & fades in)
       setIsWinterMode(true);
 
-      // 2. Add transition class so all element styles interpolate smoothly over 1.4s
-      document.documentElement.classList.add('winter-transitioning');
-
-      // 3. Trigger document-level freeze theme shortly after snowfall begins
+      // Phase 2: After 1.8 seconds of pure snowfall, the cold freeze wave begins
       setTimeout(() => {
+        setIsFreezing(true);
+        document.documentElement.classList.add('winter-transitioning');
         document.documentElement.classList.add('winter-mode');
         try {
           localStorage.setItem('khushi-winter-mode', 'true');
         } catch {}
-      }, 300);
+      }, 1800);
 
-      // 4. End the soft downward mist wave
+      // Phase 3: The freeze wave completes smoothly
       setTimeout(() => {
         setIsFreezing(false);
-      }, 2500);
+      }, 4800);
 
-      // 5. Cleanup transition class for 120 FPS performance during normal browsing
+      // Phase 4: Cleanup transition class so browsing returns to pure 120 FPS
       setTimeout(() => {
         document.documentElement.classList.remove('winter-transitioning');
         setIsTransitioning(false);
-      }, 2800);
+      }, 5000);
     } else {
       // ── TURNING WINTER MODE OFF: Gentle Thaw ──
       setIsTransitioning(true);
       document.documentElement.classList.add('winter-transitioning');
 
-      // Smoothly remove winter mode
+      // Smoothly remove winter mode styles
       document.documentElement.classList.remove('winter-mode');
       try {
         localStorage.setItem('khushi-winter-mode', 'false');
@@ -84,7 +82,7 @@ export function WinterModeProvider({ children }: { children: ReactNode }) {
         setIsWinterMode(false);
         document.documentElement.classList.remove('winter-transitioning');
         setIsTransitioning(false);
-      }, 1200);
+      }, 1500);
     }
   };
 

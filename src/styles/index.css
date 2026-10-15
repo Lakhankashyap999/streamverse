@@ -617,30 +617,30 @@ html.winter-mode header::after {
   transform: translateZ(0);
 }
 
-/* ───────────────────────── Cinematic Progressive Freeze Transitions ───────────────────────── */
-html.winter-transitioning,
-html.winter-transitioning body,
+/* ───────────────────────── Cinematic Progressive Freeze Transitions (GPU Composited, Zero Lag) ───────────────────────── */
+html.winter-transitioning body {
+  transition:
+    background-color 2.0s cubic-bezier(0.16, 1, 0.3, 1),
+    background-image 2.0s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
 html.winter-transitioning header,
 html.winter-transitioning .panel,
 html.winter-transitioning .card-tactical,
-html.winter-transitioning .glass,
-html.winter-transitioning [class*="border-line"],
+html.winter-transitioning .glass {
+  transition:
+    background-color 2.0s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 2.0s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
 html.winter-transitioning h1,
 html.winter-transitioning h2,
 html.winter-transitioning h3,
 html.winter-transitioning h4,
-html.winter-transitioning h5,
-html.winter-transitioning h6,
-html.winter-transitioning p,
-html.winter-transitioning span,
-html.winter-transitioning dd,
-html.winter-transitioning dt {
-  transition:
-    background-color 1.4s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 1.4s cubic-bezier(0.22, 1, 0.36, 1),
-    color 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-    text-shadow 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 1.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+html.winter-transitioning .font-display,
+html.winter-transitioning .font-gaming,
+html.winter-transitioning .font-esports {
+  transition: color 1.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 /* Staggered Top-to-Bottom Freeze Wave Delay (Header -> Hero -> Stats -> Body) */
@@ -649,35 +649,35 @@ html.winter-transitioning header {
 }
 html.winter-transitioning section:nth-of-type(1),
 html.winter-transitioning main > *:nth-child(1) {
-  transition-delay: 0.25s !important;
+  transition-delay: 0.3s !important;
 }
 html.winter-transitioning section:nth-of-type(2),
 html.winter-transitioning main > *:nth-child(2) {
-  transition-delay: 0.5s !important;
+  transition-delay: 0.6s !important;
 }
 html.winter-transitioning section:nth-of-type(3),
 html.winter-transitioning main > *:nth-child(3) {
-  transition-delay: 0.75s !important;
+  transition-delay: 0.9s !important;
 }
 html.winter-transitioning section:nth-of-type(n+4),
 html.winter-transitioning main > *:nth-child(n+4) {
-  transition-delay: 1.0s !important;
+  transition-delay: 1.2s !important;
 }
 
 /* Hanging icicles gradual growth during freeze wave */
 html.winter-transitioning .winter-icicle-container::after,
 html.winter-transitioning header::after {
-  animation: icicleGradualFreeze 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: icicleGradualFreeze 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes icicleGradualFreeze {
   0% {
     opacity: 0;
-    transform: translateY(-8px) scaleY(0.2);
+    transform: translateY(-8px) scaleY(0.1);
   }
-  45% {
+  40% {
     opacity: 0.45;
-    transform: translateY(-3px) scaleY(0.6);
+    transform: translateY(-3px) scaleY(0.5);
   }
   100% {
     opacity: 0.95;
@@ -685,20 +685,20 @@ html.winter-transitioning header::after {
   }
 }
 
-/* Ultra-soft diffused mist wave (zero sharp lines or corners, gentle 20% opacity) */
+/* Ultra-soft diffused mist wave (zero sharp lines or corners, gentle 16% opacity, 3.0s smooth travel) */
 @keyframes frostMistWave {
   0% {
     transform: translateY(0);
     opacity: 0;
   }
-  18% {
-    opacity: 0.22;
+  15% {
+    opacity: 0.16;
   }
-  80% {
-    opacity: 0.22;
+  85% {
+    opacity: 0.16;
   }
   100% {
-    transform: translateY(165vh);
+    transform: translateY(170vh);
     opacity: 0;
   }
 }
@@ -708,7 +708,7 @@ html.winter-transitioning header::after {
     opacity: 0;
   }
   35% {
-    opacity: 0.07;
+    opacity: 0.06;
   }
   100% {
     opacity: 0;

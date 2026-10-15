@@ -269,17 +269,18 @@ export function WinterSnowfall() {
         >
           {/* 
             Ultra-Feathered Mist Wave:
-            - 55vh tall band
+            - 60vh tall band
             - Transparent on both top and bottom (zero sharp lines or corners)
-            - Soft 18% opacity, feathered with blur-2xl
-            - Slowly drifts down from top to bottom over 2.4s
+            - Soft 16% opacity, hardware-accelerated without blur filter penalty
+            - Slowly drifts down from top to bottom over 3.0s
           */}
           <div
-            className="absolute inset-x-0 w-full h-[55vh] -top-[55vh] pointer-events-none blur-2xl opacity-20"
+            className="absolute inset-x-0 w-full h-[60vh] -top-[60vh] pointer-events-none opacity-15"
             style={{
               background:
-                'linear-gradient(180deg, transparent 0%, rgba(186, 230, 253, 0.2) 25%, rgba(224, 242, 254, 0.5) 50%, rgba(186, 230, 253, 0.2) 75%, transparent 100%)',
-              animation: 'frostMistWave 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                'linear-gradient(180deg, transparent 0%, rgba(186, 230, 253, 0.04) 15%, rgba(186, 230, 253, 0.12) 35%, rgba(224, 242, 254, 0.25) 50%, rgba(186, 230, 253, 0.12) 65%, rgba(186, 230, 253, 0.04) 85%, transparent 100%)',
+              animation: 'frostMistWave 3.0s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              transform: 'translateZ(0)',
             }}
           />
 
@@ -287,7 +288,7 @@ export function WinterSnowfall() {
           <div
             className="absolute inset-0 bg-cyan-300/5 pointer-events-none"
             style={{
-              animation: 'frostMistBreathe 2.2s ease-out forwards',
+              animation: 'frostMistBreathe 2.8s ease-out forwards',
             }}
           />
         </div>
