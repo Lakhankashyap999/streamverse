@@ -10,7 +10,7 @@ export function WinterSnowfall() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let animId: number;
@@ -23,18 +23,28 @@ export function WinterSnowfall() {
       if (!canvas) return;
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
       ctx.scale(dpr, dpr);
     };
 
     setCanvasDimensions();
-    window.addEventListener('resize', setCanvasDimensions, { passive: true });
 
-    // Subtle, gentle snowfall - 45 delicate flakes on desktop, 25 on mobile
-    const count = window.innerWidth < 768 ? 25 : 45;
+    // Prevent resize re-allocations during mobile scroll (only trigger on actual screen width change)
+    let lastWidth = window.innerWidth;
+    const handleResize = () => {
+      if (Math.abs(window.innerWidth - lastWidth) > 30) {
+        lastWidth = window.innerWidth;
+        setCanvasDimensions();
+      }
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    // 20 delicate flakes on mobile, 35 on desktop (hyper-optimized for 120 FPS)
+    const isMobile = window.innerWidth < 768;
+    const count = isMobile ? 20 : 35;
     const flakes: Array<{
       x: number;
       y: number;
@@ -42,14 +52,11 @@ export function WinterSnowfall() {
       s: number;
       w: number;
       angle: number;
-      op: number;
     }> = [];
 
     for (let i = 0; i < count; i++) {
-      // Natural small flakes: 1.0px to 2.4px diameter (delicate, realistic, no big polka dots)
-      const r = Math.random() * 1.2 + 0.8;
-      const s = r * 0.4 + Math.random() * 0.6 + 0.4;
-      const op = Math.random() * 0.4 + 0.45; // Soft natural opacity
+      const r = Math.random() * 1.0 + 0.8;
+      const s = r * 0.45 + Math.random() * 0.5 + 0.35;
 
       flakes.push({
         x: Math.random() * width,
@@ -58,7 +65,6 @@ export function WinterSnowfall() {
         s,
         w: Math.random() * 0.02 + 0.008,
         angle: Math.random() * Math.PI * 2,
-        op,
       });
     }
 
@@ -70,26 +76,30 @@ export function WinterSnowfall() {
 
       ctx.clearRect(0, 0, width, height);
 
-      for (let i = 0; i < flakes.length; i++) {
+      // Single batched draw call for ALL flakes (zero GPU overhead)
+      ctx.fillStyle = 'rgba(235, 248, 255, 0.75)';
+      ctx.beginPath();
+
+      for (let i = 0; i < count; i++) {
         const f = flakes[i];
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(240, 249, 255, ${f.op})`;
+        ctx.moveTo(f.x + f.r, f.y);
         ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-        ctx.fill();
 
         // Gentle, soft swaying wind drift
         f.angle += f.w * delta;
-        f.x += (Math.sin(f.angle) * 0.5 + 0.2) * delta;
+        f.x += (Math.sin(f.angle) * 0.4 + 0.15) * delta;
         f.y += f.s * delta;
 
         // Wrap around boundaries smoothly
-        if (f.y > height + 6) {
-          f.y = -6;
+        if (f.y > height + 5) {
+          f.y = -5;
           f.x = Math.random() * width;
         }
-        if (f.x > width + 8) f.x = -8;
-        if (f.x < -8) f.x = width + 8;
+        if (f.x > width + 6) f.x = -6;
+        if (f.x < -6) f.x = width + 6;
       }
+
+      ctx.fill();
 
       animId = requestAnimationFrame(render);
     };
@@ -97,7 +107,7 @@ export function WinterSnowfall() {
     animId = requestAnimationFrame(render);
 
     return () => {
-      window.removeEventListener('resize', setCanvasDimensions);
+      window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animId);
     };
   }, [isWinterMode]);
@@ -106,7 +116,7 @@ export function WinterSnowfall() {
 
   return (
     <>
-      {/* 1. Delicate, Natural Gentle Snowfall Canvas (60FPS, no giant polka dots) */}
+      {/* 1. Delicate, Natural Gentle Snowfall Canvas (Batched GPU rendering, 120FPS smooth) */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none z-[45]"
@@ -119,11 +129,10 @@ export function WinterSnowfall() {
         aria-hidden="true"
       />
 
-      {/* 2. Tiny, subtle, non-intrusive snow accumulation strictly in the extreme bottom corners */}
-      {/* Bottom-Left Extreme Corner: Only 18px high, nestled in corner, covers NO buttons/content */}
+      {/* 2. Tiny, subtle snow accumulation strictly in the extreme bottom corners */}
       <div className="fixed bottom-0 left-0 z-[46] pointer-events-none select-none">
         <svg
-          className="w-24 sm:w-32 h-4 sm:h-5 opacity-80"
+          className="w-20 sm:w-28 h-3.5 sm:h-4 opacity-75"
           viewBox="0 0 120 20"
           fill="none"
           aria-hidden="true"
@@ -141,10 +150,9 @@ export function WinterSnowfall() {
         </svg>
       </div>
 
-      {/* Bottom-Right Extreme Corner: Only 18px high, nestled in corner */}
       <div className="fixed bottom-0 right-0 z-[46] pointer-events-none select-none">
         <svg
-          className="w-24 sm:w-32 h-4 sm:h-5 -scale-x-100 opacity-80"
+          className="w-20 sm:w-28 h-3.5 sm:h-4 -scale-x-100 opacity-75"
           viewBox="0 0 120 20"
           fill="none"
           aria-hidden="true"

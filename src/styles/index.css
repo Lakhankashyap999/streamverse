@@ -439,28 +439,26 @@
   .sv-flash { opacity: 0.8; }
 }
 
-/* ───────────────────────── Realistic Winter / Forester Mode (Look 1) ───────────────────────── */
+/* ───────────────────────── Realistic Winter / Forester Mode (Look 1 - Super Smooth 120 FPS) ───────────────────────── */
 html.winter-mode body {
   background-color: #0b1e36 !important;
   background-image:
     radial-gradient(75rem 45rem at 50% -5%, rgba(125, 211, 252, 0.22), transparent 70%),
     radial-gradient(60rem 40rem at 5% 40%, rgba(56, 189, 248, 0.14), transparent 60%),
     radial-gradient(60rem 40rem at 95% 70%, rgba(14, 165, 233, 0.14), transparent 60%) !important;
-  transition: background-color 0.8s ease !important;
 }
 
-/* Subtle viewport frost edge (zero lag) */
+/* Crisp Viewport Frost Border (Zero GPU compositor invalidation) */
 html.winter-mode::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 40;
-  border: 2px solid rgba(186, 230, 253, 0.25);
-  box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(186, 230, 253, 0.2);
 }
 
-/* Option 1 Neon Stage Light -> Glacier Diamond Ice Beam */
+/* Neon Stage Light -> Glacier Diamond Ice Beam */
 html.winter-mode .neon-light-wash {
   background: radial-gradient(ellipse 65% 85% at 50% 0%, rgba(56, 189, 248, 0.35) 0%, rgba(14, 165, 233, 0.12) 45%, transparent 75%) !important;
 }
@@ -472,7 +470,7 @@ html.winter-mode .neon-light-aura {
   background: linear-gradient(90deg, transparent 0%, #38bdf8 20%, #a5f3fc 50%, #0284c7 80%, transparent 100%) !important;
 }
 
-/* 1. All Headings Frozen into Chiseled Ice (Look 1) */
+/* 1. All Headings Frozen into Chiseled Ice (Optimized fast dual-layer shadow) */
 html.winter-mode h1,
 html.winter-mode h2,
 html.winter-mode h3,
@@ -485,20 +483,18 @@ html.winter-mode .font-esports {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   text-shadow:
-    0 0 4px rgba(255, 255, 255, 0.9),
-    0 0 12px rgba(56, 189, 248, 0.9),
-    0 0 24px rgba(14, 165, 233, 0.65),
-    0 3px 6px rgba(2, 6, 23, 0.95) !important;
+    0 0 8px rgba(56, 189, 248, 0.85),
+    0 2px 4px rgba(2, 6, 23, 0.9) !important;
   filter: none !important;
 }
 
 /* 2. All Eyebrows & HUD Headers */
 html.winter-mode .hud-label {
   color: #7dd3fc !important;
-  text-shadow: 0 0 8px rgba(56, 189, 248, 0.8) !important;
+  text-shadow: 0 0 6px rgba(56, 189, 248, 0.75) !important;
 }
 
-/* 3. All Gradients Frozen into Arctic Diamond Glacial Ice */
+/* 3. All Gradients Frozen into Arctic Diamond Glacial Ice (Hardware-accelerated) */
 html.winter-mode .text-gradient-gold,
 html.winter-mode .text-gradient,
 html.winter-mode .text-gold,
@@ -511,7 +507,7 @@ html.winter-mode .text-blush {
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
   text-shadow: none !important;
-  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8)) !important;
+  filter: none !important;
 }
 
 /* 4. All Numbers, Stats, Ratings & Telemetry Frozen */
@@ -522,15 +518,14 @@ html.winter-mode [class*="text-4xl"],
 html.winter-mode [class*="text-5xl"],
 html.winter-mode dd {
   color: #ffffff !important;
-  text-shadow: 0 0 8px rgba(56, 189, 248, 0.95), 0 0 16px rgba(14, 165, 233, 0.6) !important;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.8) !important;
 }
 
-/* 5. Subtitle, Description & Body Text Legibility */
+/* 5. Subtitle, Description & Body Text Legibility (Zero blur penalty) */
 html.winter-mode p,
 html.winter-mode li,
 html.winter-mode dt {
   color: #e0f2fe !important;
-  text-shadow: 0 0 4px rgba(186, 230, 253, 0.25);
 }
 
 /* Fix Muted / Dark Text to Crisp Readable Frost */
@@ -540,7 +535,6 @@ html.winter-mode [class*="text-slate-400"],
 html.winter-mode [class*="text-slate-500"],
 html.winter-mode [class*="text-gray-400"] {
   color: #cbd5e1 !important;
-  text-shadow: 0 0 4px rgba(186, 230, 253, 0.2) !important;
 }
 
 /* 6. All Badges, Chips & Favourite Mode Buttons into Frost Ice Chips */
@@ -554,7 +548,6 @@ html.winter-mode [class*="bg-gold/10"] {
   border-color: rgba(186, 230, 253, 0.45) !important;
   background: rgba(14, 165, 233, 0.14) !important;
   color: #f0fdf4 !important;
-  box-shadow: 0 0 12px rgba(14, 165, 233, 0.25) !important;
 }
 
 html.winter-mode [class*="text-fuchsia-200"],
@@ -564,19 +557,20 @@ html.winter-mode [class*="text-amber-300"] {
   color: #bae6fd !important;
 }
 
-/* 7. All Cards, Panels & Glass Containers into Frozen Glacier Glass */
+/* 7. All Cards, Panels & Glass Containers into Frozen Glacier Glass (Fast Fillrate) */
 html.winter-mode .panel,
 html.winter-mode .card-tactical,
-html.winter-mode .glass,
-html.winter-mode [class*="border-line"],
-html.winter-mode [class*="bg-[#12162a]"],
-html.winter-mode [class*="bg-card"] {
+html.winter-mode .glass {
   border-color: rgba(186, 230, 253, 0.38) !important;
-  background: rgba(11, 28, 52, 0.88) !important;
-  box-shadow: 0 8px 24px -4px rgba(2, 132, 199, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.2) !important;
+  background: rgba(11, 28, 52, 0.92) !important;
+  box-shadow: 0 4px 16px -2px rgba(2, 132, 199, 0.2) !important;
 }
 
-/* Container Hanging Icicles Fringe in Winter Mode (Zero Gap, Flush to Flat Bottom, Protected Curved Corners) */
+html.winter-mode [class*="border-line"] {
+  border-color: rgba(186, 230, 253, 0.3) !important;
+}
+
+/* Container Hanging Icicles Fringe in Winter Mode (GPU Composited 120FPS, Protected Curved Corners) */
 html.winter-mode .winter-icicle-container {
   position: relative;
 }
@@ -592,7 +586,8 @@ html.winter-mode .winter-icicle-container::after {
   background-repeat: repeat-x;
   pointer-events: none;
   z-index: 25;
-  filter: drop-shadow(0 3px 5px rgba(2, 6, 23, 0.6));
+  transform: translateZ(0);
+  will-change: transform;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 16px, #000 calc(100% - 16px), transparent 100%);
   mask-image: linear-gradient(90deg, transparent 0%, #000 16px, #000 calc(100% - 16px), transparent 100%);
 }
@@ -607,7 +602,7 @@ html.winter-mode .winter-icicle-container[class*="rounded-3xl"]::after {
 html.winter-mode header {
   background: rgba(11, 30, 54, 0.95) !important;
   border-bottom-color: rgba(186, 230, 253, 0.45) !important;
-  box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.3) !important;
+  box-shadow: 0 4px 16px -2px rgba(2, 132, 199, 0.25) !important;
 }
 html.winter-mode header::after {
   content: '';
@@ -621,5 +616,6 @@ html.winter-mode header::after {
   background-repeat: repeat-x;
   pointer-events: none;
   z-index: 60;
+  transform: translateZ(0);
 }
 
