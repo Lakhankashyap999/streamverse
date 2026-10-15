@@ -6,6 +6,8 @@ import { SITE } from '../../config/site';
 import { cn } from '../../utils/misc';
 import { Footer } from './Footer';
 import { Navbar } from './Navbar';
+import { WinterModeBanner } from '../ui/WinterModeBanner';
+import { WinterSnowfall } from '../ui/WinterSnowfall';
 
 export function PageContainer({ children, className }: { children: ReactNode; className?: string }) {
   return <div className={cn('container-x', className)}>{children}</div>;
@@ -28,7 +30,7 @@ export function PageHeader({
   children?: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden pb-14 pt-32 sm:pb-20 sm:pt-40">
+    <section className="relative overflow-hidden pb-14 pt-6 sm:pb-20 sm:pt-10">
       {/* High-visibility tactical battleground map */}
       <img
         src={image}
@@ -55,7 +57,7 @@ export function PageHeader({
 }
 
 function DemoNotice() {
-  const [open, setOpen] = useState(() => sessionStorage.getItem('sv-demo-notice') !== 'hidden');
+  const [open, setOpen] = useState(false);
   if (!isDemoMode) return null;
   if (!open)
     return (
@@ -103,10 +105,12 @@ export function PublicLayout() {
   return (
     <>
       <Navbar />
+      <WinterModeBanner />
       <main id="main" tabIndex={-1} className="outline-none">
         <Outlet />
       </main>
       <Footer />
+      <WinterSnowfall />
       <DemoNotice />
     </>
   );

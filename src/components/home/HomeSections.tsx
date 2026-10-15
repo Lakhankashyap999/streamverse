@@ -50,7 +50,7 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
     reduce ? {} : { initial: { opacity: 0, y: 22 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6, delay: 0.1 + i * 0.08, ease: [0.22, 1, 0.36, 1] as const } };
 
   return (
-    <section className="relative isolate overflow-hidden pb-16 pt-24 sm:pt-28 lg:min-h-[100svh] lg:pb-20" aria-labelledby="hero-title">
+    <section className="relative isolate overflow-hidden pb-16 pt-2 sm:pt-6 lg:min-h-[calc(100svh-5rem)] lg:pb-20" aria-labelledby="hero-title">
       <div className="absolute inset-0 -z-10 bg-grid opacity-50 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)] pointer-events-none" />
       <div className="pointer-events-none absolute -left-40 top-20 -z-10 size-[32rem] rounded-full [background:radial-gradient(circle,rgba(192,38,211,0.14)_0%,transparent_70%)] transform-gpu" />
       <div className="pointer-events-none absolute -right-40 bottom-0 -z-10 size-[30rem] rounded-full [background:radial-gradient(circle,rgba(139,92,246,0.14)_0%,transparent_70%)] transform-gpu" />
@@ -69,9 +69,9 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
         </>
       )}
 
-      <CompassStrip className="absolute inset-x-0 top-20 hidden md:block lg:top-24" />
+      <CompassStrip className="absolute inset-x-0 top-14 hidden md:block lg:top-16" />
 
-      <div className="container-x grid items-center gap-10 pt-4 sm:pt-6 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:pt-14">
+      <div className="container-x grid items-center gap-6 sm:gap-10 pt-1 sm:pt-3 lg:grid-cols-[1.02fr_1fr] lg:gap-14 lg:pt-8">
         {/* left - Creator Intro at Top on Mobile and Desktop */}
         <div className="order-1 lg:order-1">
           <motion.div {...item(0)} className="w-full">
@@ -101,9 +101,19 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
             </span>
           </motion.h1>
 
+          {/* Handcrafted natural organic ice line with delicate crystal drips */}
+          <div className="winter-ice-accent" aria-hidden="true">
+            <svg className="w-56 sm:w-72 h-2.5 overflow-visible" viewBox="0 0 240 10" fill="none">
+              <path d="M0 2 Q30 0 60 2 Q90 0 120 3 Q150 1 180 2 Q210 0 240 2" stroke="url(#iceLineGrad)" strokeWidth="1.5" strokeLinecap="round" />
+              <polygon points="30,2 33,8 36,2" fill="url(#iceDripGrad)" />
+              <polygon points="90,2 93,10 96,2" fill="url(#iceDripGrad)" />
+              <polygon points="160,2 163,8 166,2" fill="url(#iceDripGrad)" />
+            </svg>
+          </div>
+
           <motion.p
             {...item(2)}
-            className="mt-3 sm:mt-5 font-display text-base sm:text-xl md:text-2xl font-semibold break-words text-white"
+            className="mt-2.5 sm:mt-3 font-display text-base sm:text-xl md:text-2xl font-semibold break-words text-white"
             style={{ color: '#ffffff' }}
           >
             I'm <span className="text-gradient-gold inline-block">{profile.gaming_name}</span>
@@ -362,8 +372,8 @@ export function CreatorIntro({ profile }: { profile: Profile }) {
       <SectionHeading eyebrow="Player profile" title="Meet the" highlight="Player" id="intro-title" />
       <div className="grid gap-6 lg:grid-cols-[1fr_1.15fr]">
         <Reveal>
-          <div className="panel overflow-hidden">
-            <div className="relative aspect-[1024/166] w-full bg-surface overflow-hidden">
+          <div className="panel relative winter-icicle-container">
+            <div className="relative aspect-[1024/166] w-full bg-surface overflow-hidden rounded-t-2xl">
               <SafeImage src={profile.banner_url} alt={`${profile.gaming_name} channel banner`} className="size-full object-cover" />
             </div>
             <div className="relative px-6 pb-6">
@@ -426,7 +436,7 @@ export function CreatorIntro({ profile }: { profile: Profile }) {
                     const isPureNumber = !isNaN(Number(cleanNum)) && cleanNum.trim() !== '';
 
                     return (
-                      <div key={label} className="panel p-4">
+                      <div key={label} className="panel p-4 winter-icicle-container">
                         <dt className="text-xs text-white font-medium" style={{ color: '#ffffff' }}>{label}</dt>
                         <dd className={cn('mt-1 font-display text-2xl font-bold', ['text-gradient-gold', 'text-gradient', 'text-gradient-zone', 'text-gradient'][i])}>
                           {matchK ? (
@@ -580,7 +590,9 @@ export function FeaturedHighlights({ highlights, loading, error, onRetry, channe
         />
 
         {/* Dynamic PUBG Battle Log & Kill Feed */}
-        <PubgLiveKillFeed className="mb-8" />
+        <div className="winter-icicle-container mb-8">
+          <PubgLiveKillFeed />
+        </div>
 
         {loading ? (
           <LoadingState count={3} label="Loading highlights" />
@@ -702,7 +714,7 @@ export function SocialSection({ profile }: { profile: Profile }) {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group panel flex items-center gap-4 p-5 transition hover:-translate-y-1 hover:border-white/25"
+                className="group panel winter-icicle-container flex items-center gap-4 p-5 transition hover:-translate-y-1 hover:border-white/25"
               >
                 <span className={cn('grid size-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-lg', colour)}>
                   <Icon className="size-7" />
@@ -720,7 +732,7 @@ export function SocialSection({ profile }: { profile: Profile }) {
         {profile.show_upi && profile.upi_id && (
           <li>
             <Reveal delay={0.25}>
-              <div className="panel flex items-center gap-4 border-gold/30 p-5">
+              <div className="panel winter-icicle-container flex items-center gap-4 border-gold/30 p-5">
                 <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-amber-300 to-orange-500 text-base">
                   <Heart className="size-7" aria-hidden />
                 </span>

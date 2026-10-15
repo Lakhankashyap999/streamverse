@@ -337,7 +337,7 @@ export function PubgCareerStats() {
 
       {/* ────────────────── OFFICIAL BGMI IN-GAME STATS DASHBOARD ────────────────── */}
       <Reveal>
-        <div className="relative mb-12 rounded-2xl border border-line bg-[#101422] shadow-2xl">
+        <div className="relative mb-12 rounded-2xl border border-line bg-[#101422] shadow-2xl winter-icicle-container">
           {/* Header Bar with Interactive Season Selector & Tactical Filters */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-4 border-b border-line/80 bg-[#161c30]/95 px-3.5 sm:px-6 py-3 rounded-t-2xl">
             {/* Left Group: DATA · STATISTICS & Season Selector (Authentic In-Game Layout) */}
@@ -798,7 +798,7 @@ export function PubgCareerStats() {
 
       {/* ────────────────── OFFICIAL BASIC INFO & PROFILE SHOWCASE BAR ────────────────── */}
       <Reveal delay={0.1}>
-        <div className="mb-12 rounded-2xl border border-line bg-[#11162a]/95 p-4 sm:p-7 shadow-xl backdrop-blur-md overflow-hidden">
+        <div className="relative mb-12 rounded-2xl border border-line bg-[#11162a]/95 p-4 sm:p-7 shadow-xl backdrop-blur-md winter-icicle-container">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6">
             {/* Player Identity Block */}
             <div className="flex items-start sm:items-center gap-3.5 sm:gap-4 min-w-0">
@@ -880,7 +880,7 @@ export function PubgCareerStats() {
 
       {/* ────────────────── OFFICIAL HONOR & 79 TITLES SHOWCASE (media_1791724431585_fb07fbcb.jpg) ────────────────── */}
       <Reveal delay={0.15}>
-        <div className="mb-12 rounded-2xl border border-line bg-[#101424] p-4 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div className="relative mb-12 rounded-2xl border border-line bg-[#101424] p-4 sm:p-8 shadow-2xl winter-icicle-container">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 pb-4 border-b border-line/60">
             <div>
               <p className="font-mono text-xs uppercase tracking-widest text-amber-400 font-bold flex items-center gap-1.5">
@@ -942,7 +942,7 @@ export function PubgCareerStats() {
 
       {/* ────────────────── SIGNATURE COMBAT LOADOUT & SENSITIVITY ────────────────── */}
       <Reveal delay={0.2}>
-        <div className="panel p-6 border-line bg-card/60">
+        <div className="panel p-6 border-line bg-card/60 winter-icicle-container">
           <div className="flex items-center gap-2 mb-4 font-display text-sm font-bold uppercase tracking-widest text-amber-400">
             <Target className="size-4" />
             Signature Combat Loadout & Gun Lab Showcase

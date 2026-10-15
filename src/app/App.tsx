@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AuthProvider } from '../context/AuthContext';
 import { ProfileProvider } from '../context/ProfileContext';
+import { WinterModeProvider } from '../context/WinterModeContext';
 import { ToastProvider } from '../components/ui/Toast';
 import { CursorSparks } from '../components/ui/CursorSparks';
 import { PubgLoader } from '../components/ui/PubgLoader';
@@ -30,7 +31,8 @@ export function App() {
   return (
     <AuthProvider>
       <ProfileProvider>
-        <ToastProvider>
+        <WinterModeProvider>
+          <ToastProvider>
           <CursorSparks />
           <AnimatePresence mode="wait">
             {showSplash && (
@@ -46,6 +48,7 @@ export function App() {
           </AnimatePresence>
           <RouterProvider router={router} />
         </ToastProvider>
+        </WinterModeProvider>
       </ProfileProvider>
     </AuthProvider>
   );

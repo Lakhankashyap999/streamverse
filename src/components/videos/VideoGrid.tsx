@@ -79,7 +79,7 @@ export function VideoCard({ item, onPlay, priority = false }: { item: MediaItem;
     'group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-card/80 text-left transition-[border-color,box-shadow] hover:border-blush/40 hover:shadow-glow';
 
   return (
-    <motion.article whileHover={reduce ? undefined : { y: -4 }} transition={{ duration: 0.2 }} className="h-full">
+    <motion.article whileHover={reduce ? undefined : { y: -4 }} transition={{ duration: 0.2 }} className="h-full winter-icicle-container">
       {hasVideo ? (
         <button type="button" onClick={() => onPlay(item)} className={cn(cls, 'w-full')} aria-label={`Play: ${item.title}`}>
           {content}
@@ -168,7 +168,7 @@ function MobileZigzagVideoCard({
   );
 
   return (
-    <div>
+    <div className="winter-icicle-container">
       {hasVideo ? (
         <button type="button" onClick={() => onPlay(item)} className={cn(containerCls, 'w-full text-left')} aria-label={`Play: ${item.title}`}>
           {isEven ? (

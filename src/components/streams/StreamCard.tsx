@@ -60,7 +60,8 @@ export function StreamCard({ stream, profile }: { stream: Stream; profile: Profi
   const thumb = stream.thumbnail_url || (isValidVideoId(stream.youtube_video_id) ? ytThumb(stream.youtube_video_id) : null);
   const creatorTime = formatInZone(stream.scheduled_at, stream.timezone);
   return (
-    <article className="group grid overflow-hidden rounded-2xl border border-line bg-card/80 transition hover:border-ultra/50 sm:grid-cols-[minmax(0,15rem)_1fr]">
+    <div className="winter-icicle-container">
+      <article className="group grid overflow-hidden rounded-2xl border border-line bg-card/80 transition hover:border-ultra/50 sm:grid-cols-[minmax(0,15rem)_1fr]">
       <div className="relative aspect-video sm:aspect-auto sm:h-full">
         <SafeImage src={thumb} alt="" className="absolute inset-0 size-full" />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-card/60" />
@@ -98,6 +99,7 @@ export function StreamCard({ stream, profile }: { stream: Stream; profile: Profi
         </div>
       </div>
     </article>
+    </div>
   );
 }
 
@@ -271,7 +273,8 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
   }
 
   return (
-    <div className="gradient-border hud-corners relative overflow-hidden rounded-3xl bg-card/80">
+    <div className="winter-icicle-container">
+      <div className="gradient-border hud-corners relative overflow-hidden rounded-3xl bg-card/80">
       <div className="grid lg:grid-cols-[1.25fr_1fr]">
         <div className="relative aspect-video overflow-hidden lg:aspect-auto lg:min-h-[22rem]">
           <SafeImage src={thumb} alt="" className="absolute inset-0 size-full" loading="eager" />
@@ -385,6 +388,7 @@ export function LiveStreamCard({ streams, videos, profile }: { streams: Stream[]
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

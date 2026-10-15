@@ -61,7 +61,8 @@ export function PollCard({ poll, compact = false }: { poll: Poll; compact?: bool
   const legendId = `poll-${poll.id}`;
 
   return (
-    <article className={cn('panel relative flex flex-col gap-5 overflow-hidden', compact ? 'p-5' : 'p-6 sm:p-7')}>
+    <div className="winter-icicle-container h-full">
+      <article className={cn('panel relative flex flex-col gap-5 overflow-hidden', compact ? 'p-5' : 'p-6 sm:p-7')}>
       <div className="flex flex-wrap items-center gap-2">
         <Badge tone={open ? 'success' : 'neutral'} icon={open ? <Vote className="size-3" aria-hidden /> : <Lock className="size-3" aria-hidden />}>
           {open ? 'Poll open' : 'Poll closed'}
@@ -151,5 +152,6 @@ export function PollCard({ poll, compact = false }: { poll: Poll; compact?: bool
         )}
       </div>
     </article>
+    </div>
   );
 }

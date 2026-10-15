@@ -16,7 +16,8 @@ export function CommunityPostCard({ post }: { post: CommunityPost }) {
   const rules = post.rules?.split('\n').map((r) => r.trim()).filter(Boolean) ?? [];
   const statusLabel = post.status === 'open' ? 'Open' : post.status === 'upcoming' ? 'Coming soon' : 'Closed';
   return (
-    <article className="panel relative flex h-full flex-col gap-4 overflow-hidden p-6">
+    <div className="winter-icicle-container h-full">
+      <article className="panel relative flex h-full flex-col gap-4 overflow-hidden p-6">
       <div className={cn('pointer-events-none absolute -right-16 -top-16 size-44 rounded-full bg-gradient-to-br to-transparent blur-2xl', meta.ring)} />
       <div className="relative flex flex-wrap items-center gap-2">
         <Badge tone={meta.tone} icon={<meta.Icon className="size-3" aria-hidden />}>
@@ -58,5 +59,6 @@ export function CommunityPostCard({ post }: { post: CommunityPost }) {
           ))}
       </div>
     </article>
+    </div>
   );
 }
