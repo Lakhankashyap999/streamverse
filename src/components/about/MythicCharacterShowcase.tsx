@@ -171,12 +171,12 @@ export const MythicCharacterShowcase: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Split Grid: Compact Character Showcase Stage (Left) + BGMI X-Lab Upgrade Breakdown (Right) */}
+      {/* Main Split Grid: Responsive Character Showcase Stage (Left) + BGMI X-Lab Upgrade Breakdown (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-12">
-        {/* LEFT COLUMN: Static HD Character Showcase Stage */}
-        <div className="lg:col-span-5 relative flex flex-col items-center justify-between p-4 sm:p-5 bg-black border-b lg:border-b-0 lg:border-r border-white/10 overflow-hidden">
+        {/* LEFT COLUMN: Static HD Character Showcase Stage (Responsive on Mobile, Tablet/WebView, Desktop) */}
+        <div className="lg:col-span-5 relative flex flex-col items-center justify-between p-4 sm:p-5 bg-black border-b lg:border-b-0 lg:border-r border-white/10">
           {/* Top Stage HUD Overlay */}
-          <div className="relative z-20 w-full flex items-center justify-between gap-2">
+          <div className="relative z-20 w-full flex items-center justify-between gap-2 mb-2">
             <div>
               <div className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-400/90">
                 AVATAR LOADOUT // 7★ MAX
@@ -187,7 +187,7 @@ export const MythicCharacterShowcase: React.FC = () => {
             </div>
 
             {/* Star Rating Pill */}
-            <div className="flex items-center gap-0.5 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-400/40 shadow-[0_0_15px_rgba(245,158,11,0.25)]">
+            <div className="flex items-center gap-0.5 px-2.5 py-1 rounded-full bg-amber-500/15 border border-amber-400/40 shadow-[0_0_15px_rgba(245,158,11,0.25)] shrink-0">
               {Array.from({ length: 7 }).map((_, idx) => (
                 <span
                   key={idx}
@@ -203,39 +203,29 @@ export const MythicCharacterShowcase: React.FC = () => {
             </div>
           </div>
 
-          {/* PURE BLACK (#000000) SHOWCASE STAGE — Zero Spin, Zero Lag, Compressed Native HD Front Render */}
-          <div className="relative w-full max-w-[270px] sm:max-w-[295px] h-[340px] sm:h-[380px] my-1 flex items-center justify-center select-none bg-black rounded-xl overflow-hidden">
-            {/* Corner Tactical HUD Brackets */}
-            <div className="pointer-events-none absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-amber-400/40 z-20" />
-            <div className="pointer-events-none absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-sky-400/40 z-20" />
-            <div className="pointer-events-none absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-sky-400/40 z-20" />
-            <div className="pointer-events-none absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-400/40 z-20" />
+          {/* PURE BLACK (#000000) SHOWCASE STAGE — Aspect-Ratio Matched so Crown & Boots NEVER Clip on Any Device */}
+          <div className="relative w-full max-w-[235px] sm:max-w-[265px] lg:max-w-[285px] aspect-[560/884] my-1 flex items-center justify-center select-none bg-black mx-auto">
+            {/* Corner Tactical HUD Brackets (Placed outside the character silhouette) */}
+            <div className="pointer-events-none absolute top-1 left-1 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-400/45 z-20" />
+            <div className="pointer-events-none absolute top-1 right-1 w-3.5 h-3.5 border-t-2 border-r-2 border-sky-400/45 z-20" />
+            <div className="pointer-events-none absolute bottom-1 left-1 w-3.5 h-3.5 border-b-2 border-l-2 border-sky-400/45 z-20" />
+            <div className="pointer-events-none absolute bottom-1 right-1 w-3.5 h-3.5 border-b-2 border-r-2 border-amber-400/45 z-20" />
 
-            {/* CHARACTER LAYER — Compressed 71 KB Front Render (Watermark Removed) */}
-            <div className="relative z-10 w-full h-full flex items-center justify-center">
-              <img
-                src="/images/creator/mythic-character-front.jpg"
-                alt="KhushiYT BGMI 7-Star Mythic X-Suit Showcase"
-                width={560}
-                height={836}
-                loading="lazy"
-                decoding="async"
-                draggable={false}
-                className="w-full h-full object-contain pointer-events-none select-none"
-              />
+            {/* CHARACTER LAYER — Full Uncropped View from Crown to Soles of Boots */}
+            <img
+              src="/images/creator/mythic-character-front-v2.jpg"
+              alt="KhushiYT BGMI 7-Star Mythic X-Suit Showcase"
+              width={560}
+              height={884}
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              className="relative z-10 w-full h-full object-contain pointer-events-none select-none"
+            />
 
-              {/* Edge Vignette so image frame melts 100% into the black stage */}
-              <div
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  boxShadow: 'inset 0 0 24px 12px #000000',
-                }}
-              />
-            </div>
-
-            {/* HOLOGRAPHIC SHOWROOM PEDESTAL (mix-blend-screen sits cleanly on #000000 under boots) */}
+            {/* HOLOGRAPHIC SHOWROOM PEDESTAL — Sits cleanly under boots in the bottom floor margin */}
             <div
-              className="pointer-events-none absolute bottom-1.5 left-1/2 -translate-x-1/2 w-[220px] h-[52px] z-20 mix-blend-screen"
+              className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 w-[78%] h-[38px] z-20 mix-blend-screen"
               style={{
                 opacity: starIntensity,
               }}
@@ -249,62 +239,65 @@ export const MythicCharacterShowcase: React.FC = () => {
               />
               {/* Outer Pedestal Ring */}
               <div
-                className="absolute inset-x-3 inset-y-2 rounded-full border"
+                className="absolute inset-x-2 inset-y-1.5 rounded-full border"
                 style={{
                   borderColor: auraColors.primary,
-                  boxShadow: `0 0 16px ${auraColors.ringGlow}`,
+                  boxShadow: `0 0 14px ${auraColors.ringGlow}`,
                 }}
               />
               {/* Inner Cyan Energy Ring */}
               <div
-                className="absolute inset-x-9 inset-y-3.5 rounded-full border border-dashed"
+                className="absolute inset-x-7 inset-y-2.5 rounded-full border border-dashed"
                 style={{
                   borderColor: auraColors.secondary,
                 }}
               />
             </div>
+          </div>
 
-            {/* Bottom Stage Status Badge */}
-            <div className="pointer-events-none absolute bottom-2.5 inset-x-3 z-30 flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-slate-300/90">
-              <span className="px-2 py-0.5 rounded bg-black/80 border border-white/10 text-amber-300">
+          {/* BELOW-STAGE STATUS & AURA BAR (Moved OUTSIDE the character stage so boots never get covered) */}
+          <div className="relative z-20 w-full mt-2 pt-2.5 border-t border-white/10 space-y-2">
+            {/* Non-overlapping Status Pills Row */}
+            <div className="flex flex-wrap items-center justify-between gap-1.5">
+              <span className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-amber-400/30 text-[10px] font-black uppercase tracking-wider text-amber-300 truncate max-w-[65%]">
                 {activeLevel.star}★ {activeLevel.title}
               </span>
-              <span className="px-2 py-0.5 rounded bg-black/80 border border-white/10 text-sky-300">
+              <span className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-sky-400/30 text-[10px] font-black uppercase tracking-wider text-sky-300 shrink-0">
                 X-SUIT // MAXED
               </span>
             </div>
-          </div>
 
-          {/* Bottom Stage Bar: X-Lab Aura Theme Switcher */}
-          <div className="relative z-20 w-full flex items-center justify-between gap-2 pt-2 border-t border-white/10">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Pedestal Aura: <strong className="text-white">{auraColors.label}</strong>
-            </span>
-            <div className="flex items-center gap-1.5">
-              {(['gold', 'cyan', 'crimson', 'purple'] as const).map((preset) => {
-                const dotColor =
-                  preset === 'gold'
-                    ? '#f59e0b'
-                    : preset === 'cyan'
-                    ? '#00f2fe'
-                    : preset === 'crimson'
-                    ? '#f43f5e'
-                    : '#a855f7';
-                return (
-                  <button
-                    key={preset}
-                    type="button"
-                    onClick={() => setAuraPreset(preset)}
-                    title={`Switch to ${preset} aura`}
-                    className={`w-4 h-4 rounded-full border transition-transform ${
-                      auraPreset === preset
-                        ? 'scale-125 border-white shadow-[0_0_8px_rgba(255,255,255,0.8)]'
-                        : 'border-white/30 opacity-60 hover:opacity-100'
-                    }`}
-                    style={{ backgroundColor: dotColor }}
-                  />
-                );
-              })}
+            {/* Pedestal Aura Switcher */}
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Pedestal Aura: <strong className="text-white">{auraColors.label}</strong>
+              </span>
+              <div className="flex items-center gap-1.5">
+                {(['gold', 'cyan', 'crimson', 'purple'] as const).map((preset) => {
+                  const dotColor =
+                    preset === 'gold'
+                      ? '#f59e0b'
+                      : preset === 'cyan'
+                      ? '#00f2fe'
+                      : preset === 'crimson'
+                      ? '#f43f5e'
+                      : '#a855f7';
+                  return (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setAuraPreset(preset)}
+                      title={`Switch to ${preset} aura`}
+                      className={`w-4 h-4 rounded-full border transition-transform ${
+                        auraPreset === preset
+                          ? 'scale-125 border-white shadow-[0_0_8px_rgba(255,255,255,0.8)]'
+                          : 'border-white/30 opacity-60 hover:opacity-100'
+                      }`}
+                      style={{ backgroundColor: dotColor }}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -329,37 +322,37 @@ export const MythicCharacterShowcase: React.FC = () => {
             </div>
 
             {/* 3 Highlight Material Stat Cards */}
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-3 gap-2 sm:gap-2.5">
               <div className="p-2.5 sm:p-3 rounded-xl bg-amber-500/10 border border-amber-500/25">
-                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-amber-300/90">
+                <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-300/90">
                   <Flame className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   <span className="truncate">Starforge Stones</span>
                 </div>
                 <div className="mt-1 flex items-baseline gap-1">
-                  <span className="text-lg sm:text-xl font-black text-white">110</span>
-                  <span className="text-[10px] font-semibold text-amber-300/80">Total (7★)</span>
+                  <span className="text-base sm:text-xl font-black text-white">110</span>
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-amber-300/80">Total (7★)</span>
                 </div>
               </div>
 
               <div className="p-2.5 sm:p-3 rounded-xl bg-sky-500/10 border border-sky-500/25">
-                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-sky-300/90">
+                <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-sky-300/90">
                   <Zap className="w-3.5 h-3.5 text-sky-400 shrink-0" />
                   <span className="truncate">Star Fragments</span>
                 </div>
                 <div className="mt-1 flex items-baseline gap-1">
-                  <span className="text-lg sm:text-xl font-black text-white">2,100</span>
-                  <span className="text-[10px] font-semibold text-sky-300/80">Total (7★)</span>
+                  <span className="text-base sm:text-xl font-black text-white">2,100</span>
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-sky-300/80">Total (7★)</span>
                 </div>
               </div>
 
               <div className="p-2.5 sm:p-3 rounded-xl bg-purple-500/10 border border-purple-500/25">
-                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-purple-300/90">
+                <div className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-purple-300/90">
                   <Trophy className="w-3.5 h-3.5 text-purple-400 shrink-0" />
                   <span className="truncate">Selected Star</span>
                 </div>
                 <div className="mt-1 flex items-baseline gap-1">
-                  <span className="text-lg sm:text-xl font-black text-white">{activeLevel.star}★</span>
-                  <span className="text-[10px] font-semibold text-purple-300/80 truncate">
+                  <span className="text-base sm:text-xl font-black text-white">{activeLevel.star}★</span>
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-purple-300/80 truncate">
                     {activeLevel.cumFragments} Frags
                   </span>
                 </div>
@@ -376,7 +369,7 @@ export const MythicCharacterShowcase: React.FC = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-7 gap-1.5">
+            <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
               {XSUIT_UPGRADE_LEVELS.map((lvl) => {
                 const isSelected = lvl.star === selectedStar;
                 return (
