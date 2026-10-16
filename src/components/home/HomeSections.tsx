@@ -94,32 +94,25 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           <motion.h1
             {...item(1)}
             id="hero-title"
-            className="relative mt-3 sm:mt-6 mb-3 sm:mb-4 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight break-words text-white inline-block max-w-full transition-all duration-700 select-none"
+            className="relative mt-3 sm:mt-6 mb-3 sm:mb-4 text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight break-words text-white inline-block max-w-full select-none"
             style={{ color: '#ffffff' }}
           >
-            <span className={cn("inline-block", isWinterMode && "winter-ice-heading")}>
+            <span className="inline-block hero-ice-target">
               Welcome to{" "}
             </span>
-            <span
-              className={cn(
-                "font-script text-[1.15em] italic leading-tight inline-block max-w-full transition-all duration-700",
-                isWinterMode ? "winter-ice-heading" : "text-gradient"
-              )}
-            >
+            <span className="font-script text-[1.15em] italic leading-tight inline-block max-w-full text-gradient hero-ice-target">
               My World
             </span>
 
             {/* Bottom Hanging Crystalline Icicles attached directly to text */}
-            {isWinterMode && (
-              <div
-                className="absolute -bottom-1 sm:-bottom-1.5 left-0 right-0 h-4 sm:h-5 bg-repeat-x pointer-events-none z-20"
-                style={{
-                  backgroundImage: 'url(/images/art/hanging-icicles-opt.png)',
-                  backgroundSize: 'auto 100%',
-                }}
-                aria-hidden="true"
-              />
-            )}
+            <div
+              className="hero-icicle-fringe absolute -bottom-1 sm:-bottom-1.5 left-0 right-0 h-4 sm:h-5 bg-repeat-x pointer-events-none z-20"
+              style={{
+                backgroundImage: 'url(/images/art/hanging-icicles-opt.png)',
+                backgroundSize: 'auto 100%',
+              }}
+              aria-hidden="true"
+            />
           </motion.h1>
 
           <motion.p

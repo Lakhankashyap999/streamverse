@@ -463,6 +463,7 @@ html.winter-mode .glass {
   pointer-events: none;
   overflow: hidden;
   contain: strict;
+  transition: opacity 1.2s ease-out;
 }
 .winter-snow-fall {
   position: absolute;
@@ -501,6 +502,16 @@ html.winter-mode .neon-light-tube {
 }
 
 /* 1. Hero Heading Frozen into Chiseled Ice */
+.hero-icicle-fringe {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+html.winter-mode .hero-icicle-fringe {
+  opacity: 1;
+  transform: scaleY(1);
+}
+html.winter-mode .hero-ice-target,
 .winter-ice-heading {
   background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 30%, #7dd3fc 65%, #0284c7 100%) !important;
   -webkit-background-clip: text !important;
@@ -512,7 +523,7 @@ html.winter-mode .neon-light-tube {
   text-shadow: 0 2px 6px rgba(2, 6, 23, 0.9) !important;
 }
 
-html.winter-mode h1:not(.winter-ice-heading),
+html.winter-mode h1:not(.winter-ice-heading):not(.hero-ice-target),
 html.winter-mode h2:not(.winter-ice-heading),
 html.winter-mode h3:not(.winter-ice-heading),
 html.winter-mode h4:not(.winter-ice-heading),
@@ -528,7 +539,7 @@ html.winter-mode .hud-label {
 
 /* 3. All Gradients Frozen into Arctic Diamond Glacial Ice */
 html.winter-mode .text-gradient-gold,
-html.winter-mode .text-gradient,
+html.winter-mode .text-gradient:not(.hero-ice-target),
 html.winter-mode .text-gold,
 html.winter-mode .text-gradient-zone,
 html.winter-mode .text-blush {
@@ -581,6 +592,7 @@ html.winter-mode .winter-icicle-container::after {
   background-size: auto 100%;
   background-repeat: repeat-x;
   pointer-events: none;
+  transform-origin: top center;
 }
 
 /* 8. Header & Navbar in Winter Mode */
@@ -602,7 +614,73 @@ html.winter-mode header::after {
   background-size: auto 100%;
   background-repeat: repeat-x;
   pointer-events: none;
+  transform-origin: top center;
 }
+
+/* ───────────────────────── Smooth Progressive Freeze Wave (Zero-Lag Color & Transform Only) ───────────────────────── */
+html.winter-transitioning body {
+  transition: background-color 1.6s ease-out !important;
+}
+
+html.winter-transitioning header,
+html.winter-transitioning .panel,
+html.winter-transitioning .card-tactical,
+html.winter-transitioning .glass {
+  transition:
+    background-color 1.5s ease-out,
+    border-color 1.5s ease-out !important;
+}
+
+html.winter-transitioning header {
+  transition-delay: 0.05s !important;
+}
+html.winter-transitioning section:nth-of-type(1) .panel,
+html.winter-transitioning section:nth-of-type(1) .glass {
+  transition-delay: 0.2s !important;
+}
+html.winter-transitioning section:nth-of-type(2) .panel,
+html.winter-transitioning section:nth-of-type(2) .glass {
+  transition-delay: 0.45s !important;
+}
+html.winter-transitioning section:nth-of-type(n+3) .panel,
+html.winter-transitioning section:nth-of-type(n+3) .glass {
+  transition-delay: 0.7s !important;
+}
+
+html.winter-transitioning .winter-icicle-container::after,
+html.winter-transitioning header::after,
+html.winter-transitioning .hero-icicle-fringe {
+  animation: icicleGradualFreeze 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes icicleGradualFreeze {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes frostMistWave {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 165vh, 0);
+    opacity: 0;
+  }
+}
+
 
 
 
