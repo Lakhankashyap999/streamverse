@@ -38,26 +38,38 @@ export function NeonStageLight({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'neon-stage-light pointer-events-none select-none relative -mt-3 mb-6 sm:-mt-5 sm:mb-8 flex flex-col items-center justify-center w-full',
+        'neon-stage-light pointer-events-none select-none relative my-2 sm:my-3 flex flex-col items-center justify-center w-full',
         className,
       )}
       aria-hidden="true"
     >
-      {/* Rich Volumetric Downward Stage Light Wash (Zero-Blur Pure Radial Gradient) */}
+      {/* Seamless 360° Omni-Directional Neon Reflection (Fades to 0% well before all 4 container edges — zero box corners) */}
       <div
-        className="neon-light-wash absolute -top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-full max-w-4xl h-56 sm:h-72 pointer-events-none -z-10"
+        className="neon-light-wash absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl h-44 sm:h-60 pointer-events-none -z-10"
         style={{
           background: `
-            radial-gradient(ellipse 60% 80% at 32% 0%, rgba(236, 72, 153, 0.28) 0%, rgba(236, 72, 153, 0.1) 45%, transparent 72%),
-            radial-gradient(ellipse 60% 80% at 68% 0%, rgba(139, 92, 246, 0.26) 0%, rgba(139, 92, 246, 0.09) 45%, transparent 72%)
+            radial-gradient(ellipse 32% 42% at 37% 50%, rgba(236, 72, 153, 0.34) 0%, rgba(236, 72, 153, 0.14) 38%, rgba(236, 72, 153, 0.03) 62%, transparent 78%),
+            radial-gradient(ellipse 38% 46% at 50% 50%, rgba(192, 132, 252, 0.24) 0%, rgba(168, 85, 247, 0.10) 42%, transparent 76%),
+            radial-gradient(ellipse 32% 42% at 63% 50%, rgba(139, 92, 246, 0.32) 0%, rgba(139, 92, 246, 0.13) 38%, rgba(139, 92, 246, 0.03) 62%, transparent 78%)
           `,
+          WebkitMaskImage: 'radial-gradient(ellipse 46% 46% at 50% 50%, #000 40%, transparent 92%)',
+          maskImage: 'radial-gradient(ellipse 46% 46% at 50% 50%, #000 40%, transparent 92%)',
+        }}
+      />
+
+      {/* Soft Close-Range All-Around Tube Bloom */}
+      <div
+        className="neon-light-halo absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[88%] sm:w-[72%] max-w-3xl h-12 sm:h-16 pointer-events-none -z-10"
+        style={{
+          background:
+            'radial-gradient(ellipse 46% 46% at 50% 50%, rgba(236, 72, 153, 0.42) 0%, rgba(139, 92, 246, 0.22) 48%, transparent 90%)',
         }}
       />
 
       {/* Sleek Horizontal Neon Light Tube */}
-      <div className="neon-light-tube relative h-[2.5px] sm:h-[3px] w-[82%] sm:w-[65%] max-w-3xl rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_20%,#8b5cf6_80%,transparent_100%)] shadow-[0_0_12px_rgba(236,72,153,0.85)]">
+      <div className="neon-light-tube relative h-[2.5px] sm:h-[3px] w-[82%] sm:w-[65%] max-w-3xl rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_18%,#c084fc_50%,#8b5cf6_82%,transparent_100%)] shadow-[0_0_10px_rgba(236,72,153,0.9),0_0_24px_rgba(236,72,153,0.55),0_0_44px_rgba(139,92,246,0.4)]">
         {/* Luminous inner core */}
-        <div className="neon-light-core absolute inset-0 rounded-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.95)_30%,rgba(255,255,255,0.95)_70%,transparent_100%)] opacity-85" />
+        <div className="neon-light-core absolute inset-0 rounded-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.95)_28%,rgba(255,255,255,0.95)_72%,transparent_100%)] opacity-90" />
       </div>
     </div>
   );

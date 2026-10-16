@@ -95,14 +95,14 @@ export function AboutPage() {
           </div>
         </section>
 
-        {/* 1.5 Compact 3D In-Game Mythic Character Turntable */}
+        {/* 1.5 Compact In-Game Mythic Character Showcase */}
         <section aria-labelledby="mythic-avatar-heading">
           <SectionHeading
             eyebrow="In-Game Character"
             title="Mythic X-Suit"
-            highlight="3D Showcase"
+            highlight="Showcase"
             id="mythic-avatar-heading"
-            description="Auto-rotating 3D lobby turntable — drag or swipe left/right to inspect Front & Back armor from any angle."
+            description="KhushiYT's 7-Star Sovereign Hydro-Pharaoh X-Suit with official BGMI X-Laboratory upgrade & fragment breakdown."
           />
           <MythicCharacterShowcase />
         </section>
