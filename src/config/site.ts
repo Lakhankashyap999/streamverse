@@ -18,7 +18,7 @@ export const DEFAULT_PROFILE: Profile = {
   tagline: 'Girl Gamer · BGMI Livestreamer',
   bio: 'Hello guys, welcome to my channel KhushiYT! I go live with long TOP 100 rank-push sessions and rush gameplay in Battlegrounds Mobile India. If you enjoy the streams, leave a like, subscribe and support the KhushiYT Family ❤️',
   avatar_url: '/images/creator/khushi-avatar-gamer.webp',
-  banner_url: '/images/creator/youtube-banner-hd.webp',
+  banner_url: '/images/creator/khushi-banner-v2.jpg',
   youtube_url: 'https://www.youtube.com/@khusiytlive',
   instagram_url: 'https://www.instagram.com/igkhusi',
   discord_url: 'https://discord.gg/YrhMyQMsMX',

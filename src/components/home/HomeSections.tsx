@@ -367,14 +367,14 @@ export function CreatorIntro({ profile }: { profile: Profile }) {
       <div className="grid gap-6 lg:grid-cols-[1fr_1.15fr]">
         <Reveal>
           <div className="panel relative winter-icicle-container">
-            <div className="relative aspect-[1024/166] w-full bg-surface overflow-hidden rounded-t-2xl">
+            <div className="relative aspect-[1024/366] w-full bg-surface overflow-hidden rounded-t-2xl">
               <SafeImage src={profile.banner_url} alt={`${profile.gaming_name} channel banner`} className="size-full object-cover" />
             </div>
             <div className="relative px-6 pb-6">
               <SafeImage
                 src={profile.avatar_url}
                 alt={`${profile.gaming_name} profile photo`}
-                className="-mt-12 size-24 rounded-2xl border-4 border-card shadow-xl"
+                className="-mt-6 sm:-mt-8 size-24 rounded-2xl border-4 border-card shadow-xl"
                 width={96}
                 height={96}
               />

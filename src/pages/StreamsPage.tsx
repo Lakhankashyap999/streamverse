@@ -53,7 +53,7 @@ export function StreamsPage() {
       <PageContainer className="py-12 space-y-16">
         {/* Official YouTube Channel Banner Card */}
         <div className="relative overflow-hidden rounded-2xl border border-line bg-card shadow-2xl">
-          <div className="relative aspect-[16/6] sm:aspect-[1024/166] min-h-[95px] sm:min-h-[140px] w-full bg-surface overflow-hidden">
+          <div className="relative aspect-[1024/366] w-full bg-surface overflow-hidden">
             <SafeImage
               src={profile.banner_url}
               alt={`${profile.gaming_name} YouTube Channel Banner`}

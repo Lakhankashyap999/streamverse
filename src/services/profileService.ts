@@ -9,14 +9,16 @@ export const profileService = {
   /** Single-creator v1: the first profile row is the public creator profile. */
   async get(): Promise<Profile> {
     if (!supabase) {
-      return { ...DEFAULT_PROFILE, ...(demoStore.read<Profile>('profiles')[0] ?? {}) };
+      const merged = { ...DEFAULT_PROFILE, ...(demoStore.read<Profile>('profiles')[0] ?? {}) };
+      return normalizeBanner(merged);
     }
     const { data, error } = await supabase.from('profiles').select('*').order('created_at').limit(1).maybeSingle();
     if (error) {
       logDev(error);
       return DEFAULT_PROFILE; // graceful fallback keeps the public site usable
     }
-    return data ? { ...DEFAULT_PROFILE, ...stripNulls(data as Partial<Profile>) } : DEFAULT_PROFILE;
+    const merged = data ? { ...DEFAULT_PROFILE, ...stripNulls(data as Partial<Profile>) } : DEFAULT_PROFILE;
+    return normalizeBanner(merged);
   },
 
   async save(patch: Partial<Profile>): Promise<Profile> {
@@ -47,4 +49,16 @@ export const profileService = {
 /** Keep explicit empty strings, but let missing columns fall back to defaults. */
 function stripNulls<T extends object>(row: T): Partial<T> {
   return Object.fromEntries(Object.entries(row).filter(([, v]) => v !== undefined)) as Partial<T>;
+}
+
+const LEGACY_BANNERS = new Set([
+  '/images/creator/youtube-banner-hd.webp',
+  '/images/creator/channel-banner.webp',
+]);
+
+function normalizeBanner(profile: Profile): Profile {
+  if (!profile.banner_url || LEGACY_BANNERS.has(profile.banner_url)) {
+    return { ...profile, banner_url: DEFAULT_PROFILE.banner_url };
+  }
+  return profile;
 }
