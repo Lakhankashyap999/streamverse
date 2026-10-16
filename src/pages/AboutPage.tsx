@@ -7,6 +7,7 @@ import { SocialIconRow } from '../components/layout/SocialLinks';
 import { useToast } from '../components/ui/Toast';
 import { SITE } from '../config/site';
 import { PubgCareerStats } from '../components/home/PubgCareerStats';
+import { MythicCharacterShowcase } from '../components/about/MythicCharacterShowcase';
 
 export function AboutPage() {
   const { profile } = useProfile();
@@ -92,6 +93,18 @@ export function AboutPage() {
               )}
             </div>
           </div>
+        </section>
+
+        {/* 1.5 Compact 3D In-Game Mythic Character Turntable */}
+        <section aria-labelledby="mythic-avatar-heading">
+          <SectionHeading
+            eyebrow="In-Game Character"
+            title="Mythic X-Suit"
+            highlight="3D Showcase"
+            id="mythic-avatar-heading"
+            description="Auto-rotating 3D lobby turntable — drag or swipe left/right to inspect Front & Back armor from any angle."
+          />
+          <MythicCharacterShowcase />
         </section>
 
         {/* 2. Live Combat Telemetry & Career Stats */}
