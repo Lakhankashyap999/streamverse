@@ -1,5 +1,4 @@
 import { useState, type ImgHTMLAttributes, type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
 import { Crosshair } from 'lucide-react';
 import { cn } from '../../utils/misc';
 import { safeImageSrc } from '../../utils/links';
@@ -44,25 +43,21 @@ export function NeonStageLight({ className }: { className?: string }) {
       )}
       aria-hidden="true"
     >
-      {/* Rich Volumetric Downward Stage Light Wash */}
+      {/* Rich Volumetric Downward Stage Light Wash (Zero-Blur Pure Radial Gradient) */}
       <div
         className="neon-light-wash absolute -top-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-full max-w-4xl h-56 sm:h-72 pointer-events-none -z-10"
         style={{
           background: `
-            radial-gradient(ellipse 55% 85% at 28% 0%, rgba(236, 72, 153, 0.38) 0%, rgba(236, 72, 153, 0.16) 45%, transparent 75%),
-            radial-gradient(ellipse 55% 85% at 72% 0%, rgba(139, 92, 246, 0.35) 0%, rgba(139, 92, 246, 0.14) 45%, transparent 75%)
+            radial-gradient(ellipse 60% 80% at 32% 0%, rgba(236, 72, 153, 0.28) 0%, rgba(236, 72, 153, 0.1) 45%, transparent 72%),
+            radial-gradient(ellipse 60% 80% at 68% 0%, rgba(139, 92, 246, 0.26) 0%, rgba(139, 92, 246, 0.09) 45%, transparent 72%)
           `,
-          filter: 'blur(30px)',
-          transform: 'translate3d(0, 0, 0)',
         }}
       />
 
       {/* Sleek Horizontal Neon Light Tube */}
-      <div className="neon-light-tube relative h-[2.5px] sm:h-[3px] w-[82%] sm:w-[65%] max-w-3xl rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_20%,#8b5cf6_80%,transparent_100%)] shadow-[0_0_14px_rgba(236,72,153,0.95),0_0_28px_rgba(139,92,246,0.7)]">
+      <div className="neon-light-tube relative h-[2.5px] sm:h-[3px] w-[82%] sm:w-[65%] max-w-3xl rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_20%,#8b5cf6_80%,transparent_100%)] shadow-[0_0_12px_rgba(236,72,153,0.85)]">
         {/* Luminous inner core */}
         <div className="neon-light-core absolute inset-0 rounded-full bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.95)_30%,rgba(255,255,255,0.95)_70%,transparent_100%)] opacity-85" />
-        {/* Soft primary neon aura */}
-        <div className="neon-light-aura absolute -inset-y-1 inset-x-2 rounded-full bg-[linear-gradient(90deg,transparent_0%,#ec4899_20%,#8b5cf6_80%,transparent_100%)] blur-[3px] opacity-90" />
       </div>
     </div>
   );
@@ -140,19 +135,7 @@ export function SectionHeading({
   );
 }
 
-/** Fade-up reveal on scroll; disabled for reduced motion. */
-export function Reveal({ children, delay = 0, className }: { children: ReactNode; delay?: number; className?: string }) {
-  const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
+/** Lightweight wrapper (zero mid-scroll JS animation overhead for 120 FPS scrolling). */
+export function Reveal({ children, className }: { children: ReactNode; delay?: number; className?: string }) {
+  return <div className={className}>{children}</div>;
 }

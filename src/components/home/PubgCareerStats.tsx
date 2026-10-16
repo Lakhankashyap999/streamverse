@@ -325,7 +325,7 @@ export function PubgCareerStats() {
     <section className="container-x py-16 sm:py-24 relative isolate overflow-x-hidden" aria-labelledby="career-stats-heading">
       {/* Background Ambience */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-25" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-neon/10 blur-[140px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full [background:radial-gradient(circle,rgba(192,38,211,0.12)_0%,transparent_70%)]" />
 
       <SectionHeading
         eyebrow="Combat Telemetry"

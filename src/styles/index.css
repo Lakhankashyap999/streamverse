@@ -111,17 +111,13 @@
   }
 
   .glass {
-    background: linear-gradient(160deg, rgb(27 33 64 / 0.8), rgb(16 20 38 / 0.72));
+    background: linear-gradient(160deg, rgb(27 33 64 / 0.88), rgb(16 20 38 / 0.82));
     border: 1px solid var(--color-line);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transform: translateZ(0);
   }
 
   .panel {
-    @apply rounded-2xl border border-line bg-card/85;
+    @apply rounded-2xl border border-line bg-card/90;
     box-shadow: var(--shadow-card);
-    transform: translateZ(0);
   }
 
   /* PUBG-style angled corners */
@@ -241,34 +237,27 @@
 @keyframes wave-letter {
   0%, 100% {
     transform: translate3d(0, 0, 0);
-    color: #ffffff;
   }
   35% {
-    transform: translate3d(0, -2.5px, 0);
-    color: #fde047;
+    transform: translate3d(0, -2px, 0);
   }
 }
 .wave-char {
   display: inline-block;
-  transform: translateZ(0);
-  will-change: transform;
-  animation: wave-letter 1.8s ease-in-out infinite;
+  animation: wave-letter 2.2s ease-in-out infinite;
   animation-delay: calc(var(--char-i, 0) * 0.08s);
 }
 
 @keyframes bell-ring {
   0%, 100% { transform: rotate(0deg); }
-  10%, 30% { transform: rotate(-14deg); }
-  20%, 40% { transform: rotate(14deg); }
-  50% { transform: rotate(-8deg); }
-  60% { transform: rotate(8deg); }
-  70%, 90% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(-12deg); }
+  20%, 40% { transform: rotate(12deg); }
+  50%, 90% { transform: rotate(0deg); }
 }
 .bell-shake {
   display: inline-block;
   transform-origin: 50% 0%;
-  animation: bell-ring 2.4s ease-in-out infinite;
-  will-change: transform;
+  animation: bell-ring 2.8s ease-in-out infinite;
 }
 
 /* ───────────────────────── Loader: soldier firing ───────────────────────── */
@@ -439,39 +428,34 @@
   .sv-flash { opacity: 0.8; }
 }
 
-/* ───────────────────────── Realistic Winter / Forester Mode (Look 1 - Super Smooth 120 FPS) ───────────────────────── */
+/* ───────────────────────── Realistic Winter / Glacier Mode (Ultra-Smooth 120 FPS on All Devices) ───────────────────────── */
 html.winter-mode body {
   background-color: #0b1e36 !important;
-  background-image: none !important;
-}
-
-/* Static glacier glow on its own fixed layer: composited once, never repainted on scroll
-   (replaces background-attachment: fixed, which repaints the whole page every scroll frame) */
-html.winter-mode::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
   background-image:
-    radial-gradient(75rem 45rem at 50% -5%, rgba(125, 211, 252, 0.22), transparent 70%),
-    radial-gradient(60rem 40rem at 5% 40%, rgba(56, 189, 248, 0.14), transparent 60%),
-    radial-gradient(60rem 40rem at 95% 70%, rgba(14, 165, 233, 0.14), transparent 60%);
-  transform: translateZ(0);
+    radial-gradient(60rem 35rem at 50% 0%, rgba(56, 189, 248, 0.2), transparent 70%),
+    linear-gradient(180deg, #0d2544 0%, #0b1e36 40%, #08172b 100%) !important;
 }
 
-/* Decorative infinite animations / blur that only cost frames in winter mode */
+/* Disable non-essential infinite animations & blurs in winter mode to keep 100% GPU headroom */
 html.winter-mode .sakura-petal,
-html.winter-mode .laser-scanner {
+html.winter-mode .laser-scanner,
+html.winter-mode .airdrop-smoke {
   display: none !important;
 }
-html.winter-mode [class*="backdrop-blur"],
+html.winter-mode .wave-char,
+html.winter-mode .bell-shake {
+  animation: none !important;
+}
+html.winter-mode .backdrop-blur,
+html.winter-mode .backdrop-blur-sm,
+html.winter-mode .backdrop-blur-md,
+html.winter-mode .backdrop-blur-xl,
 html.winter-mode .glass {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
 
-/* Compositor-only snowfall (see WinterSnowfall.tsx) */
+/* Compositor-only 2-layer snowfall (minimal overdraw, zero nested wrappers) */
 .winter-snow-root {
   position: fixed;
   inset: 0;
@@ -479,60 +463,44 @@ html.winter-mode .glass {
   pointer-events: none;
   overflow: hidden;
   contain: strict;
-  transition: opacity 1s ease-out;
-}
-.winter-snow-gust {
-  position: absolute;
-  inset: 0;
-  will-change: transform;
-  animation: winterGust 13s ease-in-out infinite;
 }
 .winter-snow-fall {
   position: absolute;
-  left: -400px;
-  right: -400px;
+  left: -16px;
+  right: -16px;
   bottom: 0;
   background-repeat: repeat;
   will-change: transform;
-  animation: winterFall linear infinite;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
-@keyframes winterFall {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(0, var(--tile), 0); }
+.winter-snow-layer-a {
+  animation: winterSnowA linear infinite;
 }
-/* Calm "halka" snow most of the time, with a periodic heavy "aandhi" gust */
-@keyframes winterGust {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  18% { transform: translate3d(calc(var(--gust) * 30px), 0, 0); }
-  40% { transform: translate3d(calc(var(--gust) * -10px), 0, 0); }
-  62% { transform: translate3d(0, 0, 0); }
-  74% { transform: translate3d(calc(var(--gust) * 260px), 0, 0); }
-  86% { transform: translate3d(calc(var(--gust) * 90px), 0, 0); }
+.winter-snow-layer-b {
+  animation: winterSnowB linear infinite;
 }
-
-/* Crisp Viewport Frost Border (Zero GPU compositor invalidation) */
-html.winter-mode::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 40;
-  border: 1px solid rgba(186, 230, 253, 0.2);
+@keyframes winterSnowA {
+  0% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(12px, calc(var(--tile) * 0.5), 0); }
+  100% { transform: translate3d(0, var(--tile), 0); }
+}
+@keyframes winterSnowB {
+  0% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-14px, calc(var(--tile) * 0.5), 0); }
+  100% { transform: translate3d(0, var(--tile), 0); }
 }
 
 /* Neon Stage Light -> Glacier Diamond Ice Beam */
 html.winter-mode .neon-light-wash {
-  background: radial-gradient(ellipse 65% 85% at 50% 0%, rgba(56, 189, 248, 0.35) 0%, rgba(14, 165, 233, 0.12) 45%, transparent 75%) !important;
+  background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(56, 189, 248, 0.28) 0%, rgba(14, 165, 233, 0.1) 45%, transparent 72%) !important;
 }
 html.winter-mode .neon-light-tube {
   background: linear-gradient(90deg, transparent 0%, #38bdf8 20%, #ffffff 50%, #0284c7 80%, transparent 100%) !important;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.8) !important;
-}
-html.winter-mode .neon-light-aura {
-  background: linear-gradient(90deg, transparent 0%, #38bdf8 20%, #a5f3fc 50%, #0284c7 80%, transparent 100%) !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.75) !important;
 }
 
-/* 1. All Headings Frozen into Chiseled Ice (Optimized fast drop shadow) */
+/* 1. Hero Heading Frozen into Chiseled Ice */
 .winter-ice-heading {
   background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 30%, #7dd3fc 65%, #0284c7 100%) !important;
   -webkit-background-clip: text !important;
@@ -541,8 +509,7 @@ html.winter-mode .neon-light-aura {
   color: transparent !important;
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9) !important;
   paint-order: stroke fill;
-  text-shadow: 0 0 14px rgba(56, 189, 248, 0.9), 0 3px 6px rgba(2, 6, 23, 0.95) !important;
-  filter: none !important;
+  text-shadow: 0 2px 6px rgba(2, 6, 23, 0.9) !important;
 }
 
 html.winter-mode h1:not(.winter-ice-heading),
@@ -550,27 +517,19 @@ html.winter-mode h2:not(.winter-ice-heading),
 html.winter-mode h3:not(.winter-ice-heading),
 html.winter-mode h4:not(.winter-ice-heading),
 html.winter-mode h5:not(.winter-ice-heading),
-html.winter-mode h6:not(.winter-ice-heading),
-html.winter-mode .font-display:not(.winter-ice-heading),
-html.winter-mode .font-gaming:not(.winter-ice-heading),
-html.winter-mode .font-esports:not(.winter-ice-heading) {
+html.winter-mode h6:not(.winter-ice-heading) {
   color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  text-shadow: 0 2px 4px rgba(2, 6, 23, 0.9) !important;
-  filter: none !important;
 }
 
 /* 2. All Eyebrows & HUD Headers */
 html.winter-mode .hud-label {
   color: #7dd3fc !important;
-  text-shadow: none !important;
 }
 
-/* 3. All Gradients Frozen into Arctic Diamond Glacial Ice (Hardware-accelerated) */
+/* 3. All Gradients Frozen into Arctic Diamond Glacial Ice */
 html.winter-mode .text-gradient-gold,
 html.winter-mode .text-gradient,
 html.winter-mode .text-gold,
-html.winter-mode .text-gradient-amber,
 html.winter-mode .text-gradient-zone,
 html.winter-mode .text-blush {
   background: linear-gradient(180deg, #ffffff 0%, #cffafe 35%, #7dd3fc 70%, #0284c7 100%) !important;
@@ -578,71 +537,36 @@ html.winter-mode .text-blush {
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
-  text-shadow: none !important;
-  filter: none !important;
 }
 
-/* 4. All Numbers, Stats, Ratings & Telemetry Frozen (Zero blur overhead) */
-html.winter-mode .tabular-nums,
-html.winter-mode [class*="text-2xl"],
-html.winter-mode [class*="text-3xl"],
-html.winter-mode [class*="text-4xl"],
-html.winter-mode [class*="text-5xl"],
-html.winter-mode dd {
-  color: #ffffff !important;
-  text-shadow: 0 1px 3px rgba(2, 6, 23, 0.8) !important;
-}
-
-/* 5. Subtitle, Description & Body Text Legibility (Zero blur penalty) */
+/* 4. Subtitle, Description & Body Text Legibility */
 html.winter-mode p,
 html.winter-mode li,
 html.winter-mode dt {
   color: #e0f2fe !important;
 }
 
-/* Fix Muted / Dark Text to Crisp Readable Frost */
-html.winter-mode .text-mute,
-html.winter-mode [class*="text-mute"],
-html.winter-mode [class*="text-slate-400"],
-html.winter-mode [class*="text-slate-500"],
-html.winter-mode [class*="text-gray-400"] {
+html.winter-mode .text-mute {
   color: #cbd5e1 !important;
 }
 
-/* 6. All Badges, Chips & Favourite Mode Buttons into Frost Ice Chips */
-html.winter-mode .clip-angle-sm,
-html.winter-mode [class*="rounded-full"][class*="border"],
-html.winter-mode [class*="rounded-2xl"][class*="border"],
-html.winter-mode [class*="bg-neon/10"],
-html.winter-mode [class*="bg-pink-500/10"],
-html.winter-mode [class*="bg-gold/5"],
-html.winter-mode [class*="bg-gold/10"] {
+/* 5. Badges, Chips & Favourite Mode Buttons into Frost Ice Chips */
+html.winter-mode .clip-angle-sm {
   border-color: rgba(186, 230, 253, 0.45) !important;
   background: rgba(14, 165, 233, 0.14) !important;
   color: #f0fdf4 !important;
 }
 
-html.winter-mode [class*="text-fuchsia-200"],
-html.winter-mode [class*="text-pink-200"],
-html.winter-mode [class*="text-pink-300"],
-html.winter-mode [class*="text-amber-300"] {
-  color: #bae6fd !important;
-}
-
-/* 7. All Cards, Panels & Glass Containers into Frozen Glacier Glass (Fast 120 FPS Fillrate) */
+/* 6. All Cards, Panels & Glass Containers into Frozen Glacier Glass */
 html.winter-mode .panel,
 html.winter-mode .card-tactical,
 html.winter-mode .glass {
   border-color: rgba(186, 230, 253, 0.38) !important;
-  background: rgba(11, 28, 52, 0.94) !important;
+  background: #0b1c34 !important;
   box-shadow: none !important;
 }
 
-html.winter-mode [class*="border-line"] {
-  border-color: rgba(186, 230, 253, 0.3) !important;
-}
-
-/* Container Hanging Icicles Fringe in Winter Mode (Ultra-light 19KB GPU Texture, 120FPS) */
+/* 7. Container Hanging Icicles Fringe in Winter Mode (Direct Alpha PNG, Zero Offscreen Opacity Group) */
 html.winter-mode .winter-icicle-container {
   position: relative;
 }
@@ -657,21 +581,13 @@ html.winter-mode .winter-icicle-container::after {
   background-size: auto 100%;
   background-repeat: repeat-x;
   pointer-events: none;
-  z-index: 25;
-  opacity: 0.95;
 }
 
-html.winter-mode .winter-icicle-container:has([class*="rounded-3xl"])::after,
-html.winter-mode .winter-icicle-container[class*="rounded-3xl"]::after {
-  left: 28px;
-  right: 28px;
-}
-
-/* Header & Navbar in Winter Mode (Zero Backdrop-Filter Penalty, Light Texture) */
+/* 8. Header & Navbar in Winter Mode */
 html.winter-mode header {
-  background: rgba(11, 30, 54, 0.98) !important;
+  background: #0b1e36 !important;
   border-bottom-color: rgba(186, 230, 253, 0.45) !important;
-  box-shadow: 0 2px 8px rgba(2, 6, 23, 0.4) !important;
+  box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
@@ -686,105 +602,7 @@ html.winter-mode header::after {
   background-size: auto 100%;
   background-repeat: repeat-x;
   pointer-events: none;
-  z-index: 60;
 }
 
-/* ───────────────────────── Cinematic Progressive Freeze Transitions (GPU Composited, Zero Lag) ───────────────────────── */
-html.winter-transitioning body {
-  transition:
-    background-color 2.0s cubic-bezier(0.16, 1, 0.3, 1),
-    background-image 2.0s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-html.winter-transitioning header,
-html.winter-transitioning .panel,
-html.winter-transitioning .card-tactical,
-html.winter-transitioning .glass {
-  transition:
-    background-color 2.0s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 2.0s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-html.winter-transitioning h1,
-html.winter-transitioning h2,
-html.winter-transitioning h3,
-html.winter-transitioning h4,
-html.winter-transitioning .font-display,
-html.winter-transitioning .font-gaming,
-html.winter-transitioning .font-esports {
-  transition: color 1.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-/* Staggered Top-to-Bottom Freeze Wave Delay (Header -> Hero -> Stats -> Body) */
-html.winter-transitioning header {
-  transition-delay: 0.05s !important;
-}
-html.winter-transitioning section:nth-of-type(1),
-html.winter-transitioning main > *:nth-child(1) {
-  transition-delay: 0.3s !important;
-}
-html.winter-transitioning section:nth-of-type(2),
-html.winter-transitioning main > *:nth-child(2) {
-  transition-delay: 0.6s !important;
-}
-html.winter-transitioning section:nth-of-type(3),
-html.winter-transitioning main > *:nth-child(3) {
-  transition-delay: 0.9s !important;
-}
-html.winter-transitioning section:nth-of-type(n+4),
-html.winter-transitioning main > *:nth-child(n+4) {
-  transition-delay: 1.2s !important;
-}
-
-/* Hanging icicles gradual growth during freeze wave */
-html.winter-transitioning .winter-icicle-container::after,
-html.winter-transitioning header::after {
-  animation: icicleGradualFreeze 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes icicleGradualFreeze {
-  0% {
-    opacity: 0;
-    transform: translateY(-8px) scaleY(0.1);
-  }
-  40% {
-    opacity: 0.45;
-    transform: translateY(-3px) scaleY(0.5);
-  }
-  100% {
-    opacity: 0.95;
-    transform: translateY(0) scaleY(1);
-  }
-}
-
-/* Ultra-soft diffused mist wave (zero sharp lines or corners, gentle 16% opacity, 3.0s smooth travel) */
-@keyframes frostMistWave {
-  0% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  15% {
-    opacity: 0.16;
-  }
-  85% {
-    opacity: 0.16;
-  }
-  100% {
-    transform: translateY(170vh);
-    opacity: 0;
-  }
-}
-
-@keyframes frostMistBreathe {
-  0% {
-    opacity: 0;
-  }
-  35% {
-    opacity: 0.06;
-  }
-  100% {
-    opacity: 0;
-  }
-}
 
 

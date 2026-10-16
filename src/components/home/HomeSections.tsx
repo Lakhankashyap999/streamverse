@@ -53,14 +53,14 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
 
   return (
     <section className="relative isolate overflow-hidden pb-16 pt-2 sm:pt-6 lg:min-h-[calc(100svh-5rem)] lg:pb-20" aria-labelledby="hero-title">
-      <div className="absolute inset-0 -z-10 bg-grid opacity-50 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)] pointer-events-none" />
-      <div className="pointer-events-none absolute -left-40 top-20 -z-10 size-[32rem] rounded-full [background:radial-gradient(circle,rgba(192,38,211,0.14)_0%,transparent_70%)] transform-gpu" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 -z-10 size-[30rem] rounded-full [background:radial-gradient(circle,rgba(139,92,246,0.14)_0%,transparent_70%)] transform-gpu" />
-      <div className="pointer-events-none absolute right-1/3 top-1/3 -z-10 size-72 rounded-full [background:radial-gradient(circle,rgba(251,191,36,0.09)_0%,transparent_70%)] transform-gpu" />
-      {!reduce && (
+      <div className="absolute inset-0 -z-10 bg-grid opacity-25 pointer-events-none" />
+      <div className="pointer-events-none absolute -left-40 top-20 -z-10 size-[32rem] rounded-full [background:radial-gradient(circle,rgba(192,38,211,0.14)_0%,transparent_70%)]" />
+      <div className="pointer-events-none absolute -right-40 bottom-0 -z-10 size-[30rem] rounded-full [background:radial-gradient(circle,rgba(139,92,246,0.14)_0%,transparent_70%)]" />
+      <div className="pointer-events-none absolute right-1/3 top-1/3 -z-10 size-72 rounded-full [background:radial-gradient(circle,rgba(251,191,36,0.09)_0%,transparent_70%)]" />
+      {!reduce && !isWinterMode && (
         <>
-          <SakuraPetals count={8} />
-          {PARTICLES.slice(0, 6).map(([x, y, d], i) => (
+          <SakuraPetals count={6} />
+          {PARTICLES.slice(0, 4).map(([x, y, d], i) => (
             <span
               key={i}
               aria-hidden
@@ -196,19 +196,21 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          <ZoneRing className="-inset-10 hidden animate-[zone-spin_60s_linear_infinite] sm:block" />
+          <ZoneRing className="-inset-10 hidden sm:block" />
 
           {/* Main Esports Frame */}
-          <div className="gradient-border hud-corners clip-angle relative overflow-hidden rounded-[4px] bg-[#12162a] shadow-[0_40px_120px_-30px_rgba(192,38,211,0.5)]">
+          <div className="gradient-border hud-corners clip-angle relative overflow-hidden rounded-[4px] bg-[#12162a] shadow-[0_24px_60px_-20px_rgba(192,38,211,0.4)]">
             {/* Laser scanning beam */}
-            <div className="pointer-events-none absolute inset-x-0 h-2 bg-gradient-to-r from-transparent via-blush/60 to-transparent laser-scanner z-10" />
+            {!isWinterMode && (
+              <div className="pointer-events-none absolute inset-x-0 h-2 bg-gradient-to-r from-transparent via-blush/60 to-transparent laser-scanner z-10" />
+            )}
 
             <div className="scanlines relative aspect-[4/4.2] sm:aspect-[4/3.8] overflow-hidden bg-gradient-to-b from-[#1b2140] via-[#101426] to-[#090b16]">
               {/* Khushi's HD Creator Photo */}
               <img
                 src="/images/creator/khushi-hero-front.jpg"
                 alt="Khushi official creator photo"
-                className="absolute inset-0 size-full object-cover object-[center_15%] filter brightness-105 contrast-105"
+                className="absolute inset-0 size-full object-cover object-[center_15%]"
                 width={800}
                 height={800}
                 fetchPriority="high"
@@ -221,14 +223,14 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
               <div className="absolute inset-0 bg-gradient-to-r from-base/30 via-transparent to-base/30" />
 
               {/* PUBG HUD Coordinates & Reticle */}
-              <div className="absolute left-3 top-3 sm:left-4 sm:top-4 flex items-center gap-1.5 sm:gap-2 font-mono text-[0.62rem] sm:text-[0.68rem] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-gold/90 bg-base/70 backdrop-blur-sm px-2 sm:px-2.5 py-1 rounded border border-gold/20">
-                <Crosshair className="size-2.5 sm:size-3 text-gold animate-spin" style={{ animationDuration: '10s' }} />
+              <div className="absolute left-3 top-3 sm:left-4 sm:top-4 flex items-center gap-1.5 sm:gap-2 font-mono text-[0.62rem] sm:text-[0.68rem] font-bold uppercase tracking-[0.2em] sm:tracking-[0.25em] text-gold/90 bg-base/85 px-2 sm:px-2.5 py-1 rounded border border-gold/20">
+                <Crosshair className="size-2.5 sm:size-3 text-gold" />
                 <span>OCEAN ODYSSEY ZONE</span>
               </div>
 
               {/* Live Match Telemetry Chip */}
-              <div className="absolute right-3 top-3 sm:right-4 sm:top-4 hidden sm:flex items-center gap-2 font-mono text-[0.65rem] text-mute bg-base/70 backdrop-blur-sm px-2.5 py-1 rounded border border-line">
-                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="absolute right-3 top-3 sm:right-4 sm:top-4 hidden sm:flex items-center gap-2 font-mono text-[0.65rem] text-mute bg-base/85 px-2.5 py-1 rounded border border-line">
+                <span className="size-1.5 rounded-full bg-emerald-400" />
                 <span>60 FPS</span>
                 <span className="text-line">|</span>
                 <span>20ms</span>
@@ -247,7 +249,7 @@ export function Hero({ profile, streams, videos }: { profile: Profile; streams: 
           </div>
 
           {/* Creator Profile Chip */}
-          <div className="glass absolute -top-4 left-2 sm:-left-5 sm:-top-5 flex items-center gap-2.5 sm:gap-3 rounded-2xl p-2 sm:p-2.5 pr-3 sm:pr-4 shadow-xl z-20 border border-blush/40 lg:animate-float max-w-[85vw] sm:max-w-none">
+          <div className="glass absolute -top-4 left-2 sm:-left-5 sm:-top-5 flex items-center gap-2.5 sm:gap-3 rounded-2xl p-2 sm:p-2.5 pr-3 sm:pr-4 shadow-xl z-20 border border-blush/40 max-w-[85vw] sm:max-w-none">
             <SafeImage
               src={profile.avatar_url}
               alt={`${profile.gaming_name} profile photo`}
