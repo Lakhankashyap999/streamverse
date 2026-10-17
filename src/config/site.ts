@@ -31,8 +31,10 @@ export const DEFAULT_PROFILE: Profile = {
   country: 'India',
   journey:
     'Creating on YouTube since 22 March 2017. Today the channel is home to marathon BGMI livestreams — six-to-eight hour rank-push sessions full of rush gameplay, squad fights and fun with viewers.',
-  setup: '',
-  achievements: '',
+  setup:
+    'Flagship 120 FPS Gaming Device • 4-Finger Claw + Full Gyroscope (Always On) • Smooth + Extreme+ (90/120 FPS) Graphics • Low-Latency Pro Gaming IEMs for Footstep Precision • High-Bitrate 1080p60 Live Broadcast Setup.',
+  achievements:
+    '27.6K+ YouTube Family Subscribers • 1.96M+ Total Channel Views • 1,100+ Live Broadcasts & Videos • Multi-Season BGMI TOP 100 Conqueror Rank Pusher • C6S18 Ultimate Royale Squad Leader.',
   community_message: 'Thank you for being part of the KhushiYT Family ❤️ See you in the next stream!',
   live_status_mode: 'auto',
   stats_snapshot: {
@@ -51,7 +53,7 @@ export const SITE = {
   name: 'StreamVerse',
   communityName: 'KhushiYT Family',
   disclaimer:
-    'Unofficial fan-made concept. Not affiliated with, endorsed or sponsored by KRAFTON, PUBG, Battlegrounds Mobile India (BGMI), YouTube or Google.',
+    'Official Creator & Gaming Hub of KhushiYT (@khusiytlive). Battlegrounds Mobile India (BGMI) is a registered trademark of KRAFTON, Inc.',
   creatorTimezone: 'Asia/Kolkata',
 } as const;
 

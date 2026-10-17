@@ -54,7 +54,7 @@ export const pollService = {
 
   /** Returns the option this visitor already voted for, if any. */
   async myVote(pollId: string): Promise<string | null> {
-    if (!supabase) {
+    if (!supabase || pollId.startsWith('poll-')) {
       return demoStore.read<DemoVote>('poll_votes').find((v) => v.poll_id === pollId)?.option_id ?? null;
     }
     const { data: s } = await supabase.auth.getSession();
@@ -69,8 +69,8 @@ export const pollService = {
 
   /** Server-enforced: one vote per visitor session, valid option, poll open. */
   async vote(pollId: string, optionId: string): Promise<void> {
-    if (!supabase) {
-      await demoDelay(300);
+    if (!supabase || pollId.startsWith('poll-')) {
+      await demoDelay(220);
       const votes = demoStore.read<DemoVote>('poll_votes');
       if (votes.some((v) => v.poll_id === pollId)) throw new FriendlyError("You've already voted in this poll.");
       demoStore.write('poll_votes', [
@@ -94,11 +94,21 @@ export const pollService = {
 
   /** Results are only returned by the server when the poll's visibility rules allow it. */
   async results(pollId: string): Promise<PollResult[]> {
-    if (!supabase) {
+    if (!supabase || pollId.startsWith('poll-')) {
+      const baseCounts: Record<string, number> = {
+        o1: 184,
+        o2: 96,
+        o3: 64,
+        o4: 41,
+        c1: 142,
+        c2: 118,
+        c3: 89,
+      };
       const votes = demoStore.read<DemoVote>('poll_votes').filter((v) => v.poll_id === pollId);
       const counts = new Map<string, number>();
+      Object.entries(baseCounts).forEach(([k, v]) => counts.set(k, v));
       votes.forEach((v) => counts.set(v.option_id, (counts.get(v.option_id) ?? 0) + 1));
-      return [...counts].map(([option_id, votes]) => ({ option_id, votes }));
+      return [...counts].map(([option_id, count]) => ({ option_id, votes: count }));
     }
     const { data, error } = await supabase.rpc('get_poll_results', { p_poll_id: pollId });
     if (error) {

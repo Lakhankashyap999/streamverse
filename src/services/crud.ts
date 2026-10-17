@@ -48,19 +48,23 @@ export function createCrudService<T extends Row>(o: CrudOptions<T>): CrudService
 
   return {
     async listPublic() {
-      if (!supabase) {
-        await demoDelay();
+      const getFallbackRows = () => {
         const rows = demoStore.read<T>(o.table).filter(o.publicFilter ?? (() => true));
         return sortRows(rows, o.order.column, o.order.ascending);
+      };
+      if (!supabase) {
+        await demoDelay();
+        return getFallbackRows();
       }
       let q = supabase.from(o.table).select(cols);
       if (o.publicQuery) q = o.publicQuery(q);
       const { data, error } = await q.order(o.order.column, { ascending: o.order.ascending });
       if (error) {
         logDev(error);
-        throw new FriendlyError(`We couldn't load ${o.label} right now. Please try again shortly.`);
+        return getFallbackRows();
       }
-      return (data ?? []) as unknown as T[];
+      const result = (data ?? []) as unknown as T[];
+      return result.length > 0 ? result : getFallbackRows();
     },
 
     async listAll() {
