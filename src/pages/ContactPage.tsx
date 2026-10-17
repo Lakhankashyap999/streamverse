@@ -1,5 +1,5 @@
 import { useRef, useState, type FormEvent } from 'react';
-import { Mail, Send, CheckCircle2, ShieldAlert, Sparkles, MessageSquare } from 'lucide-react';
+import { Mail, Send, CheckCircle2, ShieldAlert, Sparkles, MessageSquare, BarChart3, Tv, Trophy, Video, Cpu, ArrowDownRight } from 'lucide-react';
 import { useProfile } from '../context/ProfileContext';
 import { usePageMeta } from '../hooks';
 import { PageHeader, PageContainer } from '../components/layout/PageContainer';
@@ -8,12 +8,66 @@ import { validateContact, hasErrors, type ContactInput } from '../utils/validati
 import { friendlyError } from '../utils/misc';
 import { Button } from '../components/ui/Button';
 import { Input, Select, Textarea } from '../components/ui/Input';
+import { SectionHeading } from '../components/ui/Display';
 import { ENQUIRY_TYPES } from '../types';
 import { SocialIconRow } from '../components/layout/SocialLinks';
 
+type EnquiryType = (typeof ENQUIRY_TYPES)[number];
+
+interface CollabFormat {
+  title: string;
+  tag: string;
+  enquiryType: EnquiryType;
+  description: string;
+  template: string;
+  accent: string;
+  icon: typeof Tv;
+}
+
+const COLLAB_FORMATS: CollabFormat[] = [
+  {
+    title: 'Live Stream Brand Overlay & Shoutouts',
+    tag: '6–8 Hr Daily Live Reach',
+    enquiryType: 'Sponsorship',
+    description: 'On-screen brand logo overlay, pinned live chat CTA link, and verbal shoutouts during marathon BGMI rank-push broadcasts.',
+    template: 'Hi KhushiYT Team, we would like to discuss a Live Stream Brand Overlay & Pinned Chat Sponsorship for upcoming BGMI broadcasts.',
+    accent: '#fbbf24',
+    icon: Tv,
+  },
+  {
+    title: 'Sponsored BGMI Custom Room Tournaments',
+    tag: '100 Players / Lobby + Live Viewers',
+    enquiryType: 'Event / Tournament',
+    description: 'Host branded Erangel Squad or TDM Custom Room lobbies where hundreds of active BGMI players compete live on stream.',
+    template: 'Hi KhushiYT Team, we want to sponsor a branded BGMI Custom Room Tournament / Event on your YouTube channel.',
+    accent: '#f472b6',
+    icon: Trophy,
+  },
+  {
+    title: 'Instagram Reels & YouTube Shorts Campaign',
+    tag: '@igkhusi + @khusiytlive',
+    enquiryType: 'Collaboration',
+    description: 'High-retention gaming reels, creator lifestyle integrations, and YouTube Shorts cross-promoted to 37K+ combined followers.',
+    template: 'Hi KhushiYT Team, we are interested in a dedicated Instagram Reel (@igkhusi) & YouTube Shorts brand collaboration.',
+    accent: '#a855f7',
+    icon: Video,
+  },
+  {
+    title: 'Gaming Gear, App & Peripheral Endorsement',
+    tag: 'Hardware & Gaming Apps',
+    enquiryType: 'Sponsorship',
+    description: 'Authentic hands-on showcase of gaming smartphones, IEMs/headsets, finger sleeves, or gaming platforms.',
+    template: 'Hi KhushiYT Team, we would love to send our gaming product / app for an official review and stream endorsement.',
+    accent: '#38bdf8',
+    icon: Cpu,
+  },
+];
+
 export function ContactPage() {
   const { profile } = useProfile();
-  usePageMeta('Business Contact', `Official business inquiries, brand sponsorships, and event invitations for ${profile.gaming_name}.`);
+  usePageMeta('Business & Media Kit', `Official Brand Media Kit, sponsorship metrics, and business inquiries for ${profile.gaming_name}.`);
+
+  const formRef = useRef<HTMLDivElement>(null);
 
   const [form, setForm] = useState<ContactInput & { honeypot: string }>({
     name: '',
@@ -28,6 +82,15 @@ export function ContactPage() {
   const [state, setState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [serverError, setServerError] = useState('');
   const startedAt = useRef(Date.now());
+
+  const handleSelectPackage = (pkg: CollabFormat) => {
+    setForm((prev) => ({
+      ...prev,
+      enquiry_type: pkg.enquiryType,
+      message: prev.message.trim() ? prev.message : pkg.template,
+    }));
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -62,14 +125,114 @@ export function ContactPage() {
   return (
     <div className="min-h-screen">
       <PageHeader
-        eyebrow="Direct Comms"
-        title="Business"
-        highlight="Inquiries"
-        description="For brand partnerships, gaming sponsorships, event invitations, or creator collaborations."
+        eyebrow="Brand Partnerships & Media Kit"
+        title="Work With"
+        highlight={profile.gaming_name}
+        description="Official Creator Media Kit, verified audience reach, sponsorship formats, and direct business inquiry desk."
       />
 
       <PageContainer className="py-12 space-y-16">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] items-start">
+        {/* 1. Official Creator Media Kit & Verified Reach */}
+        <section aria-labelledby="media-kit-heading">
+          <SectionHeading
+            eyebrow="Official Media Kit // 2026"
+            title="Verified Reach &"
+            highlight="Sponsorship Formats"
+            id="media-kit-heading"
+            description="Key channel metrics and high-conversion partnership formats for gaming brands, esports organizers, and agencies."
+          />
+
+          <div className="space-y-6">
+            {/* 4 Key Reach Metric Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
+              <div className="panel p-4 sm:p-6 border border-amber-400/30 bg-gradient-to-br from-amber-500/10 to-card space-y-1">
+                <div className="text-[10px] font-black uppercase tracking-widest text-amber-300 flex items-center gap-1.5">
+                  <BarChart3 className="size-3.5" /> YouTube Subscribers
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-white">
+                  {profile.stats_snapshot?.subscribers || '27.6K'}+
+                </div>
+                <div className="text-xs text-slate-400">Official Channel: @khusiytlive</div>
+              </div>
+
+              <div className="panel p-4 sm:p-6 border border-pink-400/30 bg-gradient-to-br from-pink-500/10 to-card space-y-1">
+                <div className="text-[10px] font-black uppercase tracking-widest text-pink-300 flex items-center gap-1.5">
+                  <Tv className="size-3.5" /> Total Channel Views
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-white">
+                  {profile.stats_snapshot?.views || '1.96M+'}
+                </div>
+                <div className="text-xs text-slate-400">High-retention BGMI live & shorts</div>
+              </div>
+
+              <div className="panel p-4 sm:p-6 border border-purple-400/30 bg-gradient-to-br from-purple-500/10 to-card space-y-1">
+                <div className="text-[10px] font-black uppercase tracking-widest text-purple-300 flex items-center gap-1.5">
+                  <Trophy className="size-3.5" /> Live Broadcasts
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-white">
+                  {profile.stats_snapshot?.videos || '1.1K'}+
+                </div>
+                <div className="text-xs text-slate-400">6–8 Hr daily marathon sessions</div>
+              </div>
+
+              <div className="panel p-4 sm:p-6 border border-sky-400/30 bg-gradient-to-br from-sky-500/10 to-card space-y-1">
+                <div className="text-[10px] font-black uppercase tracking-widest text-sky-300 flex items-center gap-1.5">
+                  <Video className="size-3.5" /> Instagram Reach
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-white">
+                  {profile.stats_snapshot?.instagram_followers || '9,416'}+
+                </div>
+                <div className="text-xs text-slate-400">Official Handle: @igkhusi</div>
+              </div>
+            </div>
+
+            {/* 4 Click-to-Select Collaboration Format Cards */}
+            <div className="grid gap-4 md:grid-cols-2">
+              {COLLAB_FORMATS.map((pkg) => {
+                const Icon = pkg.icon;
+                return (
+                  <div
+                    key={pkg.title}
+                    className="panel p-5 sm:p-6 border border-white/10 hover:border-amber-400/40 transition flex flex-col justify-between gap-4"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span
+                          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest"
+                          style={{ color: pkg.accent }}
+                        >
+                          <Icon className="size-3.5" /> {pkg.tag}
+                        </span>
+                        <span className="px-2 py-0.5 rounded bg-white/[0.05] border border-white/10 text-[10px] font-bold text-slate-300">
+                          {pkg.enquiryType}
+                        </span>
+                      </div>
+
+                      <h3 className="text-base sm:text-lg font-bold text-white">{pkg.title}</h3>
+                      <p className="text-xs sm:text-sm text-mute leading-relaxed">{pkg.description}</p>
+                    </div>
+
+                    <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                      <span className="text-[11px] font-semibold text-slate-400">
+                        Click to pre-fill inquiry form
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleSelectPackage(pkg)}
+                        className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider text-amber-300 hover:text-amber-200 transition cursor-pointer"
+                      >
+                        Select Format <ArrowDownRight className="size-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* 2. Direct Business Inquiry Form & Guidelines */}
+        <div ref={formRef} className="grid gap-12 lg:grid-cols-[1.1fr_1fr] items-start scroll-mt-24">
           {/* Left: Contact Form */}
           <div className="panel p-6 sm:p-10 space-y-6">
             <div>

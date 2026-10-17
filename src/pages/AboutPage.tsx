@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Trophy, Heart, Monitor, Calendar, MapPin, Copy, Crosshair, Sliders, Sparkles, Crown, Flame, CheckCircle2, ExternalLink } from 'lucide-react';
 import { useProfile } from '../context/ProfileContext';
 import { usePageMeta } from '../hooks';
@@ -16,6 +17,28 @@ export function AboutPage() {
   const { profile } = useProfile();
   usePageMeta('About Me', `Learn more about ${profile.gaming_name} — BGMI streamer, sensitivity code, rank pusher, setup details and gaming journey.`);
   const toast = useToast();
+
+  const [cheers, setCheers] = useState<{ love: number; dinner: number; clutch: number }>(() => {
+    try {
+      const saved = localStorage.getItem('khushi-fan-cheers');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return { love: 14824, dinner: 9452, clutch: 11296 };
+  });
+  const [activeBurst, setActiveBurst] = useState<'love' | 'dinner' | 'clutch' | null>(null);
+
+  const handleCheer = (key: 'love' | 'dinner' | 'clutch', label: string) => {
+    setCheers((prev) => {
+      const next = { ...prev, [key]: prev[key] + 1 };
+      try {
+        localStorage.setItem('khushi-fan-cheers', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+    setActiveBurst(key);
+    setTimeout(() => setActiveBurst(null), 500);
+    toast(`${label} sent to ${profile.gaming_name}!`, 'success');
+  };
 
   const copyText = async (value: string, label: string) => {
     try {
@@ -407,16 +430,71 @@ export function AboutPage() {
           </div>
         </section>
 
-        {/* 6. Message to the Community */}
+        {/* 6. Message to the Community + Interactive Fan Cheer Bar */}
         <section aria-labelledby="message-heading">
-          <div className="gradient-border rounded-3xl bg-gradient-to-r from-card to-card-2 p-8 sm:p-12 text-center space-y-4">
+          <div className="gradient-border rounded-3xl bg-gradient-to-r from-card to-card-2 p-6 sm:p-12 text-center space-y-6">
             <Heart className="size-10 text-blush mx-auto animate-pulse" />
-            <h2 id="message-heading" className="text-2xl sm:text-3xl font-bold">
-              Message to the <span className="text-gradient font-script italic">{SITE.communityName}</span>
-            </h2>
-            <p className="max-w-2xl mx-auto text-mute sm:text-lg leading-relaxed">
-              "{profile.community_message || 'Thank you for watching, chatting, and being part of the family! See you in the next stream!'}"
-            </p>
+            <div className="space-y-3">
+              <h2 id="message-heading" className="text-2xl sm:text-3xl font-bold">
+                Message to the <span className="text-gradient font-script italic">{SITE.communityName}</span>
+              </h2>
+              <p className="max-w-2xl mx-auto text-mute sm:text-lg leading-relaxed">
+                "{profile.community_message || 'Thank you for watching, chatting, and being part of the family! See you in the next stream!'}"
+              </p>
+            </div>
+
+            {/* Interactive Cheer & Reaction Bar */}
+            <div className="pt-4 border-t border-white/10 max-w-2xl mx-auto space-y-3">
+              <p className="text-xs font-bold uppercase tracking-widest text-amber-300">
+                Tap to Send Live Cheer to {profile.gaming_name}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleCheer('love', '🌸 Family Love')}
+                  className={`relative py-3 px-4 rounded-2xl border bg-pink-500/10 border-pink-400/35 hover:bg-pink-500/20 transition flex items-center justify-between gap-2 cursor-pointer active:scale-95 ${
+                    activeBurst === 'love' ? 'ring-2 ring-pink-400 scale-[1.03]' : ''
+                  }`}
+                >
+                  <span className="flex items-center gap-2 text-xs sm:text-sm font-black text-white">
+                    <span className="text-lg">🌸</span> Send Love
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-black/50 border border-pink-400/30 font-mono text-xs font-black text-pink-300 tabular-nums">
+                    {cheers.love.toLocaleString()}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleCheer('dinner', '🍗 Chicken Dinner GG')}
+                  className={`relative py-3 px-4 rounded-2xl border bg-amber-500/10 border-amber-400/35 hover:bg-amber-500/20 transition flex items-center justify-between gap-2 cursor-pointer active:scale-95 ${
+                    activeBurst === 'dinner' ? 'ring-2 ring-amber-400 scale-[1.03]' : ''
+                  }`}
+                >
+                  <span className="flex items-center gap-2 text-xs sm:text-sm font-black text-white">
+                    <span className="text-lg">🍗</span> Chicken Dinner
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-black/50 border border-amber-400/30 font-mono text-xs font-black text-amber-300 tabular-nums">
+                    {cheers.dinner.toLocaleString()}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleCheer('clutch', '🔥 OP 1v4 Clutch')}
+                  className={`relative py-3 px-4 rounded-2xl border bg-purple-500/10 border-purple-400/35 hover:bg-purple-500/20 transition flex items-center justify-between gap-2 cursor-pointer active:scale-95 ${
+                    activeBurst === 'clutch' ? 'ring-2 ring-purple-400 scale-[1.03]' : ''
+                  }`}
+                >
+                  <span className="flex items-center gap-2 text-xs sm:text-sm font-black text-white">
+                    <span className="text-lg">🔥</span> OP Clutch
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-black/50 border border-purple-400/30 font-mono text-xs font-black text-purple-300 tabular-nums">
+                    {cheers.clutch.toLocaleString()}
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         </section>
       </PageContainer>

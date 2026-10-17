@@ -9,6 +9,8 @@ import { PageHeader, PageContainer } from '../components/layout/PageContainer';
 import { PollCard } from '../components/community/PollCard';
 import { SuggestionForm } from '../components/community/SuggestionForm';
 import { CommunityPostCard } from '../components/community/CommunityPostCard';
+import { SquadIdCardGenerator } from '../components/community/SquadIdCardGenerator';
+import { SupportersHallOfFame } from '../components/community/SupportersHallOfFame';
 import { EmptyState, ErrorState, LoadingState } from '../components/ui/States';
 import { SectionHeading } from '../components/ui/Display';
 import { useToast } from '../components/ui/Toast';
@@ -282,6 +284,30 @@ export function CommunityPage() {
               )}
             </div>
           </div>
+        </section>
+
+        {/* 0.5 Official VIP Squad ID Card Generator */}
+        <section aria-labelledby="vip-pass-heading">
+          <SectionHeading
+            eyebrow="Official Fan Pass"
+            title="Generate Your"
+            highlight="VIP Squad Card"
+            id="vip-pass-heading"
+            description="Create your custom holographic KhushiYT Family ID card in 1 click and share it on Instagram Story (@igkhusi)."
+          />
+          <SquadIdCardGenerator />
+        </section>
+
+        {/* 0.8 Supporters, VIPs & Moderators Hall of Fame */}
+        <section aria-labelledby="hall-of-fame-heading">
+          <SectionHeading
+            eyebrow="Wall of Honour"
+            title="Supporters &"
+            highlight="Hall of Fame"
+            id="hall-of-fame-heading"
+            description="Celebrating our top stream supporters, channel moderators, and loyal KhushiYT Family VIP members."
+          />
+          <SupportersHallOfFame />
         </section>
 
         {/* Navigation tabs */}
